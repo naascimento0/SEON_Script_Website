@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group = 'nemo.seon'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation fileTree(dir: 'jars', include: ['**/*.jar']) // The "**/*.jar" indicates that all .jar files, including those inside lib/, batik/, gvml/, etc., will be automatically added as dependencies.
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+}
+
+test {
+    useJUnitPlatform()
+}
