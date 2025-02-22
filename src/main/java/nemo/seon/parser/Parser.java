@@ -9,10 +9,13 @@ public class Parser {
     public static final String PATH = System.getProperty("user.dir");  // Current working directory
     public static final String astahFilePath = PATH + "/" + "astah_seon.asta"; // Astah file name should always be "astah_seon.asta"
     public static void main(String[] args) {
-        exportAstahImages();
+//        exportAstahImages();
 
         ModelReader modelReader = new ModelReader();
         Package seonNetwork = modelReader.parseAstah2Seon(astahFilePath);
+
+        PageWriter pageWriter = new PageWriter();
+        pageWriter.generateSeonPages(seonNetwork);
 
     }
 
