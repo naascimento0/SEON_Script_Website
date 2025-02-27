@@ -1,6 +1,7 @@
 package nemo.seon.parser;
 
 import nemo.seon.model.Package;
+import nemo.seon.writer.PageWriter;
 
 import java.io.File;
 import java.io.IOException;

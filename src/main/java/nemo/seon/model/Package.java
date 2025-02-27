@@ -18,6 +18,7 @@ public class Package {
     private Package parent;
     private final IPackage pack;
     private final List<Diagram> diagrams;
+    private final PackType type;
 
     public Package(String name, String definition, PackType type, int order, IPackage pack) {
         this.pack = pack;
@@ -25,6 +26,7 @@ public class Package {
         packageMap.put(pack, this);
         this.dependencies = new ArrayList<>();
         this.diagrams = new ArrayList<>();
+        this.type = type;
     }
 
     public String getName() {
@@ -70,6 +72,14 @@ public class Package {
                 return pack;
             }
         return null;
+    }
+
+    public static List<Package> getAllPackages() {
+        return new ArrayList<>(packageMap.values());
+    }
+
+    public PackType getPackageType() {
+        return this.type;
     }
 
     public void setParent(Package parent) {
