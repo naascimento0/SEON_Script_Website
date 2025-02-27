@@ -132,34 +132,48 @@ public class ModelReader {
         }
     }
 
-
-    /** NÃO ESTÁ SENDO USADO ????????
-     * Reads the relations between the concepts.
-     * @param concepts the list of concepts
+    /**
+     * Reads the relations between concepts from the Astah model and associates them with their source and target concepts.
+     * @param concepts The list of concepts to parse relations for.
      */
     private void parseRelations(List<Concept> concepts) {
-        for(Concept source : concepts) {
+        if (concepts == null || concepts.isEmpty()) {
+            System.out.println("No concepts provided to parse relations.");
+            return;
+        }
+
+        for (Concept source : concepts) {
+            if (source == null || source.getAstahConceptObject() == null) continue;
+
             for (IAttribute attribute : source.getAstahConceptObject().getAttributes()) {
                 IAssociation association = attribute.getAssociation();
-                if (association != null) { // it is an Association, not an Attribute
-                    IAttribute firstEnd = association.getMemberEnds()[0];
-                    IAttribute secondEnd = association.getMemberEnds()[1];
-                    if (firstEnd.getType().equals(source.getAstahConceptObject())) {
-                        String stereotype = null;
-                        if (association.getStereotypes().length > 0)
-                            stereotype = association.getStereotypes()[0];
-                        boolean composition = (firstEnd.isComposite() || secondEnd.isAggregate());
-                        String smult = "";
-                        String tmult = "";
-                        if (firstEnd.getMultiplicity().length > 0)
-                            smult = multiplicityToString(firstEnd.getMultiplicity()[0]);
-                        if (secondEnd.getMultiplicity().length > 0)
-                            tmult = multiplicityToString(secondEnd.getMultiplicity()[0]);
+                if (association != null) { // É uma associação, não um atributo simples
+                    IAttribute[] ends = association.getMemberEnds();
+                    if (ends.length < 2) continue; // Associações inválidas
 
-                        Concept target = Concept.getConceptObjectByItsIClass(attribute.getType());
+                    IAttribute firstEnd = ends[0];
+                    IAttribute secondEnd = ends[1];
+
+                    if (firstEnd.getType().equals(source.getAstahConceptObject())) {
+                        String stereotype = association.getStereotypes().length > 0 ? association.getStereotypes()[0] : null;
+                        boolean composition = firstEnd.isComposite() || secondEnd.isAggregate();
+                        String sourceMultiplicity = firstEnd.getMultiplicity().length > 0 ?
+                                multiplicityToString(firstEnd.getMultiplicity()[0]) : "";
+                        String targetMultiplicity = secondEnd.getMultiplicity().length > 0 ?
+                                multiplicityToString(secondEnd.getMultiplicity()[0]) : "";
+
+                        Concept target = Concept.getConceptObjectByItsIClass(secondEnd.getType());
                         Package pack = Package.getPackageByFullName(association.getFullName("::"));
 
-                        Relation relation = new Relation(association.getName(), association.getDefinition(), stereotype, composition, pack, source, target, smult, tmult);
+                        if (target != null) { // Só cria relação se o alvo for válido
+                            Relation relation = new Relation(association.getName(), association.getDefinition(),
+                                    stereotype, composition, pack, source, target,
+                                    sourceMultiplicity, targetMultiplicity);
+                            source.addRelation(relation);
+                            target.addRelation(relation); // Adiciona ao alvo também, se desejado
+                        } else {
+                            System.out.println("Warning: Target concept not found for relation from " + source.getName());
+                        }
                     }
                 }
             }
@@ -188,7 +202,7 @@ public class ModelReader {
      */
     private void parseDiagrams(Package seonNetwork) {
         for (IDiagram object : seonNetwork.getAstahPack().getDiagrams()) {
-            Diagram diagram = new Diagram(object.getName(), object.getDefinition(), Diagram.getDiagramType(object.getTaggedValue("Type")), object.getTaggedValue("Network"));
+            Diagram diagram = new Diagram(object.getName(), object.getDefinition(), Diagram.getDiagramType(object.getTaggedValue("Type")), object.getTaggedValue("Network"), object);
             diagram.setPack(seonNetwork);
             seonNetwork.addDiagram(diagram);
         }

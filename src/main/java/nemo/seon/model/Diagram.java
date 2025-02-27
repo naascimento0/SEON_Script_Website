@@ -1,10 +1,20 @@
 package nemo.seon.model;
 
+import com.change_vision.jude.api.inf.model.IDiagram;
+
 public class Diagram {
 
     private Package	pack;
+    private final String name;
+    private final String definition;
+    private final DiagType type;
+    private final IDiagram object;
 
-    public Diagram(String name, String definition, DiagType type, String network) {
+    public Diagram(String name, String definition, DiagType type, String network, IDiagram object) {
+        this.name = name;
+        this.definition = definition;
+        this.type = type;
+        this.object = object;
     }
 
     public enum DiagType {
@@ -25,6 +35,26 @@ public class Diagram {
             }
         }
         return DiagType.CONCEPTUALMODEL;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDefinition() {
+        return this.definition;
+    }
+
+    public DiagType getType() {
+        return this.type;
+    }
+
+    public IDiagram getDiagramAstahObject() {
+        return this.object;
+    }
+
+    public Package getPack() {
+        return pack;
     }
 
     public void setPack(Package pack) {

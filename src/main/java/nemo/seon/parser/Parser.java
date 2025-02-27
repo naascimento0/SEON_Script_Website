@@ -10,7 +10,7 @@ public class Parser {
     public static final String PATH = System.getProperty("user.dir");  // Current working directory
     public static final String astahFilePath = PATH + "/" + "astah_seon.asta"; // Astah file name should always be "astah_seon.asta"
     public static void main(String[] args) {
-//        exportAstahImages();
+        exportAstahImages();
 
         ModelReader modelReader = new ModelReader();
         Package seonNetwork = modelReader.parseAstah2Seon(astahFilePath);
@@ -32,7 +32,7 @@ public class Parser {
      */
     private static void exportAstahImages() {
         String scriptPath = Parser.PATH + "/jars/astah-command.sh";  // astah-command.sh script is the command line tool for Astah
-        String outputDir = Parser.PATH + "/images";  // Output directory for the images
+        String outputDir = Parser.PATH + "/page/images";  // Output directory for the images
 
         // Verifies if the astah-command.sh script exists
         if (!new File(scriptPath).exists()) {

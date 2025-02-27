@@ -4,6 +4,8 @@ import nemo.seon.model.Package;
 
 public class PageWriter {
     public void generateSeonPages(Package seonNetwork) {
-//        writeOntologies(seonNetwork);
+        OntologiesWriter ontologiesWriter = new OntologiesWriter();
+        ontologiesWriter.writeOntologies(seonNetwork);
+        System.out.println("Ontologies pages were generated successfully.");
     }
 }
