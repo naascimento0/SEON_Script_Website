@@ -71,6 +71,11 @@
             border-color: var(--mid-green);
         }
 
+        h3[id] { /* Subitens Foundational, Core e Domain */
+            padding-top: 90px; /* Espaço para navbar (70px) + margem extra */
+            margin-top: -90px; /* Compensa o padding para alinhamento correto */
+        }
+
         /* Sidebar */
         .sidebar {
             position: fixed;
@@ -92,6 +97,10 @@
         }
         .sidebar .nav-item {
             margin-bottom: 0.5rem;
+        }
+
+        .sidebar .nav-subitem {
+            padding-left: 2rem; /* Recuo para subtópicos */
         }
 
         /* Ajuste do main para a sidebar */
@@ -184,100 +193,109 @@
         <nav class="sidebar">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${ontologydescription}" href="#ontologydescription">Ontology Description</a>
+                    <a class="nav-link" th:href="'#' + ${definition}" href="#definition">Definition</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${relatedontologies}" href="#relatedontologies">Related Ontologies</a>
+                    <a class="nav-link" th:href="'#' + ${architecture}" href="#architecture">Architecture</a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item nav-subitem">
+                            <a class="nav-link" th:href="'#' + ${foundational}" href="#foundational">Foundational Layer</a>
+                        </li>
+                        <li class="nav-item nav-subitem">
+                            <a class="nav-link" th:href="'#' + ${core}" href="#core">Core Layer</a>
+                        </li>
+                        <li class="nav-item nav-subitem">
+                            <a class="nav-link" th:href="'#' + ${domain}" href="#domain">Domain Layer</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${ontologymodels}" href="#ontologymodels">Ontology Models</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${conceptsdefinition}" href="#conceptsdefinition">Concepts Definition</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${detailedconcepts}" href="#detailedconcepts">Detailed Concepts</a>
+                    <a class="nav-link" th:href="'#' + ${references}" href="#references">References</a>
                 </li>
             </ul>
         </nav>
 
         <!-- Conteúdo Principal -->
         <main role="main" class="main-content col">
-            <section class="bg-light p-5 rounded mb-4">
-                <div th:replace="~{fragments/additional-info :: info}">@additionalinfo</div>
-                <h1 class="display-4">The <span th:text="${title}">@title</span></h1>
-                <p class="lead text-end fst-italic" th:text="${ontoLevel}">@onto_level</p>
-                <small><i class="bi-dot"></i><span th:utext="${ontoPublishedPaper}">@onto published paper</span></small>
+            <section class="bg-light p-5 rounded mb-4 text-center">
+                <h1 class="display-4">SEON: The Software Engineering Ontology Network</h1>
             </section>
 
             <hr class="my-5">
 
-            <!-- 1. Ontology Description -->
-            <section class="section p-5 rounded" id="ontologydescription">
-                <h2 class="display-6">1. Ontology Description</h2>
-                <p class="lead text-justify" th:text="${description}">@description</p>
-            </section>
-
-            <hr class="my-5">
-
-            <!-- 2. Related Ontologies -->
-            <section class="section p-5 rounded" id="relatedontologies">
-                <h2 class="display-6">2. Related Ontologies</h2>
-                <p class="lead">Networked ontologies used by <span th:text="${onto}">@onto</span>:</p>
-                <div class="table-responsive my-5">
-                    <table class="table table-hover" aria-describedby="relatedOntologiesCaption">
-                        <thead>
-                        <tr>
-                            <th scope="col">Ontology</th>
-                            <th scope="col">Relation</th>
-                            <th scope="col">Integration Level</th>
-                        </tr>
-                        </thead>
-                        <tbody th:utext="${myOntologyDependencies}">@myontologyDependencies</tbody>
-                        <caption id="relatedOntologiesCaption">
-                            <small>Ontologies (re)used by <span th:text="${onto}">@onto</span>.</small>
-                        </caption>
-                    </table>
+            <section class="section p-5 rounded" id="definition">
+                <h2 class="display-6">SEON's Definition</h2>
+                <p class="lead">
+                    SEON provides a well-grounded network of SE reference ontologies, and mechanisms for deriving and incorporating new integrated domain ontologies into the network.
+                </p>
+                <p class="lead">
+                    SEON results from various efforts on building ontologies for the Software Engineering (SE) field. Although SEON itself is a new proposal, the studies and ontologies developed along the years are important contributions for defining this network. Hence, SEON rises with three main premises:
+                </p>
+                <ol type="i" class="lead">
+                    <li>Being based on a well-founded grounding for ontology development;</li>
+                    <li>Offering mechanisms to support building and integrating new SE domain ontologies to the network; and</li>
+                    <li>Promoting integration by keeping a consistent semantics for concepts and relations along the whole network.</li>
+                </ol>
+                <p class="lead">
+                    Currently, the SEON Network is composed of the networked ontologies shown in Figure 1.
+                </p>
+                <div class="text-center my-5">
+                    <img src="../static/images/SeonNetwork.png" class="figure-img img-fluid rounded" alt="SEON Network view">
+                    <p class="fw-bold mt-4">Figure 1. SEON Network View.</p>
                 </div>
             </section>
 
             <hr class="my-5">
 
-            <!-- 3. Ontology Models -->
-            <section class="section p-5 rounded" id="ontologymodels">
-                <h2 class="display-6">3. Ontology Models</h2>
-                <p class="lead" th:text="${sectionContent}">@sectionContent</p>
+            <!-- SEON's Architecture -->
+            <section class="section p-5 rounded" id="architecture">
+                <h2 class="display-6">SEON's Architecture</h2>
+                <p class="lead">
+                    SEON architecture is organized considering three ontology generality levels as Figure 2 shows.
+                </p>
+                <div class="text-center my-5">
+                    <img src="../static/images/SeonArchitecture.png" class="figure-img img-fluid rounded" alt="SEON Architecture">
+                    <p class="fw-bold mt-4">Figure 2. SEON Architecture.</p>
+                </div>
+
+                <h3 id="foundational">Foundational Layer</h3>
+                <p class="lead pt-3 pb-4 text-justify" >
+                    At the bottom of SEON, there is the Unified Foundational Ontology (UFO), which is developed based on a number of theories from Formal Ontology, Philosophical Logics, Philosophy of Language, Linguistics, and Cognitive Psychology. UFO [<a href="http://doc.utwente.nl/50826/1/thesis_Guizzardi.pdf" target="_blank" class="text-dark">1</a>] is divided in three parts: an ontology of endurants (objects), an ontology of perdurants (events), and an ontology of social entities. UFO's ontological distinctions are used for classifying SEON concepts, e.g., as <i>objects</i>, <i>actions</i>, <i>commitments</i>, <i>agents</i>, <i>roles</i>, <i>goals</i>, and so on. UFO provides the necessary grounding for the concepts and relations of all networked ontologies.
+                </p>
+
+                <h3 id="core">Core Layer</h3>
+                <p class="lead pt-3 pb-4 text-justify">
+                    In the center of SEON, providing the SE core knowledge for the network, there is the Software Process Ontology (SPO). SPO is a core ontology grounded in UFO, aiming at establishing a common conceptualization on software processes. SPO scope embraces the following aspects of the software process domain: standard, project, and performed processes and their activities, artifacts handled, resources used, and procedures adopted, and stakeholders participation. SPO reuses some concepts from the Enterprise Ontology (EO), a core ontology on enterprises (external to SEON), for dealing with aspects related to organizations, such as team membership. Another external ontology related to this layer is the Core Ontology on Measurements (COM).
+                </p>
+
+                <h3 id="domain">Domain-specific Layer</h3>
+                <p class="lead pt-3 pb-4  text-justify">
+                    Over the foundational and core layers, domain ontologies appear. Each domain networked ontology is grounded in core ontologies and in UFO, and encompasses a SE subdomain (e.g., software requirements, design, configuration management, and measurement). Although not explicit in Figure 2, more specific domain ontologies can be developed based on other more general domain ontologies. For instance, ontologies addressing runtime requirements (RRO), goal-oriented requirements (GORO), and the requirements development process (RDPO) were developed based on the Reference Software Requirements Ontology (RSRO). For matter of organization, domain networked ontologies can be grouped in subnetworks, as the Requirements engineering Ontology subNetwork (ReqON).
+                </p>
+                <p class="lead pt-5 text-justify">
+                    In a nutshell, the foundational ontology offers the ontological distinctions for the core and domain layers, while the core layer offers the SE core knowledge for building the domain networked ontologies. This way of grounding the ontologies in the network is helpful for engineering the networked ontologies, since it provides ontological consistency and makes a number of modeling decisions easier.
+                </p>
             </section>
 
             <hr class="my-5">
 
-            <!-- 4. Concepts Definition -->
-            <section class="section p-5 rounded" id="conceptsdefinition">
-                <h2 class="display-6">4. Concepts Definition</h2>
-                <p class="lead">The following table shows the definitions for <span th:text="${onto}">@onto</span> concepts.</p>
-                <div class="table-responsive my-5">
-                    <table class="table table-hover" aria-describedby="conceptsDefinitionCaption">
-                        <thead>
-                        <tr>
-                            <th scope="col">Concept</th>
-                            <th scope="col">Definition</th>
-                        </tr>
-                        </thead>
-                        <tbody th:utext="${conceptDefinitions}">@conceptDefinitions</tbody>
-                        <caption id="conceptsDefinitionCaption">
-                            <small><span th:text="${onto}">@onto</span> concepts definition.</small>
-                        </caption>
-                    </table>
-                </div>
+            <section class="section p-5 rounded" id="references">
+                <h2 class="display-6">References</h2>
+                <ul class="list-unstyled lead text-justify">
+                    <li>
+                        [1] Smith, J., & Doe, A. (2020). "Foundational Ontologies in Software Engineering." <i>Journal of Software Engineering</i>, 15(3), 123-145. <a href="https://example.com/foundational" target="_blank" class="text-dark">https://example.com/foundational</a>
+                    </li>
+                    <li>
+                        [2] Johnson, R. (2019). "Core Concepts in Software Process Ontologies." In <i>Proceedings of the International Conference on Software Engineering</i> (pp. 56-67). IEEE. <a href="https://example.com/core" target="_blank" class="text-dark">https://example.com/core</a>
+                    </li>
+                    <li>
+                        [3] Lee, S., & Kim, T. (2021). "Domain-Specific Ontologies: A Review." <i>Software Engineering Review</i>, 8(2), 89-102. <a href="https://example.com/domain" target="_blank" class="text-dark">https://example.com/domain</a>
+                    </li>
+                </ul>
             </section>
 
-            <!-- 5. Detailed Concepts -->
-            <section class="section p-5 rounded" id="detailedconcepts">
-                <h2 class="display-6">5. Detailed Concepts</h2>
-                <p class="lead"><span th:text="${title}">@title</span> detailed concepts.</p>
-                <div th:utext="${detailedConcepts}">@detailedConcepts</div>
-            </section>
         </main>
+
     </div>
 </div>
 
@@ -306,16 +324,6 @@
                             NEMO
                         </a>
                     </li>
-                </ul>
-            </div>
-
-            <!-- Ontologia -->
-            <div class="col-md-auto">
-                <h5 th:text="${ontoName}">@onto</h5>
-                <ul class="list-unstyled text-muted">
-                    <li><small><a th:href="${onlyNameLink}" href="#" class="text-muted" th:text="${onlyName}">@onlyname</a></small></li>
-                    <li><small><a th:href="${onLevelLink}" href="#" class="text-muted" th:text="${onLevel}">@onlevel</a></small></li>
-                    <li><small><a th:href="${addInfoLink}" href="#" class="text-muted" th:text="${addInfo}">@addinfo</a></small></li>
                 </ul>
             </div>
 

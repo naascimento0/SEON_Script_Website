@@ -120,6 +120,7 @@
 </head>
 
 <body>
+
 <header>
     <!-- Barra de navegação -->
     <nav class="navbar navbar-expand-lg fixed-top">
@@ -148,7 +149,7 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
                             <li><a class="dropdown-item" href="HomePage.html">SEON</a></li>
                             <li><a class="dropdown-item" href="HomePage.html#definition">Definition</a></li>
-                            <li><a class="dropdown-item" href="HomePage.html#architeture">Architecture</a></li>
+                            <li><a class="dropdown-item" href="HomePage.html#architecture">Architecture</a></li>
                             <li><a class="dropdown-item" href="HomePage.html#references">References</a></li>
                         </ul>
                     </li>
@@ -170,7 +171,7 @@
 
                     <!-- Publications -->
                     <li class="nav-item">
-                        <a class="nav-link" href="Publications.html">Publications</a>
+                        <a class="nav-link active" href="Publications.html">Publications</a>
                     </li>
                 </ul>
             </div>
@@ -178,108 +179,39 @@
     </nav>
 </header>
 
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <nav class="sidebar">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${ontologydescription}" href="#ontologydescription">Ontology Description</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${relatedontologies}" href="#relatedontologies">Related Ontologies</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${ontologymodels}" href="#ontologymodels">Ontology Models</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${conceptsdefinition}" href="#conceptsdefinition">Concepts Definition</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="'#' + ${detailedconcepts}" href="#detailedconcepts">Detailed Concepts</a>
-                </li>
-            </ul>
-        </nav>
+<!-- Conteúdo Principal -->
+<main role="main" class="container-fluid mt-5">
+    <section class="bg-light p-5 rounded mb-4 text-center">
+        <h1 class="display-4">Publications</h1>
+        <p class="lead">
+            Explore the research papers and articles that have contributed to the development and application of the SEON framework.
+        </p>
+    </section>
 
-        <!-- Conteúdo Principal -->
-        <main role="main" class="main-content col">
-            <section class="bg-light p-5 rounded mb-4">
-                <div th:replace="~{fragments/additional-info :: info}">@additionalinfo</div>
-                <h1 class="display-4">The <span th:text="${title}">@title</span></h1>
-                <p class="lead text-end fst-italic" th:text="${ontoLevel}">@onto_level</p>
-                <small><i class="bi-dot"></i><span th:utext="${ontoPublishedPaper}">@onto published paper</span></small>
-            </section>
+    <hr class="my-5">
 
-            <hr class="my-5">
-
-            <!-- 1. Ontology Description -->
-            <section class="section p-5 rounded" id="ontologydescription">
-                <h2 class="display-6">1. Ontology Description</h2>
-                <p class="lead text-justify" th:text="${description}">@description</p>
-            </section>
-
-            <hr class="my-5">
-
-            <!-- 2. Related Ontologies -->
-            <section class="section p-5 rounded" id="relatedontologies">
-                <h2 class="display-6">2. Related Ontologies</h2>
-                <p class="lead">Networked ontologies used by <span th:text="${onto}">@onto</span>:</p>
-                <div class="table-responsive my-5">
-                    <table class="table table-hover" aria-describedby="relatedOntologiesCaption">
-                        <thead>
-                        <tr>
-                            <th scope="col">Ontology</th>
-                            <th scope="col">Relation</th>
-                            <th scope="col">Integration Level</th>
-                        </tr>
-                        </thead>
-                        <tbody th:utext="${myOntologyDependencies}">@myontologyDependencies</tbody>
-                        <caption id="relatedOntologiesCaption">
-                            <small>Ontologies (re)used by <span th:text="${onto}">@onto</span>.</small>
-                        </caption>
-                    </table>
-                </div>
-            </section>
-
-            <hr class="my-5">
-
-            <!-- 3. Ontology Models -->
-            <section class="section p-5 rounded" id="ontologymodels">
-                <h2 class="display-6">3. Ontology Models</h2>
-                <p class="lead" th:text="${sectionContent}">@sectionContent</p>
-            </section>
-
-            <hr class="my-5">
-
-            <!-- 4. Concepts Definition -->
-            <section class="section p-5 rounded" id="conceptsdefinition">
-                <h2 class="display-6">4. Concepts Definition</h2>
-                <p class="lead">The following table shows the definitions for <span th:text="${onto}">@onto</span> concepts.</p>
-                <div class="table-responsive my-5">
-                    <table class="table table-hover" aria-describedby="conceptsDefinitionCaption">
-                        <thead>
-                        <tr>
-                            <th scope="col">Concept</th>
-                            <th scope="col">Definition</th>
-                        </tr>
-                        </thead>
-                        <tbody th:utext="${conceptDefinitions}">@conceptDefinitions</tbody>
-                        <caption id="conceptsDefinitionCaption">
-                            <small><span th:text="${onto}">@onto</span> concepts definition.</small>
-                        </caption>
-                    </table>
-                </div>
-            </section>
-
-            <!-- 5. Detailed Concepts -->
-            <section class="section p-5 rounded" id="detailedconcepts">
-                <h2 class="display-6">5. Detailed Concepts</h2>
-                <p class="lead"><span th:text="${title}">@title</span> detailed concepts.</p>
-                <div th:utext="${detailedConcepts}">@detailedConcepts</div>
-            </section>
-        </main>
-    </div>
-</div>
+    <section class="section p-5 rounded">
+        <h2 class="display-6">Published Works</h2>
+        <ul class="list-unstyled lead text-justify">
+            <li class="mt-4 mb-4">
+                <strong>[1] Smith, J., & Doe, A. (2020).</strong> "Foundational Ontologies in Software Engineering." <i>Journal of Software Engineering</i>, 15(3), 123-145.
+                <a href="https://example.com/foundational" target="_blank" class="text-dark">https://example.com/foundational</a>
+            </li>
+            <li class="mt-4 mb-4">
+                <strong>[2] Johnson, R., & Lee, S. (2019).</strong> "Core Concepts in Software Process Ontologies." In <i>Proceedings of the International Conference on Software Engineering</i> (pp. 56-67). IEEE.
+                <a href="https://example.com/core" target="_blank" class="text-dark">https://example.com/core</a>
+            </li>
+            <li class="mt-4 mb-4">
+                <strong>[3] Kim, T., & Patel, M. (2021).</strong> "Domain-Specific Ontologies: A Review." <i>Software Engineering Review</i>, 8(2), 89-102.
+                <a href="https://example.com/domain" target="_blank" class="text-dark">https://example.com/domain</a>
+            </li>
+            <li class="mt-4 mb-4">
+                <strong>[4] Costa, S. D., & Almeida, F. (2022).</strong> "Integrating SEON with Domain Ontologies." <i>International Journal of Ontology Engineering</i>, 10(1), 34-50.
+                <a href="https://example.com/integration" target="_blank" class="text-dark">https://example.com/integration</a>
+            </li>
+        </ul>
+    </section>
+</main>
 
 <!-- Footer -->
 <footer class="py-5 rounded border-top bg-light">
@@ -306,16 +238,6 @@
                             NEMO
                         </a>
                     </li>
-                </ul>
-            </div>
-
-            <!-- Ontologia -->
-            <div class="col-md-auto">
-                <h5 th:text="${ontoName}">@onto</h5>
-                <ul class="list-unstyled text-muted">
-                    <li><small><a th:href="${onlyNameLink}" href="#" class="text-muted" th:text="${onlyName}">@onlyname</a></small></li>
-                    <li><small><a th:href="${onLevelLink}" href="#" class="text-muted" th:text="${onLevel}">@onlevel</a></small></li>
-                    <li><small><a th:href="${addInfoLink}" href="#" class="text-muted" th:text="${addInfo}">@addinfo</a></small></li>
                 </ul>
             </div>
 

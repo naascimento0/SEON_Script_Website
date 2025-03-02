@@ -8,12 +8,11 @@ import com.change_vision.jude.api.inf.presentation.INodePresentation;
 import com.change_vision.jude.api.inf.presentation.IPresentation;
 import nemo.seon.model.*;
 import nemo.seon.model.Package;
-import org.apache.commons.io.FileUtils;
-
 import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
+
+import static nemo.seon.writer.Utils.fileToString;
+import static nemo.seon.writer.Utils.stringToFile;
 
 public class OntologiesWriter {
     private int figCount;
@@ -493,28 +492,5 @@ public class OntologiesWriter {
             ).append("\n\n");
         }
         return detailedConcepts.toString();
-    }
-
-
-
-    public static String fileToString(String filename) {
-        String text = null;
-        try {
-            text = FileUtils.readFileToString(new File(filename), "UTF-8");
-            //text = FileUtils.readFileToString(new File(Utils.class.getResource(filename).toURI()), "UTF-8");
-        } catch (IOException e) {
-            System.out.println("Error while reading file: " + filename + "at OntologiesWriter.fileToString()");
-            e.printStackTrace();
-        }
-        return text;
-    }
-
-    public static void stringToFile(String filename, String text) {
-        try {
-            FileUtils.writeStringToFile(new File(filename), text, "UTF-8");
-        } catch (IOException e) {
-            System.out.println("Error while writing file: " + filename + " at OntologiesWriter.stringToFile()");
-            e.printStackTrace();
-        }
     }
 }
