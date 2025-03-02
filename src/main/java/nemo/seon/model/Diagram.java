@@ -49,10 +49,16 @@ public class Diagram {
         return this.type;
     }
 
+    /**
+     * @return the Astah object
+     */
     public IDiagram getDiagramAstahObject() {
         return this.object;
     }
 
+    /**
+     * @return the pack of the diagram
+     */
     public Package getPack() {
         return pack;
     }

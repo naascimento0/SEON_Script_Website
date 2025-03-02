@@ -36,6 +36,10 @@ public class Relation {
         return this.target;
     }
 
+    /**
+     * Create a relation between two concepts in string format
+     * @return the relation in string format
+     */
     @Override
     public String toString() {
         String rname = name;

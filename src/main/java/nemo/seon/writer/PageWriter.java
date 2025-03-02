@@ -21,6 +21,9 @@ public class PageWriter {
         System.out.println("Publications page was generated successfully.");
     }
 
+    /**
+     * Writes the home page.
+     */
     private void writeHomePage() {
         // Lendo o template HTML
         String html = fileToString("./static/TemplateHomePage.html");
@@ -34,6 +37,9 @@ public class PageWriter {
         stringToFile("./page/" + "HomePage.html", html);
     }
 
+    /**
+     * Writes the publications page.
+     */
     private void writePublicationsPage() {
         // Lendo o template HTML
         String html = fileToString("./static/TemplatePublications.html");

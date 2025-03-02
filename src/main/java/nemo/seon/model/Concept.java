@@ -42,22 +42,43 @@ public class Concept implements Comparable<Concept> {
         this.stereotype = stereotype;
     }
 
+    /**
+     * Set the ontology to which this concept belongs.
+     * @param onto The ontology to which this concept belongs.
+     */
     public void setOntology(Ontology onto) {
         this.ontology = onto;
     }
 
+    /**
+     * Returns the Astah object that represents this concept.
+     * @return The Astah object that represents this concept.
+     */
     public IClass getAstahConceptObject() {
         return this.object;
     }
 
+    /**
+     * Returns the Concept object that corresponds to the given Astah object.
+     * @param object The Astah object that represents the concept.
+     * @return The Concept object that corresponds to the given Astah object.
+     */
     public static Concept getConceptObjectByItsIClass(IClass object) {
         return conceptMap.get(object);
     }
 
+    /**
+     * Return all concepts.
+     * @return A list with all concepts.
+     */
     public static List<Concept> getAllConcepts() {
         return new ArrayList<>(conceptMap.values());
     }
 
+    /**
+     * Returns the ontology to which this concept belongs.
+     * @return The ontology to which this concept belongs.
+     */
     public Ontology getOntology() {
         return this.ontology;
     }
@@ -70,14 +91,14 @@ public class Concept implements Comparable<Concept> {
         return this.definition;
     }
 
-    public IClass getConceptAstahObject() {
-        return this.object;
-    }
-
-    /* Returns the Concept with the full name parameter ("::" separator). */
+    /**
+     * Returns the Concept with the full name parameter ("::" separator).
+     * @param fullName The full name of the concept.
+     * @return The concept with the given full name.
+     */
     public static Concept getConceptByFullName(String fullName) {
         for (Concept concept : conceptMap.values()) {
-            if (concept.getConceptAstahObject().getFullName("::").equals(fullName)) {
+            if (concept.getAstahConceptObject().getFullName("::").equals(fullName)) {
                 return concept;
             }
         }
@@ -100,11 +121,18 @@ public class Concept implements Comparable<Concept> {
         return String.format("%s.html#%s_%s", shortName, shortName, formattedName);
     }
 
-    /* Returns the string used for labeling this concept in the html. Ex.: SPO_Artifact+Participation */
+    /**
+     * Returns the string used for labeling this concept in the HTML.
+     * Example: "SPO_Artifact+Participation"
+     */
     public String getLabel() {
         return ontology.getMainOntology().getShortName() + "_" + name.replace(' ', '+');
     }
 
+    /**
+     * Returns the example of this concept.
+     * @return The example of this concept.
+     */
     public String getExample() {
         return this.example;
     }
@@ -113,6 +141,10 @@ public class Concept implements Comparable<Concept> {
         return this.sourceDefinition;
     }
 
+    /**
+     * Get the generalizations of this concept.
+     * @return The generalizations of this concept.
+     */
     public List<Concept> getGeneralizations() {
         return this.generalizations;
     }
@@ -125,14 +157,28 @@ public class Concept implements Comparable<Concept> {
         return ontology.getMainOntology().getShortName() + "::" + this.name;
     }
 
+    /**
+     * Returns the main ontology to which this concept belongs.
+     * @return The main ontology to which this concept belongs.
+     */
     public Ontology getMainOntology() {
         return ontology.getMainOntology();
     }
 
+    /**
+     * Add a generalization to this concept.
+     * @param concept The concept that generalizes this concept.
+     * @return The concept that generalizes this concept.
+     */
     public void addGeneralization(Concept concept) {
         this.generalizations.add(concept);
     }
 
+    /**
+     * Compares this concept with another concept.
+     * @param o the object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
+     */
     @Override
     public int compareTo(Concept o) {
         return this.name.compareTo(o.name);

@@ -9,6 +9,7 @@ import com.change_vision.jude.api.inf.presentation.IPresentation;
 import nemo.seon.model.*;
 import nemo.seon.model.Package;
 import java.awt.geom.Rectangle2D;
+import java.time.Year;
 import java.util.*;
 
 import static nemo.seon.writer.Utils.fileToString;
@@ -16,6 +17,11 @@ import static nemo.seon.writer.Utils.stringToFile;
 
 public class OntologiesWriter {
     private int figCount;
+
+    /**
+     * Recursively writes HTML pages for all ontologies within the SEON network.
+     * @param seonNetwork the root package representing the SEON network
+     */
     public void writeOntologies(Package seonNetwork) {
         for(Package pack : seonNetwork.getSubpacks()) {
             if(pack.getPackageType() == Package.PackType.ONTOLOGY) {
@@ -27,6 +33,10 @@ public class OntologiesWriter {
         }
     }
 
+    /**
+     * Generates and writes an HTML page for a specific ontology.
+     * @param ontology the ontology to generate the HTML page for
+     */
     private void writeOntologyPage(Ontology ontology) {
 
         // Lendo o template HTML
@@ -44,7 +54,7 @@ public class OntologiesWriter {
         final String STAR_HALF = "<i class=\"bi bi-star-half\"></i>";
         final String STAR_FULL = "<i class=\"bi bi-star-fill\"></i>";
 
-        figCount = 1;
+        figCount = 1; // Contador de figuras para mostrar no HTML (Figura 1, Figura 2, etc.)
 
         Ontology.OntoLevel level = ontology.getLevel();
         if (level != null) {
@@ -106,13 +116,18 @@ public class OntologiesWriter {
         html = html.replace("@onlyname", ontology.getFullName());
         html = html.replace("@onlevel", onLevel);
         html = html.replace("@addinfo", addInfo);
-        html = html.replace("@currentYear", String.valueOf(java.time.Year.now().getValue()));
+        html = html.replace("@currentYear", String.valueOf(Year.now().getValue()));
         html = html.replace("@date", new Date().toString());
 
         // Gravando o arquivo HTML gerado
         stringToFile("./page/" + ontology.getShortName() + ".html", html);
     }
 
+    /**
+     * Formats a raw description text into HTML, adding line breaks and handling empty cases.
+     * @param description the description text to format
+     * @return the HTML-formatted description
+     */
     private String formatDescription(String description) {
         if (description == null || description.trim().isEmpty()) {
             return "<span class=\"text-danger fw-bold\">No definition available</span>";
@@ -120,6 +135,11 @@ public class OntologiesWriter {
         return description.replaceAll("\\R", "<br/>");
     }
 
+    /**
+     * Creates an HTML table listing the ontology's dependencies.
+     * @param ontology the ontology whose dependencies are to be listed
+     * @return the HTML table string containing dependency information
+     */
     private String generateDependenciesTable(Ontology ontology) {
         if (ontology == null || ontology.getDependencies() == null || ontology.getDependencies().isEmpty()) {
             return "<tr><td colspan=\"3\" class=\"text-center\">No dependencies available</td></tr>";
@@ -146,6 +166,11 @@ public class OntologiesWriter {
         return table.toString();
     }
 
+    /**
+     * Retrieves the URL for an ontology based on its network name.
+     * @param network the name of the network the ontology belongs to
+     * @return the URL string for the ontology, or "#" if not found
+     */
     private static String networkedOntoURL(String network) {
         if (network == null || network.trim().isEmpty()) {
             return "#"; // Link vazio padrão
@@ -173,6 +198,11 @@ public class OntologiesWriter {
         return urlMap.getOrDefault(network, "#"); // Retorna "#" se não encontrar
     }
 
+    /**
+     * Generates HTML structures for diagrams associated with a package, used in Ontology Models section.
+     * @param pack the package containing the diagrams
+     * @return the HTML string representing diagram structures
+     */
     private String generateDiagramStructures(Package pack) {
         if (pack == null || pack.getDiagrams() == null || pack.getDiagrams().isEmpty()) {
             return "<p class=\"lead text-center\">No diagrams available for this package.</p>";
@@ -220,6 +250,11 @@ public class OntologiesWriter {
         return diagramStructs.toString();
     }
 
+    /**
+     * Constructs an HTML image tag with its associated map for a diagram.
+     * @param diagram the diagram to generate the image and map for
+     * @return the HTML string containing the image and map elements
+     */
     private String parseImage(Diagram diagram) {
         if (diagram == null || diagram.getName() == null || diagram.getDiagramAstahObject() == null) {
             return "<p class=\"text-danger\">Invalid diagram data</p>";
@@ -236,6 +271,12 @@ public class OntologiesWriter {
         return image + parseMap(diagram);
     }
 
+    /**
+     * Builds the file path for a diagram image based on its package hierarchy.
+     * @param pack the package containing the diagram
+     * @param diagramName the name of the diagram
+     * @return the constructed image file path
+     */
     private String buildImagePath(Package pack, String diagramName) {
         StringBuilder path = new StringBuilder("astah_seon/"); // Raiz fixa baseada na exportação
 
@@ -261,6 +302,11 @@ public class OntologiesWriter {
         return path.toString();
     }
 
+    /**
+     * Generates an HTML image map for a diagram, linking concepts or packages.
+     * @param diagram the diagram to create the map for
+     * @return the HTML map string with clickable areas
+     */
     private String parseMap(Diagram diagram) {
         if (diagram == null || diagram.getDiagramAstahObject() == null) {
             return "";
@@ -342,6 +388,12 @@ public class OntologiesWriter {
         return mapCode.append("</map>").toString();
     }
 
+    /**
+     * Calculates the coordinates for an image map area based on a node's position.
+     * @param node the node presentation to calculate coordinates for
+     * @param adjust the bounding rectangle for adjustment
+     * @return the coordinates string in the format "x1,y1,x2,y2"
+     */
     private String getMapCoords(INodePresentation node, Rectangle2D adjust) {
         if (node == null || adjust == null) {
             return "0,0,0,0"; // Coordenadas padrão para erro
@@ -353,6 +405,12 @@ public class OntologiesWriter {
         return String.format("%d,%d,%d,%d", x, y, x + w, y + h);
     }
 
+    /**
+     * Generates HTML structures for subpackage sections within Ontology Models.
+     * @param seonNetwork the package containing subpackages
+     * @param sectionNumber the section number prefix (e.g., "3.")
+     * @return the HTML string representing section structures
+     */
     private String generateSectionStructures(Package seonNetwork, String sectionNumber) {
         if (seonNetwork == null || seonNetwork.getSubpacks() == null || seonNetwork.getSubpacks().isEmpty()) {
             return "";
@@ -385,6 +443,11 @@ public class OntologiesWriter {
         return sectionStructures.toString();
     }
 
+    /**
+     * Creates an HTML table listing the concepts and definitions of an ontology.
+     * @param ontology the ontology whose concepts are to be listed
+     * @return the HTML table string containing concept information
+     */
     public String generateConceptsTable(Ontology ontology) {
         if (ontology == null || ontology.getAllConcepts() == null || ontology.getAllConcepts().isEmpty()) {
             return "<tr><td colspan=\"2\" class=\"text-center\">No concepts available</td></tr>";
@@ -425,6 +488,11 @@ public class OntologiesWriter {
         return conceptsTable.toString();
     }
 
+    /**
+     * Generates detailed HTML sections for each concept in an ontology, including stereotypes, generalizations, and relations.
+     * @param ontology the ontology whose concepts are to be detailed
+     * @return the HTML string representing detailed concept sections
+     */
     private String generateDetailedConcepts(Ontology ontology) {
         if (ontology == null || ontology.getAllConcepts() == null || ontology.getAllConcepts().isEmpty()) {
             return "<p class=\"text-center\">No detailed concepts available</p>";

@@ -34,6 +34,7 @@ public class Package implements Comparable<Package> {
         this.order = order;
     }
 
+
     public String getName() {
         return this.pack.getName();
     }
@@ -62,14 +63,28 @@ public class Package implements Comparable<Package> {
         return PackType.PACKAGE;
     }
 
+    /**
+     * Returns the Package object associated with the given Astah package.
+     * @param pack The Astah package to search for.
+     * @return The Package object, or null if not found.
+     */
     public static Package getAstahPackFromMap(IPackage pack) {
         return packageMap.get(pack);
     }
 
+    /**
+     * Returns the subpackages of this package.
+     * @return A list of Package objects.
+     */
     public List<Package> getSubpacks() {
         return subpacks;
     }
 
+    /**
+     * Returns the package with the given name.
+     * @param fullName The name of the package to search for.
+     * @return The Package object, or null if not found.
+     */
     public static Package getPackageByFullName(String fullName) {
         for (Package pack : packageMap.values())
             if (pack.getAstahPack().getFullName("::").equals(fullName))
@@ -77,30 +92,50 @@ public class Package implements Comparable<Package> {
         return null;
     }
 
-    public static List<Package> getAllPackages() {
-        return new ArrayList<>(packageMap.values());
-    }
-
+    /**
+     * Returns the type of this package.
+     * @return The PackType enum value.
+     */
     public PackType getPackageType() {
         return this.type;
     }
 
+    /**
+     * Returns the parent package of this package.
+     * @return The parent Package object, or null if this is a root package.
+     */
     public Package getParent() {
         return this.parent;
     }
 
+    /**
+     * Returns the network name of this package.
+     * @return The network name, or null if not found.
+     */
     public String getNetwork() {
         return this.pack.getTaggedValue("Network");
     }
 
+    /**
+     * Returns the dependencies of this package.
+     * @return A list of Dependency objects.
+     */
     public List<Dependency> getDependencies() {
         return this.dependencies;
     }
 
+    /**
+     * Returns the definition of this package.
+     * @return The definition string, or null if not found.
+     */
     public String getDefinition() {
         return this.pack.getDefinition();
     }
 
+    /**
+     * Returns the diagrams of this package.
+     * @return A list of Diagram objects.
+     */
     public List<Diagram> getDiagrams() {
         return this.diagrams;
     }
@@ -161,6 +196,10 @@ public class Package implements Comparable<Package> {
         return level;
     }
 
+    /**
+     * Returns the ontology level of this package
+     * @return The OntoLevel enum value, or null if not found.
+     */
     public Ontology.OntoLevel getLevel() {
         Package pack = this;
         while (pack.getPackageType() != PackType.LEVEL && pack.getPackageType() != PackType.NETWORK)
@@ -174,7 +213,10 @@ public class Package implements Comparable<Package> {
         return null;
     }
 
-    /* Gets all concepts of the Package, including subpackages. */
+    /**
+     * Returns all concepts of this package and its subpackages.
+     * @return A list of Concept objects.
+     */
     public List<Concept> getAllConcepts() {
         List<Concept> concepts = new ArrayList<Concept>();
         if (this instanceof Ontology) {
@@ -185,6 +227,7 @@ public class Package implements Comparable<Package> {
         }
         return concepts;
     }
+
 
     public void setParent(Package parent) {
         this.parent = parent;

@@ -7,6 +7,11 @@ import java.io.IOException;
 
 public class Utils {
 
+    /**
+     * Reads a file and returns its content as a string.
+     * @param filename the file name
+     * @return the file content as a string
+     */
     public static String fileToString(String filename) {
         String text = null;
         try {
@@ -19,6 +24,11 @@ public class Utils {
         return text;
     }
 
+    /**
+     * Writes a string to a file.
+     * @param filename the file name
+     * @param text the text to write
+     */
     public static void stringToFile(String filename, String text) {
         try {
             FileUtils.writeStringToFile(new File(filename), text, "UTF-8");
