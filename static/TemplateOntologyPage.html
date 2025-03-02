@@ -16,16 +16,8 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- Estilo customizado para main -->
+    <!-- Estilo customizado -->
     <style>
-        .section {
-            padding: 3rem; /* Equivalente a p-5, mas ajustável */
-            border-radius: 0.3rem; /* Equivalente a rounded */
-        }
-        .text-justify {
-            text-align: justify;
-        }
-
         /* Tema verde claro */
         :root {
             --light-green: #d4edda; /* Verde claro principal */
@@ -56,13 +48,12 @@
             color: var(--dark-green);
         }
 
-        /* Main e seções */
+        /* Corpo e seções */
         body {
-            /*background-color: #f5f8f5; !* Fundo geral sutil *!*/
             color: var(--dark-green);
+            padding-top: 70px; /* Espaço para navbar fixa */
         }
         .section, .bg-light {
-            /*background-color: var(--light-green);*/
             border: 1px solid var(--mid-green);
             border-radius: 0.3rem;
             padding: 3rem;
@@ -79,249 +70,284 @@
         hr {
             border-color: var(--mid-green);
         }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 60px; /* Abaixo da navbar */
+            bottom: 0;
+            left: 0;
+            width: 250px;
+            border-right: 1px solid var(--mid-green);
+            padding: 1rem;
+            overflow-y: auto; /* Rolagem se necessário */
+        }
+        .sidebar .nav-link {
+            color: var(--dark-green);
+            padding: 0.5rem 1rem;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: var(--mid-green);
+            color: var(--dark-green);
+        }
+        .sidebar .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Ajuste do main para a sidebar */
+        .main-content {
+            margin-left: 250px; /* Espaço para a sidebar */
+        }
     </style>
 
     <!-- Estilo customizado footer-->
     <style>
+        /* Footer */
         footer {
-            background-color: #f8f9fa; /* Equivalente a bg-light */
-            padding: 3rem 0; /* Equivalente a py-5 */
-            border-top: 1px solid #dee2e6; /* Equivalente a border-top */
-            border-radius: 0.3rem; /* Equivalente a rounded */
+            background-color: #f8f9fa;
+            padding: 3rem 0;
+            border-top: 1px solid #dee2e6;
+            border-radius: 0.3rem;
         }
         footer .text-muted a {
-            color: #6c757d; /* Cor padrão do text-muted */
+            color: #6c757d;
             text-decoration: none;
         }
         footer .text-muted a:hover {
             text-decoration: underline;
         }
     </style>
-
 </head>
 
 <body>
-    <header>
-        <!-- Barra de navegação -->
-        <nav class="navbar navbar-expand-lg fixed-top">
-            <div class="container-fluid">
-                <!-- Marca -->
-                <a class="navbar-brand" href="SEON.html">SEON</a>
+<header>
+    <!-- Barra de navegação -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <!-- Marca -->
+            <a class="navbar-brand" href="SEON.html">SEON</a>
 
-                <!-- Botão hamburguer para telas pequenas -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Alternar navegação">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <!-- Botão hamburguer para telas pequenas -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Alternar navegação">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <!-- Menu colapsável -->
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <!-- Home -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="TemplateHomePage.html">Home <span class="visually-hidden">(página atual)</span></a>
-                        </li>
+            <!-- Menu colapsável -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <!-- Home -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="TemplateHomePage.html">Home <span class="visually-hidden">(página atual)</span></a>
+                    </li>
 
-                        <!-- The Network -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="dropdownNetwork" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                The Network
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
-                                <li><a class="dropdown-item" href="TemplateHomePage.html">SEON</a></li>
-                                <li><a class="dropdown-item" href="TemplateHomePage.html#definition">Definition</a></li>
-                                <li><a class="dropdown-item" href="TemplateHomePage.html#architeture">Architecture</a></li>
-                                <li><a class="dropdown-item" href="TemplateHomePage.html#references">References</a></li>
-                            </ul>
-                        </li>
+                    <!-- The Network -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownNetwork" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            The Network
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
+                            <li><a class="dropdown-item" href="TemplateHomePage.html">SEON</a></li>
+                            <li><a class="dropdown-item" href="TemplateHomePage.html#definition">Definition</a></li>
+                            <li><a class="dropdown-item" href="TemplateHomePage.html#architeture">Architecture</a></li>
+                            <li><a class="dropdown-item" href="TemplateHomePage.html#references">References</a></li>
+                        </ul>
+                    </li>
 
-                        <!-- Networked Ontologies -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="dropdownOntologies" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Networked Ontologies
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownOntologies">
-                                <li><a class="dropdown-item disabled">Foundational Layer</a></li>
-                                <li><a class="dropdown-item" href="UFO.html">UFO</a></li>
-                                <li><a class="dropdown-item disabled">Core Layer</a></li>
-                                <li><a class="dropdown-item" href="SysSwO.html">SysSwO</a></li>
-                                <li><a class="dropdown-item disabled">Domain Layer</a></li>
-                                <li><a class="dropdown-item" href="CMPO.html">CMPO</a></li>
-                            </ul>
-                        </li>
+                    <!-- Networked Ontologies -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownOntologies" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Networked Ontologies
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownOntologies">
+                            <li><a class="dropdown-item disabled">Foundational Layer</a></li>
+                            <li><a class="dropdown-item" href="UFO.html">UFO</a></li>
+                            <li><a class="dropdown-item disabled">Core Layer</a></li>
+                            <li><a class="dropdown-item" href="SysSwO.html">SysSwO</a></li>
+                            <li><a class="dropdown-item disabled">Domain Layer</a></li>
+                            <li><a class="dropdown-item" href="CMPO.html">CMPO</a></li>
+                        </ul>
+                    </li>
 
-                        <!-- Publications -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="Publications.html">Publications</a>
-                        </li>
-
-                        <!-- @onto -->
-                        <li class="nav-item dropdown active">
-                            <a class="nav-link dropdown-toggle" href="#" id="dropdownOnto" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                @onto
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownOnto">
-                                <li><a class="dropdown-item" href="#ontologydescription">Ontology Description</a></li>
-                                <li><a class="dropdown-item" href="#relatedontologies">Related Ontologies</a></li>
-                                <li><a class="dropdown-item" href="#ontologymodels">Ontology Models</a></li>
-                                <li><a class="dropdown-item" href="#conceptsdefinition">Concepts Definition</a></li>
-                                <li><a class="dropdown-item" href="#detailedconcepts">Detailed Concepts</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <main role="main" class="container-fluid mt-5">
-        <!-- Seção Inicial -->
-        <section class="bg-light p-5 rounded mb-4">
-            <div th:replace="~{fragments/additional-info :: info}">@additionalinfo</div>
-            <h1 class="display-4">The <span th:text="${title}">@title</span></h1>
-            <p class="lead text-end fst-italic" th:text="${ontoLevel}">@onto_level</p>
-            <small><i class="bi-dot"></i><span th:utext="${ontoPublishedPaper}">@onto published paper</span></small>
-
-            <!-- Exemplo estático comentado:
-            <p><small><i class="bi-pin-fill"></i> Costa, S. D., et al. (2022). A core ontology on the Human–Computer Interaction phenomenon. <a class="text-dark" href="https://doi.org/10.1016/j.datak.2021.101977" target="_blank">10.1016/j.datak.2021.101977</a></small></p>
-            -->
-        </section>
-
-        <hr class="my-5">
-
-        <!-- 1. Ontology Description -->
-        <section class="section p-5 rounded" id="ontologydescription">
-            <h2 class="display-6">1. Ontology Description</h2>
-            <p class="lead text-justify" th:text="${description}">@description</p>
-        </section>
-
-        <hr class="my-5">
-
-        <!-- 2. Related Ontologies -->
-        <section class="section p-5 rounded" id="relatedontologies">
-            <h2 class="display-6">2. Related Ontologies</h2>
-            <p class="lead">Networked ontologies used by <span th:text="${onto}">@onto</span>:</p>
-            <div class="table-responsive my-5">
-                <table class="table table-hover" aria-describedby="relatedOntologiesCaption">
-                    <thead>
-                    <tr>
-                        <th scope="col">Ontology</th>
-                        <th scope="col">Relation</th>
-                        <th scope="col">Integration Level</th>
-                    </tr>
-                    </thead>
-                    <tbody th:utext="${myOntologyDependencies}">@myontologyDependencies</tbody>
-                    <caption id="relatedOntologiesCaption">
-                        <small>Ontologies (re)used by <span th:text="${onto}">@onto</span>.</small>
-                    </caption>
-                </table>
-            </div>
-        </section>
-
-        <hr class="my-5">
-
-        <!-- 3. Ontology Models -->
-        <section class="section p-5 rounded" id="ontologymodels">
-            <h2 class="display-6">3. Ontology Models</h2>
-            <p class="lead" th:text="${sectionContent}">@sectionContent</p>
-        </section>
-
-        <hr class="my-5">
-
-        <!-- 4. Concepts Definition -->
-        <section class="section p-5 rounded" id="conceptsdefinition">
-            <h2 class="display-6">4. Concepts Definition</h2>
-            <p class="lead">The following table shows the definitions for <span th:text="${onto}">@onto</span> concepts.</p>
-            <div class="table-responsive my-5">
-                <table class="table table-hover" aria-describedby="conceptsDefinitionCaption">
-                    <thead>
-                    <tr>
-                        <th scope="col">Concept</th>
-                        <th scope="col">Definition</th>
-                    </tr>
-                    </thead>
-                    <tbody th:utext="${conceptDefinitions}">@conceptDefinitions</tbody>
-                    <caption id="conceptsDefinitionCaption">
-                        <small><span th:text="${onto}">@onto</span> concepts definition.</small>
-                    </caption>
-                </table>
-            </div>
-        </section>
-
-        <!-- 5. Detailed Concepts -->
-        <section class="section p-5 rounded" id="detailedconcepts">
-            <h2 class="display-6">5. Detailed Concepts</h2>
-            <p class="lead"><span th:text="${title}">@title</span> detailed concepts.</p>
-            <div th:utext="${detailedConcepts}">@detailedConcepts</div>
-        </section>
-
-    </main>
-
-    <footer class="py-5 rounded border-top bg-light">
-        <div class="container">
-            <div class="row justify-content-md-center g-4">
-                <!-- Copyright -->
-                <div class="col-md-auto">
-                    <h6>Copyright</h6>
-                    <div class="d-flex align-items-center">
-                        <i class="material-icons text-muted me-1" aria-label="Símbolo de copyright">copyright</i>
-                        <span class="text-muted">
-            <small th:text="'© ' + ${currentYear} + ' Simone Dornelas Costa'">© Nome a ser colocado</small>
-          </span>
-                    </div>
-                </div>
-
-                <!-- Powered by -->
-                <div class="col-md-auto">
-                    <h6>Powered by</h6>
-                    <ul class="list-unstyled text-muted">
-                        <li>
-                            <a href="https://nemo.inf.ufes.br/" target="_blank" class="text-muted text-decoration-none">
-                                <img src="../static/images/logoNemo.svg" alt="Logo NEMO" width="50" class="mb-1 d-block">
-                                NEMO
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Ontologia -->
-                <div class="col-md-auto">
-                    <h5 th:text="${ontoName}">@onto</h5>
-                    <ul class="list-unstyled text-muted">
-                        <li><small><a th:href="${onlyNameLink}" href="#" class="text-muted" th:text="${onlyName}">@onlyname</a></small></li>
-                        <li><small><a th:href="${onLevelLink}" href="#" class="text-muted" th:text="${onLevel}">@onlevel</a></small></li>
-                        <li><small><a th:href="${addInfoLink}" href="#" class="text-muted" th:text="${addInfo}">@addinfo</a></small></li>
-                    </ul>
-                </div>
-
-                <!-- Contato -->
-                <div class="col-md-auto">
-                    <h6>Contact us</h6>
-                    <ul class="list-unstyled text-muted">
-                        <li class="d-flex align-items-center">
-                            <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
-                            <small><a href="mailto:simone.costa@ufes.br" class="text-muted">Email de algúem</a></small>
-                        </li>
-                        <li class="d-flex align-items-center">
-                            <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
-                            <small><a href="mailto:monalessa@inf.ufes.br" class="text-muted">Email de alguém</a></small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Data -->
-            <div class="row mt-4 justify-content-md-center">
-                <div class="col-md-auto">
-                    <small class="text-muted" th:text="${date}">@date</small>
-                </div>
+                    <!-- Publications -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="Publications.html">Publications</a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </footer>
+    </nav>
+</header>
 
-    <script
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="'#' + ${ontologydescription}" href="#ontologydescription">Ontology Description</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="'#' + ${relatedontologies}" href="#relatedontologies">Related Ontologies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="'#' + ${ontologymodels}" href="#ontologymodels">Ontology Models</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="'#' + ${conceptsdefinition}" href="#conceptsdefinition">Concepts Definition</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="'#' + ${detailedconcepts}" href="#detailedconcepts">Detailed Concepts</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main role="main" class="main-content col">
+            <section class="bg-light p-5 rounded mb-4">
+                <div th:replace="~{fragments/additional-info :: info}">@additionalinfo</div>
+                <h1 class="display-4">The <span th:text="${title}">@title</span></h1>
+                <p class="lead text-end fst-italic" th:text="${ontoLevel}">@onto_level</p>
+                <small><i class="bi-dot"></i><span th:utext="${ontoPublishedPaper}">@onto published paper</span></small>
+            </section>
+
+            <hr class="my-5">
+
+            <!-- 1. Ontology Description -->
+            <section class="section p-5 rounded" id="ontologydescription">
+                <h2 class="display-6">1. Ontology Description</h2>
+                <p class="lead text-justify" th:text="${description}">@description</p>
+            </section>
+
+            <hr class="my-5">
+
+            <!-- 2. Related Ontologies -->
+            <section class="section p-5 rounded" id="relatedontologies">
+                <h2 class="display-6">2. Related Ontologies</h2>
+                <p class="lead">Networked ontologies used by <span th:text="${onto}">@onto</span>:</p>
+                <div class="table-responsive my-5">
+                    <table class="table table-hover" aria-describedby="relatedOntologiesCaption">
+                        <thead>
+                        <tr>
+                            <th scope="col">Ontology</th>
+                            <th scope="col">Relation</th>
+                            <th scope="col">Integration Level</th>
+                        </tr>
+                        </thead>
+                        <tbody th:utext="${myOntologyDependencies}">@myontologyDependencies</tbody>
+                        <caption id="relatedOntologiesCaption">
+                            <small>Ontologies (re)used by <span th:text="${onto}">@onto</span>.</small>
+                        </caption>
+                    </table>
+                </div>
+            </section>
+
+            <hr class="my-5">
+
+            <!-- 3. Ontology Models -->
+            <section class="section p-5 rounded" id="ontologymodels">
+                <h2 class="display-6">3. Ontology Models</h2>
+                <p class="lead" th:text="${sectionContent}">@sectionContent</p>
+            </section>
+
+            <hr class="my-5">
+
+            <!-- 4. Concepts Definition -->
+            <section class="section p-5 rounded" id="conceptsdefinition">
+                <h2 class="display-6">4. Concepts Definition</h2>
+                <p class="lead">The following table shows the definitions for <span th:text="${onto}">@onto</span> concepts.</p>
+                <div class="table-responsive my-5">
+                    <table class="table table-hover" aria-describedby="conceptsDefinitionCaption">
+                        <thead>
+                        <tr>
+                            <th scope="col">Concept</th>
+                            <th scope="col">Definition</th>
+                        </tr>
+                        </thead>
+                        <tbody th:utext="${conceptDefinitions}">@conceptDefinitions</tbody>
+                        <caption id="conceptsDefinitionCaption">
+                            <small><span th:text="${onto}">@onto</span> concepts definition.</small>
+                        </caption>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 5. Detailed Concepts -->
+            <section class="section p-5 rounded" id="detailedconcepts">
+                <h2 class="display-6">5. Detailed Concepts</h2>
+                <p class="lead"><span th:text="${title}">@title</span> detailed concepts.</p>
+                <div th:utext="${detailedConcepts}">@detailedConcepts</div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="py-5 rounded border-top bg-light">
+    <div class="container">
+        <div class="row justify-content-md-center g-4">
+            <!-- Copyright -->
+            <div class="col-md-auto">
+                <h6>Copyright</h6>
+                <div class="d-flex align-items-center">
+                    <i class="material-icons text-muted me-1" aria-label="Símbolo de copyright">copyright</i>
+                    <span class="text-muted">
+                            <small th:text="'© ' + ${currentYear} + ' Simone Dornelas Costa'">© Nome a ser colocado</small>
+                        </span>
+                </div>
+            </div>
+
+            <!-- Powered by -->
+            <div class="col-md-auto">
+                <h6>Powered by</h6>
+                <ul class="list-unstyled text-muted">
+                    <li>
+                        <a href="https://nemo.inf.ufes.br/" target="_blank" class="text-muted text-decoration-none">
+                            <img src="../static/images/logoNemo.svg" alt="Logo NEMO" width="50" class="mb-1 d-block">
+                            NEMO
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Ontologia -->
+            <div class="col-md-auto">
+                <h5 th:text="${ontoName}">@onto</h5>
+                <ul class="list-unstyled text-muted">
+                    <li><small><a th:href="${onlyNameLink}" href="#" class="text-muted" th:text="${onlyName}">@onlyname</a></small></li>
+                    <li><small><a th:href="${onLevelLink}" href="#" class="text-muted" th:text="${onLevel}">@onlevel</a></small></li>
+                    <li><small><a th:href="${addInfoLink}" href="#" class="text-muted" th:text="${addInfo}">@addinfo</a></small></li>
+                </ul>
+            </div>
+
+            <!-- Contato -->
+            <div class="col-md-auto">
+                <h6>Contact us</h6>
+                <ul class="list-unstyled text-muted">
+                    <li class="d-flex align-items-center">
+                        <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
+                        <small><a href="mailto:simone.costa@ufes.br" class="text-muted">Email de algúem</a></small>
+                    </li>
+                    <li class="d-flex align-items-center">
+                        <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
+                        <small><a href="mailto:monalessa@inf.ufes.br" class="text-muted">Email de alguém</a></small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Data -->
+        <div class="row mt-4 justify-content-md-center">
+            <div class="col-md-auto">
+                <small class="text-muted" th:text="${date}">@date</small>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
-    </script>
+</script>
 </body>
 </html>
