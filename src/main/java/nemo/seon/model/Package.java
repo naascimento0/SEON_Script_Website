@@ -72,10 +72,8 @@ public class Package implements Comparable<Package> {
 
     public static Package getPackageByFullName(String fullName) {
         for (Package pack : packageMap.values())
-            if (pack.getAstahPack().getFullName("::").equals(fullName)) {
-                System.out.println(pack.getAstahPack().getFullName("::"));
+            if (pack.getAstahPack().getFullName("::").equals(fullName))
                 return pack;
-            }
         return null;
     }
 

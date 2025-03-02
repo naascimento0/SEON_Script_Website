@@ -444,9 +444,9 @@ public class OntologiesWriter {
 
             String stereotype = concept.getStereotype() != null && !concept.getStereotype().isEmpty() ?
                     "<br><code class=\"text-muted\">&lt;&lt;" + concept.getStereotype() + "&gt;&gt;</code>" : "";
-            if (stereotype.isEmpty() && !"UFO".equals(ontology.getShortName())) {
-                System.out.println("*" + concept + " <none>");
-            }
+//            if (stereotype.isEmpty() && !"UFO".equals(ontology.getShortName())) {
+//                System.out.println("*" + concept + " <none>");
+//            }
 
             String definition = concept.getDefinition() != null ? concept.getDefinition().replaceAll("\\R", "") : "No definition provided";
             String example = concept.getExample() != null ?
