@@ -17,6 +17,7 @@ Portanto, neste repositório temos o objetivo de criar um script que leia arquiv
 
 * Java 21
 * IDE: IntelliJ IDEA
+* Linux
 
 # Execução do Código
 
