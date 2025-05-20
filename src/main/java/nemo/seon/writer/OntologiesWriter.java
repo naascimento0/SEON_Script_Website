@@ -32,7 +32,7 @@ public class OntologiesWriter {
             }
         }
     }
-
+ 
     /**
      * Generates and writes an HTML page for a specific ontology.
      * @param ontology the ontology to generate the HTML page for
@@ -135,6 +135,7 @@ public class OntologiesWriter {
         return description.replaceAll("\\R", "<br/>");
     }
 
+    // TODO Refactor para consertar o problema de dependências
     /**
      * Creates an HTML table listing the ontology's dependencies.
      * @param ontology the ontology whose dependencies are to be listed
