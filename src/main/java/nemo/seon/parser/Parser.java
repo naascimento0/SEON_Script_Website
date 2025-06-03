@@ -20,64 +20,60 @@ public class Parser {
 
     }
 
+    /**
+     * Exports the astah images to the images directory.
+     * astah-command.sh script usage:
+     *     -f,--file <target file>    target file
+     *     -image                     export documents to image
+     *     -o,--output <output dir>   output dir
+     *     -t,--type <image type>     png/jpg/emf (emf is supported by uml or professional only.)
+     *     -resized                   resized export image's font(Main purpose:Exporting at other OS)
+     *     -diff <base astah project file> <reference astah project file>   jude/asta
+     */
     public static void exportAstahImages() {
+        String scriptPath = Parser.PATH + "/jars/astah-command.sh";  // astah-command.sh script is the command line tool for Astah
         String outputDir = Parser.PATH + "/page/images";  // Output directory for the images
-        File outputDirFile = new File(outputDir);
-        if (!outputDirFile.exists()) {
-            outputDirFile.mkdirs();
+
+        // Verifies if the astah-command.sh script exists
+        if (!new File(scriptPath).exists()) {
+            System.err.println("Error: The file '" + scriptPath + "' was not found.");
+            return;
         }
 
         try {
-            int exitCode = runAstahCommandInDocker(outputDir);
+            int exitCode = getExitCode(scriptPath, outputDir);
             if (exitCode == 0) {
                 System.out.println("The astah images exporting was executed successfully.");
             } else {
-                System.err.println("The Docker command has failed. Exit code: " + exitCode);
+                System.err.println("The command has failed. " + exitCode);
             }
         } catch (Exception e) {
             // Prints the error message
-            System.err.println("Error while executing Docker command: " + e.getMessage());
+            System.err.println("Error while executing command: " + e.getMessage());
         }
     }
 
     /**
-     * Executes the Astah command inside a Docker container.
-     * @param outputDir Output directory for the images
+     * Executes the command to export the Astah images.
+     * @param scriptPath Path to the script
+     * @param outputDir Output directory
      * @return The exit code of the process
      */
-    private static int runAstahCommandInDocker(String outputDir) throws IOException, InterruptedException {
-        // Build the docker run command
+    private static int getExitCode(String scriptPath, String outputDir) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder(
-                "docker", "run", "--rm",
-                "-v", astahFilePath + ":/app/data/astah_seon.asta:ro",  // Mount the .asta file (read-only)
-                "-v", outputDir + ":/app/output",  // Mount the output directory
-                "seon-astah:latest",  // Docker image name
-                "-image", "cl",  // Argument to export only class diagrams
-                "-f", "/app/data/astah_seon.asta",  // Path to the .asta file inside the container
-                "-o", "/app/output"  // Output directory inside the container
+                scriptPath, // Path to the script
+                "-image", "cl", // Argument to export only class diagrams
+                "-f", astahFilePath, // Astah file
+                "-o", outputDir  // Output directory
         );
 
-        // Start the process
+        // Defines the working directory
+        processBuilder.directory(new File(Parser.PATH));
+
+        // Starts the process
         Process process = processBuilder.start();
 
-        // Optionally redirect output streams for debugging
-        new Thread(() -> {
-            try (java.util.Scanner s = new java.util.Scanner(process.getInputStream())) {
-                while (s.hasNextLine()) {
-                    System.out.println("Docker: " + s.nextLine());
-                }
-            }
-        }).start();
-
-        new Thread(() -> {
-            try (java.util.Scanner s = new java.util.Scanner(process.getErrorStream())) {
-                while (s.hasNextLine()) {
-                    System.err.println("Docker error: " + s.nextLine());
-                }
-            }
-        }).start();
-
-        // Wait for the process to finish
+        // Waits for the process to finish
         return process.waitFor();
     }
 }
