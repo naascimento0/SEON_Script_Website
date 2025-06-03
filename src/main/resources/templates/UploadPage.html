@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload of .asta File</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #output { margin-top: 20px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+<h1>Generate Ontology Network</h1>
+<p>Upload the .asta file to generate the ontology network:</p>
+<input type="file" id="astaFile" accept=".asta">
+<button onclick="uploadFile()">Process</button>
+<div id="output"></div>
+
+<script>
+    async function uploadFile() {
+        const fileInput = document.getElementById('astaFile');
+        const outputDiv = document.getElementById('output');
+        const file = fileInput.files[0];
+
+        if (!file || !file.name.endsWith('.asta')) {
+            outputDiv.innerHTML = '<p class="error">Please select a valid .asta file.</p>';
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        outputDiv.innerHTML = '<p>Processing...</p>';
+
+        try {
+            const response = await fetch('http://localhost:8080/upload-asta', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                outputDiv.innerHTML = `<p class="error">Error: ${errorText}</p>`;
+                return;
+            }
+
+            const result = await response.text();
+            outputDiv.innerHTML = `<p class="success">File uploaded successfully: ${result}</p>`;
+        } catch (error) {
+            outputDiv.innerHTML = `<p class="error">Error uploading the file: ${error.message}</p>`;
+        }
+    }
+</script>
+</body>
+</html>
