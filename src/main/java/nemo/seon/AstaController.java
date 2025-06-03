@@ -60,12 +60,6 @@ public class AstaController {
             logger.error("Error processing file: {}", e.getMessage(), e);
             return ResponseEntity.status(500)
                     .body(("Error processing file: " + e.getMessage()).getBytes());
-        } catch (RuntimeException e) {
-            logger.error("Error parsing .asta file: {}", e.getMessage(), e);
-            String message = e.getCause() instanceof com.change_vision.jude.api.inf.exception.LicenseNotFoundException
-                    ? "Astah license not found. Please ensure a valid license is configured."
-                    : "Invalid or corrupted .asta file: " + e.getMessage();
-            return ResponseEntity.status(500).body(message.getBytes());
         } catch (Exception e) {
             logger.error("Unexpected error: {}", e.getMessage(), e);
             return ResponseEntity.status(500).body(("Unexpected error: " + e.getMessage()).getBytes());
