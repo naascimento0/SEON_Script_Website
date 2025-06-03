@@ -26,9 +26,9 @@ public class PageWriter {
      */
     private void writeHomePage() {
         // Lendo o template HTML
-        String html = fileToString("./static/TemplateHomePage.html");
+        String html = fileToString("./src/main/resources/templates/TemplateHomePage.html");
         if (html == null) {
-            System.out.println("Failed to load template for home page: ./static/TemplateHomePage.html");
+            System.out.println("Failed to load template for home page: ./src/main/resources/templates/TemplateHomePage.html");
             return;
         }
 
@@ -42,9 +42,9 @@ public class PageWriter {
      */
     private void writePublicationsPage() {
         // Lendo o template HTML
-        String html = fileToString("./static/TemplatePublications.html");
+        String html = fileToString("./src/main/resources/templates/TemplatePublications.html");
         if (html == null) {
-            System.out.println("Failed to load template for home page: ./static/TemplatePublications.html");
+            System.out.println("Failed to load template for home page: ./src/main/resources/templates/TemplatePublications.html");
             return;
         }
 

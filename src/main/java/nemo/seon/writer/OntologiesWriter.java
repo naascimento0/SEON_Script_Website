@@ -40,7 +40,7 @@ public class OntologiesWriter {
     private void writeOntologyPage(Ontology ontology) {
 
         // Lendo o template HTML
-        String html = fileToString("./static/TemplateOntologyPage.html");
+        String html = fileToString("./src/main/resources/templates/TemplateOntologyPage.html");
         if (html == null) {
             System.out.println("Failed to load template for ontology: " + ontology.getName());
             return;
