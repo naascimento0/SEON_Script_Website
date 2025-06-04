@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>SEON</title>
+    <title>SEON - Publications</title>
     <!-- Favicon -->
     <link rel="icon" href="../../../../static/images/favicon.svg" sizes="32x32" type="image/svg">
     <!-- CDN from Bootstrap website -->
@@ -24,39 +24,236 @@
             --dark-green: #155724;  /* Verde escuro para contraste */
             --mid-green: #c3e6cb;   /* Tom intermediário */
             --text-muted-green: #6c757d; /* Mantém o cinza muted padrão */
+            --sidebar-width: 280px; /* Largura do sidebar */
+            --navbar-height: 70px; /* Altura aumentada da navbar */
         }
 
-        /* Barra de navegação */
+        /* Barra de navegação melhorada */
         .navbar {
-            background-color: var(--light-green);
-            border-bottom: 1px solid var(--dark-green);
+            background: linear-gradient(135deg, var(--light-green) 0%, var(--mid-green) 100%);
+            border-bottom: 2px solid var(--dark-green);
+            z-index: 1040;
+            box-shadow: 0 4px 12px rgba(21, 87, 36, 0.15);
+            backdrop-filter: blur(10px);
+            height: var(--navbar-height);
+            transition: all 0.3s ease;
         }
-        .navbar-brand, .nav-link {
+
+        .navbar.scrolled {
+            background: rgba(212, 237, 218, 0.95);
+            box-shadow: 0 2px 20px rgba(21, 87, 36, 0.2);
+        }
+
+        /* Marca/Logo */
+        .navbar-brand {
             color: var(--dark-green) !important;
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
         }
+
+        .navbar-brand::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--dark-green), var(--mid-green));
+            transition: width 0.3s ease;
+        }
+
+        .navbar-brand:hover::after {
+            width: 100%;
+        }
+
+        .navbar-brand:hover {
+            color: #0d3c17 !important;
+            transform: translateY(-2px);
+        }
+
+        /* Links de navegação */
+        .nav-link {
+            color: var(--dark-green) !important;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem !important;
+            margin: 0 0.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
         .nav-link:hover, .nav-link:focus {
-            color: #0d3c17 !important; /* Tom mais escuro no hover */
+            color: white !important;
+            background: linear-gradient(135deg, var(--dark-green), #0d3c17);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(21, 87, 36, 0.3);
         }
+
+        .nav-link.active {
+            color: white !important;
+            background: linear-gradient(135deg, var(--dark-green), #0d3c17);
+            box-shadow: 0 2px 6px rgba(21, 87, 36, 0.4);
+        }
+
+        /* Dropdown melhorado */
+        .dropdown-toggle::after {
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown.show .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
         .dropdown-menu {
-            background-color: var(--mid-green);
+            background: linear-gradient(135deg, var(--mid-green) 0%, var(--light-green) 100%);
+            border: 2px solid var(--dark-green);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(21, 87, 36, 0.2);
+            margin-top: 0.5rem;
+            padding: 0.75rem 0;
+            min-width: 220px;
+            backdrop-filter: blur(10px);
         }
+
         .dropdown-item {
             color: var(--dark-green);
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
+
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--dark-green);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-item:hover::before, .dropdown-item:focus::before {
+            transform: scaleY(1);
+        }
+
         .dropdown-item:hover, .dropdown-item:focus {
-            background-color: var(--light-green);
+            background: linear-gradient(90deg, rgba(21, 87, 36, 0.1), transparent);
             color: var(--dark-green);
+            transform: translateX(8px);
+            padding-left: 2rem;
+        }
+
+        .dropdown-item.disabled {
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            padding: 0.5rem 1.5rem;
+            background: rgba(21, 87, 36, 0.05);
+            margin: 0.25rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .dropdown-item.disabled:hover {
+            transform: none;
+            padding-left: 1.5rem;
+            background: rgba(21, 87, 36, 0.05);
+        }
+
+        /* Botão hamburguer customizado */
+        .navbar-toggler {
+            border: 2px solid var(--dark-green);
+            border-radius: 8px;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:hover {
+            background: var(--dark-green);
+            transform: scale(1.05);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2821, 87, 36, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .navbar-toggler:hover .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Animações de entrada */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu.show {
+            animation: slideInDown 0.3s ease;
+        }
+
+        /* Responsividade melhorada */
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background: rgba(212, 237, 218, 0.98);
+                border-radius: 12px;
+                margin-top: 1rem;
+                padding: 1rem;
+                box-shadow: 0 4px 15px rgba(21, 87, 36, 0.2);
+            }
+
+            .navbar-nav {
+                gap: 0.5rem;
+            }
+
+            .dropdown-menu {
+                border: none;
+                box-shadow: none;
+                background: rgba(195, 230, 203, 0.5);
+                margin-left: 1rem;
+            }
         }
 
         /* Corpo e seções */
         body {
             color: var(--dark-green);
-            padding-top: 70px; /* Espaço para navbar fixa */
+            padding-top: var(--navbar-height);
         }
         .section, .bg-light {
             border: 1px solid var(--mid-green);
-            border-radius: 0.3rem;
+            border-radius: 0.5rem;
             padding: 3rem;
+            margin-bottom: 2rem;
         }
         .text-justify {
             text-align: justify;
@@ -69,40 +266,165 @@
         }
         hr {
             border-color: var(--mid-green);
+            margin: 2rem 0;
         }
 
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 60px; /* Abaixo da navbar */
-            bottom: 0;
-            left: 0;
-            width: 250px;
-            border-right: 1px solid var(--mid-green);
-            padding: 1rem;
-            overflow-y: auto; /* Rolagem se necessário */
+        /* Ajuste para âncoras com navbar fixa */
+        h2[id], h3[id] {
+            scroll-margin-top: 90px;
         }
+
+        /* Sidebar - Desktop */
+        @media (min-width: 992px) {
+            .sidebar {
+                position: fixed;
+                top: var(--navbar-height);
+                left: 0;
+                width: var(--sidebar-width);
+                height: calc(100vh - var(--navbar-height));
+                background-color: #f8f9fa;
+                border-right: 2px solid var(--mid-green);
+                padding: 1.5rem 0;
+                overflow-y: auto;
+                z-index: 1000;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            }
+
+            .main-content {
+                margin-left: var(--sidebar-width);
+                padding: 0 2rem;
+            }
+
+            .sidebar-toggle {
+                display: none;
+            }
+        }
+
+        /* Sidebar - Mobile/Tablet */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: fixed;
+                top: var(--navbar-height);
+                left: -100%;
+                width: 280px;
+                height: calc(100vh - var(--navbar-height));
+                background-color: #f8f9fa;
+                border-right: 2px solid var(--mid-green);
+                padding: 1.5rem 0;
+                overflow-y: auto;
+                z-index: 1050;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .main-content {
+                padding: 0 1rem;
+            }
+
+            .sidebar-toggle {
+                position: fixed;
+                top: 85px;
+                left: 15px;
+                z-index: 1060;
+                background-color: var(--light-green);
+                border: 1px solid var(--dark-green);
+                color: var(--dark-green);
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                transition: all 0.3s ease;
+            }
+
+            .sidebar-toggle:hover {
+                background-color: var(--mid-green);
+                transform: scale(1.1);
+            }
+
+            .sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 1040;
+                display: none;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+
+        /* Estilos do sidebar */
+        .sidebar .nav {
+            padding: 0 1rem;
+        }
+
         .sidebar .nav-link {
             color: var(--dark-green);
-            padding: 0.5rem 1rem;
-        }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            background-color: var(--mid-green);
-            color: var(--dark-green);
-        }
-        .sidebar .nav-item {
-            margin-bottom: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
         }
 
-        /* Ajuste do main para a sidebar */
-        .main-content {
-            margin-left: 250px; /* Espaço para a sidebar */
+        .sidebar .nav-link:hover {
+            background-color: var(--mid-green);
+            color: var(--dark-green);
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-link.active {
+            background-color: var(--dark-green);
+            color: white !important;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 0.5rem;
+            font-size: 1.1em;
+        }
+
+        .sidebar-title {
+            color: var(--dark-green);
+            font-weight: bold;
+            text-align: center;
+            padding: 0 1rem 1rem 1rem;
+            border-bottom: 1px solid var(--mid-green);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-green);
+            cursor: pointer;
+        }
+
+        @media (min-width: 992px) {
+            .sidebar-close {
+                display: none;
+            }
         }
     </style>
 
     <!-- Estilo customizado footer-->
     <style>
-        /* Footer */
         footer {
             background-color: #f8f9fa;
             padding: 3rem 0;
@@ -120,7 +442,6 @@
 </head>
 
 <body>
-
 <header>
     <!-- Barra de navegação -->
     <nav class="navbar navbar-expand-lg fixed-top">
@@ -138,7 +459,7 @@
                 <ul class="navbar-nav">
                     <!-- Home -->
                     <li class="nav-item">
-                        <a class="nav-link" href="HomePage.html">Home <span class="visually-hidden">(página atual)</span></a>
+                        <a class="nav-link" href="HomePage.html">Home</a>
                     </li>
 
                     <!-- The Network -->
@@ -164,6 +485,7 @@
                             <li><a class="dropdown-item" href="UFO.html">UFO</a></li>
                             <li><a class="dropdown-item disabled">Core Layer</a></li>
                             <li><a class="dropdown-item" href="SysSwO.html">SysSwO</a></li>
+                            <li><a class="dropdown-item" href="SPO.html">SPO</a></li>
                             <li><a class="dropdown-item disabled">Domain Layer</a></li>
                             <li><a class="dropdown-item" href="CMPO.html">CMPO</a></li>
                         </ul>
@@ -171,7 +493,7 @@
 
                     <!-- Publications -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="Publications.html">Publications</a>
+                        <a class="nav-link active" href="Publications.html">Publications <span class="visually-hidden">(página atual)</span></a>
                     </li>
                 </ul>
             </div>
@@ -179,39 +501,115 @@
     </nav>
 </header>
 
-<!-- Conteúdo Principal -->
-<main role="main" class="container-fluid mt-5">
-    <section class="bg-light p-5 rounded mb-4 text-center">
-        <h1 class="display-4">Publications</h1>
-        <p class="lead">
-            Explore the research papers and articles that have contributed to the development and application of the SEON framework.
-        </p>
-    </section>
+<!-- Botão toggle para sidebar (mobile) -->
+<button class="sidebar-toggle d-lg-none" type="button">
+    <i class="bi bi-list"></i>
+</button>
 
-    <hr class="my-5">
+<!-- Overlay para fechar sidebar no mobile -->
+<div class="sidebar-overlay"></div>
 
-    <section class="section p-5 rounded">
-        <h2 class="display-6">Published Works</h2>
-        <ul class="list-unstyled lead text-justify">
-            <li class="mt-4 mb-4">
-                <strong>[1] Smith, J., & Doe, A. (2020).</strong> "Foundational Ontologies in Software Engineering." <i>Journal of Software Engineering</i>, 15(3), 123-145.
-                <a href="https://example.com/foundational" target="_blank" class="text-dark">https://example.com/foundational</a>
-            </li>
-            <li class="mt-4 mb-4">
-                <strong>[2] Johnson, R., & Lee, S. (2019).</strong> "Core Concepts in Software Process Ontologies." In <i>Proceedings of the International Conference on Software Engineering</i> (pp. 56-67). IEEE.
-                <a href="https://example.com/core" target="_blank" class="text-dark">https://example.com/core</a>
-            </li>
-            <li class="mt-4 mb-4">
-                <strong>[3] Kim, T., & Patel, M. (2021).</strong> "Domain-Specific Ontologies: A Review." <i>Software Engineering Review</i>, 8(2), 89-102.
-                <a href="https://example.com/domain" target="_blank" class="text-dark">https://example.com/domain</a>
-            </li>
-            <li class="mt-4 mb-4">
-                <strong>[4] Costa, S. D., & Almeida, F. (2022).</strong> "Integrating SEON with Domain Ontologies." <i>International Journal of Ontology Engineering</i>, 10(1), 34-50.
-                <a href="https://example.com/integration" target="_blank" class="text-dark">https://example.com/integration</a>
-            </li>
-        </ul>
-    </section>
-</main>
+<!-- Sidebar -->
+<nav class="sidebar">
+    <button class="sidebar-close d-lg-none">&times;</button>
+    
+    <div class="sidebar-title">
+        <i class="bi bi-bookmark-star me-2"></i>Page Contents
+    </div>
+    
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="#published-works">
+                <i class="bi bi-journal-text"></i>Published Works
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#by-category">
+                <i class="bi bi-tags"></i>By Category
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#recent-publications">
+                <i class="bi bi-clock-history"></i>Recent Publications
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Conteúdo Principal -->
+        <main role="main" class="main-content col">
+            <section class="bg-light p-5 rounded mb-4 text-center">
+                <h1 class="display-4">Publications</h1>
+                <p class="lead">
+                    Explore the research papers and articles that have contributed to the development and application of the SEON framework.
+                </p>
+            </section>
+
+            <section class="section p-5 rounded" id="published-works">
+                <h2 class="display-6">Published Works</h2>
+                <ul class="list-unstyled lead text-justify">
+                    <li class="mt-4 mb-4">
+                        <strong>[1] Smith, J., & Doe, A. (2020).</strong> "Foundational Ontologies in Software Engineering." <i>Journal of Software Engineering</i>, 15(3), 123-145.
+                        <a href="https://example.com/foundational" target="_blank" class="text-dark">https://example.com/foundational</a>
+                    </li>
+                    <li class="mt-4 mb-4">
+                        <strong>[2] Johnson, R., & Lee, S. (2019).</strong> "Core Concepts in Software Process Ontologies." In <i>Proceedings of the International Conference on Software Engineering</i> (pp. 56-67). IEEE.
+                        <a href="https://example.com/core" target="_blank" class="text-dark">https://example.com/core</a>
+                    </li>
+                    <li class="mt-4 mb-4">
+                        <strong>[3] Kim, T., & Patel, M. (2021).</strong> "Domain-Specific Ontologies: A Review." <i>Software Engineering Review</i>, 8(2), 89-102.
+                        <a href="https://example.com/domain" target="_blank" class="text-dark">https://example.com/domain</a>
+                    </li>
+                    <li class="mt-4 mb-4">
+                        <strong>[4] Costa, S. D., & Almeida, F. (2022).</strong> "Integrating SEON with Domain Ontologies." <i>International Journal of Ontology Engineering</i>, 10(1), 34-50.
+                        <a href="https://example.com/integration" target="_blank" class="text-dark">https://example.com/integration</a>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="section p-5 rounded" id="by-category">
+                <h2 class="display-6">Publications by Category</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4><i class="bi bi-layers me-2"></i>Foundational Ontologies</h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">• UFO-based Software Engineering Ontologies</li>
+                            <li class="mb-2">• Theoretical Foundations for SE Ontologies</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h4><i class="bi bi-gear me-2"></i>Core Ontologies</h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">• Software Process Ontologies</li>
+                            <li class="mb-2">• System and Software Ontologies</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h4><i class="bi bi-puzzle me-2"></i>Domain Ontologies</h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">• CMPO Ontologies</li>
+                            <li class="mb-2">• Domain-Specific Applications</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section p-5 rounded" id="recent-publications">
+                <h2 class="display-6">Recent Publications (2023-2025)</h2>
+                <p class="lead">Latest research contributions to the SEON network:</p>
+                <ul class="list-unstyled lead text-justify">
+                    <li class="mt-4 mb-4">
+                        <strong>[5] Recent Author, X. (2024).</strong> "Advanced Integration Patterns in SEON." <i>Software Engineering Advances</i>, 12(4), 78-95.
+                        <a href="https://example.com/recent" target="_blank" class="text-dark">https://example.com/recent</a>
+                    </li>
+                </ul>
+            </section>
+
+        </main>
+    </div>
+</div>
 
 <!-- Footer -->
 <footer class="py-5 rounded border-top bg-light">
@@ -223,8 +621,8 @@
                 <div class="d-flex align-items-center">
                     <i class="material-icons text-muted me-1" aria-label="Símbolo de copyright">copyright</i>
                     <span class="text-muted">
-                            <small th:text="'© ' + ${currentYear} + ' Simone Dornelas Costa'">© Nome a ser colocado</small>
-                        </span>
+                        <small th:text="'© ' + ${currentYear} + ' Simone Dornelas Costa'">© 2025 Simone Dornelas Costa</small>
+                    </span>
                 </div>
             </div>
 
@@ -247,11 +645,11 @@
                 <ul class="list-unstyled text-muted">
                     <li class="d-flex align-items-center">
                         <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
-                        <small><a href="mailto:simone.costa@ufes.br" class="text-muted">Email de algúem</a></small>
+                        <small><a href="mailto:simone.costa@ufes.br" class="text-muted">simone.costa@ufes.br</a></small>
                     </li>
                     <li class="d-flex align-items-center">
                         <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
-                        <small><a href="mailto:monalessa@inf.ufes.br" class="text-muted">Email de alguém</a></small>
+                        <small><a href="mailto:monalessa@inf.ufes.br" class="text-muted">monalessa@inf.ufes.br</a></small>
                     </li>
                 </ul>
             </div>
@@ -260,7 +658,7 @@
         <!-- Data -->
         <div class="row mt-4 justify-content-md-center">
             <div class="col-md-auto">
-                <small class="text-muted" th:text="${date}">@date</small>
+                <small class="text-muted" th:text="${date}">June 3, 2025</small>
             </div>
         </div>
     </div>
@@ -270,6 +668,113 @@
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarOverlay = document.querySelector('.sidebar-overlay');
+    const sidebarClose = document.querySelector('.sidebar-close');
+    const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+    const navbar = document.querySelector('.navbar');
+
+    // Efeito de scroll na navbar
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Toggle sidebar no mobile
+    sidebarToggle?.addEventListener('click', function() {
+        sidebar.classList.add('show');
+        sidebarOverlay.classList.add('show');
+    });
+
+    // Fechar sidebar
+    function closeSidebar() {
+        sidebar.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
+    }
+
+    sidebarClose?.addEventListener('click', closeSidebar);
+    sidebarOverlay?.addEventListener('click', closeSidebar);
+
+    // Fechar sidebar ao clicar em link (mobile)
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth < 992) {
+                closeSidebar();
+            }
+        });
+    });
+
+    // Highlight do link ativo baseado na posição da página
+    function updateActiveLink() {
+        const sections = document.querySelectorAll('section[id]');
+        const scrollPos = window.scrollY + 150;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        
+        // Verifica se está no final da página
+        if (window.scrollY + windowHeight >= documentHeight - 100) {
+            sidebarLinks.forEach(link => link.classList.remove('active'));
+            
+            const lastLink = document.querySelector('.sidebar .nav-link[href="#recent-publications"]');
+            if (lastLink) {
+                lastLink.classList.add('active');
+            }
+            return;
+        }
+
+        let activeSection = null;
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            
+            if (scrollPos >= sectionTop - 100 && scrollPos < sectionTop + sectionHeight) {
+                activeSection = sectionId;
+            }
+        });
+
+        if (activeSection) {
+            sidebarLinks.forEach(link => link.classList.remove('active'));
+            
+            const activeLink = document.querySelector(`.sidebar .nav-link[href="#${activeSection}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+    }
+
+    // Atualizar link ativo no scroll
+    window.addEventListener('scroll', updateActiveLink);
+    
+    // Inicializar link ativo
+    updateActiveLink();
+
+    // Smooth scroll para links do sidebar
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                const offsetTop = targetElement.offsetTop - 90;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+});
 </script>
 </body>
 </html>

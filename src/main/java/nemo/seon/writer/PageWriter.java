@@ -19,13 +19,16 @@ public class PageWriter {
 
         writePublicationsPage();
         System.out.println("Publications page was generated successfully.");
+
+        writeUploadPage();
+        System.out.println("Upload page was generated successfully.");
     }
 
     /**
      * Writes the home page.
      */
     private void writeHomePage() {
-        // Lendo o template HTML
+        // Reading the HTML template
         String html = fileToString("./src/main/resources/templates/TemplateHomePage.html");
         if (html == null) {
             System.out.println("Failed to load template for home page: ./src/main/resources/templates/TemplateHomePage.html");
@@ -33,7 +36,7 @@ public class PageWriter {
         }
 
         html = html.replace("@date", new Date().toString());
-        // Gravando o arquivo HTML gerado
+        // Writing the generated HTML file
         stringToFile("./page/" + "HomePage.html", html);
     }
 
@@ -41,7 +44,7 @@ public class PageWriter {
      * Writes the publications page.
      */
     private void writePublicationsPage() {
-        // Lendo o template HTML
+        // Reading the HTML template
         String html = fileToString("./src/main/resources/templates/TemplatePublications.html");
         if (html == null) {
             System.out.println("Failed to load template for home page: ./src/main/resources/templates/TemplatePublications.html");
@@ -49,7 +52,20 @@ public class PageWriter {
         }
 
         html = html.replace("@date", new Date().toString());
-        // Gravando o arquivo HTML gerado
+        // Writing the generated HTML file
         stringToFile("./page/" + "Publications.html", html);
+    }
+
+    private void writeUploadPage() {
+        // Reading the HTML template
+        String html = fileToString("./src/main/resources/templates/UploadPage.html");
+        if (html == null) {
+            System.out.println("Failed to load template for upload page: ./src/main/resources/templates/UploadPage.html");
+            return;
+        }
+
+        html = html.replace("@date", new Date().toString());
+        // Writing the generated HTML file
+        stringToFile("./page/" + "UploadPage.html", html);
     }
 }
