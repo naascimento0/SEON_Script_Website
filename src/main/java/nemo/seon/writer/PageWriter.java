@@ -22,6 +22,9 @@ public class PageWriter {
 
         writeUploadPage();
         System.out.println("Upload page was generated successfully.");
+
+        writeLoginPage();
+        System.out.println("Login page was generated successfully.");
     }
 
     /**
@@ -67,5 +70,18 @@ public class PageWriter {
         html = html.replace("@date", new Date().toString());
         // Writing the generated HTML file
         stringToFile("./page/" + "UploadPage.html", html);
+    }
+
+    private void writeLoginPage() {
+        // Reading the HTML template
+        String html = fileToString("./src/main/resources/templates/LoginPage.html");
+        if (html == null) {
+            System.out.println("Failed to load template for login page: ./src/main/resources/templates/LoginPage.html");
+            return;
+        }
+
+//        html = html.replace("@date", new Date().toString());
+        // Writing the generated HTML file
+        stringToFile("./page/" + "LoginPage.html", html);
     }
 }

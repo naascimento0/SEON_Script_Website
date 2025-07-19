@@ -1,4 +1,4 @@
-package nemo.seon;
+package nemo.seon.controller;
 
 import nemo.seon.model.Package;
 import nemo.seon.parser.ModelReader;
@@ -24,6 +24,7 @@ public class AstaController {
 
     private static final Logger logger = LoggerFactory.getLogger(AstaController.class);
 
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/upload-asta", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> uploadAstaFile(@RequestParam("file") MultipartFile file) {
         try {
