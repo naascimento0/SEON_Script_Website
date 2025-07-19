@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>SEON - Upload</title>
+    <title>SEON - Login</title>
     <!-- Favicon -->
     <link rel="icon" href="../../../../static/images/favicon.svg" sizes="32x32" type="image/svg">
     <!-- CDN from Bootstrap website -->
@@ -247,40 +247,55 @@
         body {
             color: var(--dark-green);
             padding-top: var(--navbar-height);
+            background: linear-gradient(135deg, #f8f9fa 0%, rgba(212, 237, 218, 0.1) 100%);
+            min-height: 100vh;
         }
+
         .section, .bg-light {
             border: 1px solid var(--mid-green);
             border-radius: 0.5rem;
             padding: 3rem;
             margin-bottom: 2rem;
         }
+
         .text-justify {
             text-align: justify;
         }
+
         h1.display-4, h2.display-6 {
             color: var(--dark-green);
         }
+
         .lead, small {
             color: var(--dark-green);
         }
+
         hr {
             border-color: var(--mid-green);
             margin: 2rem 0;
         }
 
-        /* Upload specific styles melhorados */
-        .upload-area {
-            border: 3px dashed var(--mid-green);
+        /* Login specific styles */
+        .login-container {
+            min-height: calc(100vh - var(--navbar-height) - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(212, 237, 218, 0.1) 100%);
+            border: 2px solid var(--mid-green);
             border-radius: 1rem;
             padding: 3rem;
-            text-align: center;
+            box-shadow: 0 10px 30px rgba(21, 87, 36, 0.15);
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
-            background: linear-gradient(135deg, #f8f9fa 0%, rgba(212, 237, 218, 0.1) 100%);
             position: relative;
             overflow: hidden;
         }
 
-        .upload-area::before {
+        .login-card::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -292,42 +307,61 @@
             transition: transform 0.3s ease;
         }
 
-        .upload-area:hover::before,
-        .upload-area.dragover::before {
+        .login-card:hover::before {
             transform: scale(1);
         }
 
-        .upload-area:hover,
-        .upload-area.dragover {
-            border-color: var(--dark-green);
-            background: linear-gradient(135deg, var(--light-green) 0%, rgba(195, 230, 203, 0.3) 100%);
+        .login-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(21, 87, 36, 0.15);
+            box-shadow: 0 15px 40px rgba(21, 87, 36, 0.2);
         }
 
-        .upload-area h3 {
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
             position: relative;
             z-index: 2;
         }
 
-        .upload-area p {
-            position: relative;
-            z-index: 2;
+        .login-header h1 {
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
         }
 
-        .upload-area i {
-            position: relative;
-            z-index: 2;
+        .login-header .lead {
+            color: var(--text-muted-green);
+        }
+
+        .login-icon {
+            font-size: 4rem;
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--mid-green);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
         }
 
-        .upload-area:hover i,
-        .upload-area.dragover i {
-            transform: scale(1.2);
-            color: var(--dark-green) !important;
+        .form-control:focus {
+            border-color: var(--dark-green);
+            box-shadow: 0 0 0 0.2rem rgba(21, 87, 36, 0.25);
         }
 
-        .btn-upload {
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-login {
             background: linear-gradient(135deg, var(--dark-green), #0d3c17);
             border: none;
             color: white !important;
@@ -340,9 +374,11 @@
             position: relative;
             overflow: hidden;
             letter-spacing: 0.5px;
+            width: 100%;
+            z-index: 2;
         }
 
-        .btn-upload::before {
+        .btn-login::before {
             content: '';
             position: absolute;
             top: 0;
@@ -353,61 +389,70 @@
             transition: left 0.5s ease;
         }
 
-        .btn-upload:hover::before {
+        .btn-login:hover::before {
             left: 100%;
         }
 
-        .btn-upload:hover {
+        .btn-login:hover {
             background: linear-gradient(135deg, #0d3c17, #0a2f14);
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(21, 87, 36, 0.3);
             color: white !important;
         }
 
-        .btn-upload:disabled {
-            opacity: 0.6;
-            transform: none;
-            box-shadow: none;
-            color: white !important;
-        }
-
-        .btn-upload:focus {
+        .btn-login:focus {
             color: white !important;
             box-shadow: 0 0 0 0.2rem rgba(21, 87, 36, 0.25);
         }
 
-        .btn-upload:active {
+        .btn-login:active {
             color: white !important;
-        }
-
-        .success {
-            color: #155724;
-            background: linear-gradient(135deg, #d4edda, rgba(195, 230, 203, 0.8));
-            border: 2px solid #c3e6cb;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(21, 87, 36, 0.1);
-        }
-
-        .error {
-            color: #721c24;
-            background: linear-gradient(135deg, #f8d7da, rgba(245, 198, 203, 0.8));
-            border: 2px solid #f5c6cb;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(114, 28, 36, 0.1);
         }
 
         .alert {
             border-radius: 8px;
             border: 2px solid;
             font-weight: 500;
+            position: relative;
+            z-index: 2;
         }
 
-        .alert-info {
-            background: linear-gradient(135deg, #d1ecf1, rgba(209, 236, 241, 0.8));
-            border-color: #bee5eb;
-            color: #0c5460;
+        .alert-danger {
+            background: linear-gradient(135deg, #f8d7da, rgba(245, 198, 203, 0.8));
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda, rgba(195, 230, 203, 0.8));
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .input-group {
+            position: relative;
+            z-index: 2;
+        }
+
+        .input-group .form-control {
+            border-right: none;
+        }
+
+        .input-group-text {
+            background: var(--light-green);
+            border: 2px solid var(--mid-green);
+            border-left: none;
+            color: var(--dark-green);
+        }
+
+        .form-control:focus + .input-group-text {
+            border-color: var(--dark-green);
+        }
+
+        /* Loading spinner */
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
         }
     </style>
 
@@ -487,7 +532,7 @@
 
                     <!-- Upload -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="UploadPage.html">Upload <span class="visually-hidden">(página atual)</span></a>
+                        <a class="nav-link" href="UploadPage.html">Upload</a>
                     </li>
                 </ul>
             </div>
@@ -496,44 +541,71 @@
 </header>
 
 <div class="container-fluid">
-    <div class="row">
-        <!-- Conteúdo Principal -->
-        <main role="main" class="col">
-            <section class="bg-light p-5 rounded mb-4">
-                <h1 class="display-4"><i class="bi bi-cloud-upload me-3"></i>Upload Astah File</h1>
-                <p class="lead">Upload your .asta file to generate SEON Pages</p>
-                <hr class="my-4">
-                
-                <!-- Upload Area -->
-                <div class="upload-area mb-4" id="uploadArea">
-                    <i class="bi bi-cloud-upload" style="font-size: 4rem; color: var(--dark-green);"></i>
-                    <h3 class="mt-3">Drag and drop your .asta file here</h3>
-                    <p class="text-muted">or click to select a file</p>
-                    <input type="file" id="fileInput" accept=".asta" style="display: none;">
-                    <button type="button" class="btn btn-upload mt-3" onclick="document.getElementById('fileInput').click()">
-                        <i class="bi bi-folder2-open me-2"></i>Choose File
-                    </button>
-                </div>
+    <div class="login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-md-6 col-lg-4">
+                <div class="login-card">
+                    <div class="login-header">
+                        <i class="bi bi-shield-lock login-icon"></i>
+                        <h1 class="display-6">Login Required</h1>
+                        <p class="lead">Please authenticate to access SEON Upload feature</p>
+                    </div>
 
-                <!-- Selected File Info -->
-                <div id="fileInfo" class="mb-3" style="display: none;">
-                    <div class="alert alert-info">
-                        <i class="bi bi-file-earmark me-2"></i>
-                        <strong>Selected file:</strong> <span id="fileName"></span>
+                    <!-- Mensagens de erro/sucesso -->
+                    <div th:if="${param.error}" class="alert alert-danger mb-3">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Authentication Failed!</strong> Invalid username or password.
+                    </div>
+                    
+                    <div th:if="${param.logout}" class="alert alert-success mb-3">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <strong>Logout Successful!</strong> You have been logged out.
+                    </div>
+
+                    <!-- Formulário de login -->
+                    <form th:action="@{/login}" method="post" id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                <i class="bi bi-person me-2"></i>Username
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       placeholder="Enter your username" required>
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-fill"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <i class="bi bi-lock me-2"></i>Password
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       placeholder="Enter your password" required>
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock-fill"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-login" id="loginBtn">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+                            <span id="loginText">Sign In</span>
+                        </button>
+                    </form>
+
+                    <!-- Informações adicionais -->
+                    <div class="text-center mt-4">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Use your SEON credentials to access the upload functionality
+                        </small>
                     </div>
                 </div>
-
-                <!-- Upload Button -->
-                <div class="text-center mb-4">
-                    <button type="button" class="btn btn-upload btn-lg" id="uploadBtn" onclick="uploadFile()" disabled>
-                        <i class="bi bi-upload me-2"></i>Upload and Process
-                    </button>
-                </div>
-
-                <!-- Output -->
-                <div id="output" class="mt-4"></div>
-            </section>
-        </main>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -584,7 +656,7 @@
         <!-- Data -->
         <div class="row mt-4 justify-content-md-center">
             <div class="col-md-auto">
-                <small class="text-muted" th:text="${date}">June 3, 2025</small>
+                <small class="text-muted" th:text="${date}">July 19, 2025</small>
             </div>
         </div>
     </div>
@@ -597,127 +669,45 @@
 </script>
 
 <script>
-    let selectedFile = null;
-
-    // Efeito de scroll na navbar
-    window.addEventListener('scroll', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginText = document.getElementById('loginText');
 
-    // File input change handler
-    document.getElementById('fileInput').addEventListener('change', function(e) {
-        handleFileSelection(e.target.files[0]);
-    });
-
-    // Drag and drop handlers
-    const uploadArea = document.getElementById('uploadArea');
-    
-    uploadArea.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        uploadArea.classList.add('dragover');
-    });
-
-    uploadArea.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
-    });
-
-    uploadArea.addEventListener('drop', function(e) {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
-        
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            handleFileSelection(files[0]);
-        }
-    });
-
-    function handleFileSelection(file) {
-        if (!file) return;
-
-        if (!file.name.endsWith('.asta')) {
-            showOutput('<p class="error"><i class="bi bi-exclamation-triangle me-2"></i>Please select a valid .asta file.</p>');
-            return;
-        }
-
-        selectedFile = file;
-        
-        // Show file info
-        document.getElementById('fileName').textContent = file.name;
-        document.getElementById('fileInfo').style.display = 'block';
-        
-        // Enable upload button
-        document.getElementById('uploadBtn').disabled = false;
-        
-        // Clear any previous output
-        document.getElementById('output').innerHTML = '';
-    }
-
-    async function uploadFile() {
-        if (!selectedFile) {
-            showOutput('<p class="error"><i class="bi bi-exclamation-triangle me-2"></i>Please select a file first.</p>');
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('file', selectedFile);
-
-        showOutput('<div class="alert alert-info"><i class="bi bi-hourglass-split me-2"></i>Processing file, please wait...</div>');
-
-        // Disable upload button during processing
-        document.getElementById('uploadBtn').disabled = true;
-
-        try {
-            // Credenciais Basic Auth em base64
-            const credentials = btoa('user:password');
-
-            const response = await fetch('http://localhost:8080/upload-asta', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Authorization': `Basic ${credentials}`
-                }           
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                showOutput(`<p class="error"><i class="bi bi-exclamation-triangle me-2"></i>Error: ${errorText}</p>`);
-                return;
-            }
-
-            const result = await response.text();
-            showOutput(`<p class="success"><i class="bi bi-check-circle me-2"></i>File uploaded and processed successfully: ${result}</p>`);
-        } catch (error) {
-            if (error instanceof TypeError && error.message.includes('fetch')) {
-                showServerWarning();
+        // Efeito de scroll na navbar
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
             } else {
-                showOutput(`<p class="error"><i class="bi bi-exclamation-triangle me-2"></i>Error uploading the file: ${error.message}</p>`);
+                navbar.classList.remove('scrolled');
             }
-        } finally {
-            // Re-enable upload button
-            document.getElementById('uploadBtn').disabled = false;
-        }
-    }
+        });
 
-    function showServerWarning() {
-        const warningHtml = `
-            <div class="alert alert-warning">
-                <i class="bi bi-exclamation-triangle me-2"></i>
-                <strong>Server Connection Warning:</strong> 
-                Unable to connect to the upload server. Please ensure the server is running on port 8080.
-            </div>
-        `;
-        showOutput(warningHtml);
-    }
+        // Loading state no formulário
+        loginForm.addEventListener('submit', function() {
+            loginBtn.disabled = true;
+            loginText.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing In...';
+        });
 
-    function showOutput(html) {
-        document.getElementById('output').innerHTML = html;
-    }
+        // Focus automático no campo username
+        document.getElementById('username').focus();
+
+        // Enter key navigation
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('password').focus();
+            }
+        });
+
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                loginForm.submit();
+            }
+        });
+    });
 </script>
 </body>
 </html>
