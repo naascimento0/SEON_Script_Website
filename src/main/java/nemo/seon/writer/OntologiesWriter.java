@@ -46,48 +46,52 @@ public class OntologiesWriter {
             return;
         }
 
-        String onLevel = "";
-        String ontoLevel = "";
-
-        // Constantes e ícones do Bootstrap 5
-        final String STAR_EMPTY = "<i class=\"bi bi-star\"></i>";
-        final String STAR_HALF = "<i class=\"bi bi-star-half\"></i>";
-        final String STAR_FULL = "<i class=\"bi bi-star-fill\"></i>";
-
         figCount = 1; // Contador de figuras para mostrar no HTML (Figura 1, Figura 2, etc.)
 
-        Ontology.OntoLevel level = ontology.getLevel();
-        if (level != null) {
-            switch (level) {
-                case FOUNDATIONAL:
-                    ontoLevel = STAR_EMPTY + " Foundational Ontology";
-                    onLevel = "Foundational Ontology";
-                    break;
-                case CORE:
-                    if (ontology.getNetwork() != null && ontology.getNetwork().equals("SEON")) {
-                        ontoLevel = STAR_HALF + " Core Ontology from SEON";
-                        onLevel = "Core Ontology from SEON";
-                    } else {
-                        System.out.println("Network not recognized: " + ontology.getNetwork());
-                        ontoLevel = STAR_HALF + " Core Ontology";
-                        onLevel = "Core Ontology";
-                    }
-                    break;
-                case DOMAIN:
-                    if (ontology.getNetwork() != null && ontology.getNetwork().equals("SEON")) {
-                        ontoLevel = STAR_FULL + " Domain Ontology from SEON";
-                        onLevel = "Domain Ontology from SEON";
-                    } else {
-                        System.out.println("Network not recognized: " + ontology.getNetwork());
-                        ontoLevel = STAR_FULL + " Domain Ontology";
-                        onLevel = "Domain Ontology";
-                    }
-                    break;
-                default:
-                    System.out.println("Unknown ontology level: " + level);
+//        String onLevel = "";
+//        String ontoLevel = "";
+//
+//        // Constantes e ícones do Bootstrap 5
+//        final String STAR_EMPTY = "<i class=\"bi bi-star\"></i>";
+//        final String STAR_HALF = "<i class=\"bi bi-star-half\"></i>";
+//        final String STAR_FULL = "<i class=\"bi bi-star-fill\"></i>";
 
-            }
-        }
+
+//        Ontology.OntoLevel level = ontology.getLevel();
+//        if (level != null) {
+//            switch (level) {
+//                case FOUNDATIONAL:
+//                    ontoLevel = STAR_EMPTY + " Foundational Ontology";
+//                    onLevel = "Foundational Ontology";
+//                    break;
+//                case CORE:
+//                    if (ontology.getNetwork() != null && ontology.getNetwork().equals("SEON")) {
+//                        ontoLevel = STAR_HALF + " Core Ontology from SEON";
+//                        onLevel = "Core Ontology from SEON";
+//                    } else {
+//                        System.out.println("Network not recognized: " + ontology.getNetwork());
+//                        ontoLevel = STAR_HALF + " Core Ontology";
+//                        onLevel = "Core Ontology";
+//                    }
+//                    break;
+//                case DOMAIN:
+//                    if (ontology.getNetwork() != null && ontology.getNetwork().equals("SEON")) {
+//                        ontoLevel = STAR_FULL + " Domain Ontology from SEON";
+//                        onLevel = "Domain Ontology from SEON";
+//                    } else {
+//                        System.out.println("Network not recognized: " + ontology.getNetwork());
+//                        ontoLevel = STAR_FULL + " Domain Ontology";
+//                        onLevel = "Domain Ontology";
+//                    }
+//                    break;
+//                default:
+//                    System.out.println("Unknown ontology level: " + level);
+//
+//            }
+//        }
+
+        String ontoLevel = formatOntologyLevelHtml(ontology);
+        String onLevel = formatOntologyLevelText(ontology);
 
         // Informações adicionais (status e versão)
         String additionalInfo;
@@ -123,12 +127,49 @@ public class OntologiesWriter {
         stringToFile("./page/" + ontology.getShortName() + ".html", html);
     }
 
+    public String formatOntologyLevelHtml(Ontology ontology) {
+        final String STAR_EMPTY = "<i class=\"bi bi-star\"></i>";
+        final String STAR_HALF = "<i class=\"bi bi-star-half\"></i>";
+        final String STAR_FULL = "<i class=\"bi bi-star-fill\"></i>";
+
+        Ontology.OntoLevel level = ontology.getLevel();
+        if (level == null) return "";
+
+        return switch (level) {
+            case FOUNDATIONAL -> STAR_EMPTY + " Foundational Ontology";
+            case CORE -> STAR_HALF + (isFromSeon(ontology) ? " Core Ontology from SEON" : " Core Ontology");
+            case DOMAIN -> STAR_FULL + (isFromSeon(ontology) ? " Domain Ontology from SEON" : " Domain Ontology");
+        };
+    }
+
+    public String formatOntologyLevelText(Ontology ontology) {
+        Ontology.OntoLevel level = ontology.getLevel();
+        if (level == null) return "";
+
+        return switch (level) {
+            case FOUNDATIONAL -> "Foundational Ontology";
+            case CORE -> isFromSeon(ontology) ? "Core Ontology from SEON" : "Core Ontology";
+            case DOMAIN -> isFromSeon(ontology) ? "Domain Ontology from SEON" : "Domain Ontology";
+        };
+    }
+
+    private boolean isFromSeon(Ontology ontology) {
+        if (ontology.getNetwork() != null && ontology.getNetwork().equals("SEON")) {
+            return true;
+        } else {
+            if (ontology.getNetwork() != null) {
+                System.out.println("Network not recognized: " + ontology.getNetwork());
+            }
+            return false;
+        }
+    }
+
     /**
      * Formats a raw description text into HTML, adding line breaks and handling empty cases.
      * @param description the description text to format
      * @return the HTML-formatted description
      */
-    private String formatDescription(String description) {
+    public String formatDescription(String description) {
         if (description == null || description.trim().isEmpty()) {
             return "<span class=\"text-danger fw-bold\">No definition available</span>";
         }
@@ -141,7 +182,7 @@ public class OntologiesWriter {
      * @param ontology the ontology whose dependencies are to be listed
      * @return the HTML table string containing dependency information
      */
-    private String generateDependenciesTable(Ontology ontology) {
+    public String generateDependenciesTable(Ontology ontology) {
         if (ontology == null || ontology.getDependencies() == null || ontology.getDependencies().isEmpty()) {
             return "<tr><td colspan=\"3\" class=\"text-center\">No dependencies available</td></tr>";
         }
@@ -204,7 +245,7 @@ public class OntologiesWriter {
      * @param pack the package containing the diagrams
      * @return the HTML string representing diagram structures
      */
-    private String generateDiagramStructures(Package pack) {
+    public String generateDiagramStructures(Package pack) {
         if (pack == null || pack.getDiagrams() == null || pack.getDiagrams().isEmpty()) {
             return "<p class=\"lead text-center\">No diagrams available for this package.</p>";
         }
@@ -412,7 +453,7 @@ public class OntologiesWriter {
      * @param sectionNumber the section number prefix (e.g., "3.")
      * @return the HTML string representing section structures
      */
-    private String generateSectionStructures(Package seonNetwork, String sectionNumber) {
+    public String generateSectionStructures(Package seonNetwork, String sectionNumber) {
         if (seonNetwork == null || seonNetwork.getSubpacks() == null || seonNetwork.getSubpacks().isEmpty()) {
             return "";
         }
@@ -494,7 +535,7 @@ public class OntologiesWriter {
      * @param ontology the ontology whose concepts are to be detailed
      * @return the HTML string representing detailed concept sections
      */
-    private String generateDetailedConcepts(Ontology ontology) {
+    public String generateDetailedConcepts(Ontology ontology) {
         if (ontology == null || ontology.getAllConcepts() == null || ontology.getAllConcepts().isEmpty()) {
             return "<p class=\"text-center\">No detailed concepts available</p>";
         }
@@ -522,30 +563,77 @@ public class OntologiesWriter {
             String source = concept.getSourceDefinition() != null ?
                     "<br><span class=\"fw-bold\">Source: </span>" + concept.getSourceDefinition().replaceAll("\\R", "") : "";
 
+            // CORREÇÃO: Usar Set para evitar duplicatas e verificar se já existe
             StringBuilder generals = new StringBuilder();
             List<Concept> generalizations = concept.getGeneralizations() != null ? concept.getGeneralizations() : Collections.emptyList();
+
+            // Usar LinkedHashSet para manter ordem e evitar duplicatas
+            Set<String> uniqueGenerals = new LinkedHashSet<>();
+
             for (Concept general : generalizations) {
-                generals.append("<p>").append(specializeIcon).append(" ").append(general.getFullName()).append("</p>");
+                if (general != null && general.getFullName() != null) {
+                    uniqueGenerals.add(general.getFullName());
+                }
+            }
+
+            // Se não há generalizações, mostrar mensagem
+            if (uniqueGenerals.isEmpty()) {
+                generals.append("<p class=\"bi bi-diagram-2\"> No specializations</p>");
+            } else {
+                // Adicionar cada generalização única
+                for (String generalName : uniqueGenerals) {
+                    generals.append("<p>").append(specializeIcon).append(" ").append(generalName).append("</p>");
+                }
             }
 
             StringBuilder relations = new StringBuilder();
             List<Relation> conceptRelations = concept.getRelations();
             if (conceptRelations != null && !conceptRelations.isEmpty()) {
                 relations.append("<code class=\"text-muted\">");
+                
+                // CORREÇÃO: Usar Set para evitar relações duplicadas
+                Set<String> uniqueRelations = new LinkedHashSet<>();
+                
                 for (Relation relation : conceptRelations) {
-                    Ontology ontoSource = relation.getSource() != null ? relation.getSource().getMainOntology() : null;
-                    Ontology ontoTarget = relation.getTarget() != null ? relation.getTarget().getMainOntology() : null;
-                    String relationText = relation.toString();
-                    if (true) { /* SeonParser.STABLE || ontoSource.getLevel().getValue() >= ontoTarget.getLevel().getValue() */
+                    if (relation != null) {
+                        String relationText = relation.toString();
+                        if (relationText != null && !relationText.trim().isEmpty()) {
+                            uniqueRelations.add(relationText);
+                        }
+                    }
+                }
+                
+                // Adicionar relações únicas
+                for (String relationText : uniqueRelations) {
+                    Ontology ontoSource = null;
+                    Ontology ontoTarget = null;
+                    
+                    // Tentar obter ontologias das relações (se disponível)
+                    try {
+                        // Esta parte pode precisar ser ajustada dependendo da implementação de Relation
+                        for (Relation relation : conceptRelations) {
+                            if (relation.toString().equals(relationText)) {
+                                ontoSource = relation.getSource() != null ? relation.getSource().getMainOntology() : null;
+                                ontoTarget = relation.getTarget() != null ? relation.getTarget().getMainOntology() : null;
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        // Se houver erro ao obter ontologias, continuar sem verificação de nível
+                    }
+                    
+                    // Verificar se é uma relação válida entre níveis
+                    if (ontoSource != null && ontoTarget != null) {
+                        // Lógica de validação pode ser expandida aqui
                         relations.append(relationText).append("<br>");
                     } else {
-                        relations.append("<span class=\"text-danger\" title=\"Relation to a lower level (")
-                                .append(ontoSource != null ? ontoSource.getName() : "Unknown").append("-->")
-                                .append(ontoTarget != null ? ontoTarget.getName() : "Unknown").append(")\">")
-                                .append(relationText).append("</span><br>");
+                        // Se não conseguir verificar, adicionar normalmente
+                        relations.append(relationText).append("<br>");
                     }
                 }
                 relations.append("</code>");
+            } else {
+                relations.append("<p class=\"text-muted\">No relations</p>");
             }
 
             detailedConcepts.append(detailItemTemplate
