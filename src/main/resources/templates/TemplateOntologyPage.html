@@ -556,9 +556,10 @@
         <!-- Conteúdo Principal -->
         <main role="main" class="main-content col">
             <section class="bg-light p-5 rounded mb-4">
-                <div th:replace="~{fragments/additional-info :: info}">@additionalinfo</div>
+                <div th:utext="${additionalinfo}"></div>
+                
                 <h1 class="display-4">The <span th:text="${title}">@title</span></h1>
-                <p class="lead text-end fst-italic" th:text="${ontoLevel}">@onto_level</p>
+                <p class="lead text-end fst-italic" th:text="${onto_level}">@onto_level</p>
                 <small><i class="bi-dot"></i><span th:utext="${ontoPublishedPaper}">@onto published paper</span></small>
             </section>
 
