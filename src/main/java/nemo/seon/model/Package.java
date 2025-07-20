@@ -270,14 +270,13 @@ public class Package implements Comparable<Package> {
         if (level == null) {
             levelWeight = 0;
         } else {
-            switch (level) {
-                case DOMAIN: levelWeight = 1_000_000; break; // 100^3
-                case CORE: levelWeight = 10_000; break;      // 100^2
-                case FOUNDATIONAL: levelWeight = 100; break;  // 100^1
-                default: levelWeight = 0;
-            }
+            levelWeight = switch (level) {
+                case DOMAIN -> 1_000_000; // 100^3
+                case CORE -> 10_000;      // 100^2
+                case FOUNDATIONAL -> 100;  // 100^1
+                default -> 0;
+            };
         }
         return levelWeight + pack.order;
     }
-
 }
