@@ -25,6 +25,17 @@ public class PageController {
     @GetMapping("/")
     public String homePage(Model model) {
         model.addAttribute("date", java.time.LocalDate.now());
+
+        // Add variables to sidebar
+        model.addAttribute("definition", "definition");
+        model.addAttribute("architecture", "architecture"); 
+        model.addAttribute("foundational", "foundational");
+        model.addAttribute("core", "core");
+        model.addAttribute("domain", "domain");
+        model.addAttribute("references", "references");
+        model.addAttribute("currentYear", String.valueOf(Year.now().getValue()));
+        model.addAttribute("date", java.time.LocalDate.now().toString());
+        
         return "TemplateHomePage";
     }
 
@@ -43,7 +54,7 @@ public class PageController {
     @GetMapping("/ontology/{ontologyName}")
     public String ontologyPage(@PathVariable String ontologyName, Model model) {
         try {
-            // Buscar a ontologia pelo nome usando o serviço
+            // Search for the ontology by name using the service
             Ontology ontology = ontologyService.findByName(ontologyName);
             if (ontology == null) {
                 System.out.println("Ontology not found: " + ontologyName);
@@ -79,14 +90,21 @@ public class PageController {
             model.addAttribute("currentYear", String.valueOf(Year.now().getValue()));
             model.addAttribute("date", java.time.LocalDate.now());
 
+            // Adicionar variáveis para a sidebar da página de ontologia
+            model.addAttribute("ontologydescription", "ontologydescription");
+            model.addAttribute("relatedontologies", "relatedontologies");
+            model.addAttribute("ontologymodels", "ontologymodels");
+            model.addAttribute("conceptsdefinition", "conceptsdefinition");
+            model.addAttribute("detailedconcepts", "detailedconcepts");
+
             return "TemplateOntologyPage";
 
         } catch (Exception e) {
-            // Log do erro
+            // Log the error
             System.err.println("Error loading ontology page for: " + ontologyName);
             e.printStackTrace();
 
-            // Redirecionar para página de erro
+            // Redirection to error page
             model.addAttribute("error", "Error loading ontology: " + e.getMessage());
             return "ErrorPage";
         }

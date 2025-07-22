@@ -21,7 +21,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/upload-asta").hasRole("USER")
-                        .requestMatchers("/login", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/publications", "/ontology/**", "/login", "/static/**", "/css/**", "/js/**", "/images/**", "/generated-images/**", "/astah-images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
