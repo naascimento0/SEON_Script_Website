@@ -30,14 +30,14 @@ public class OntologyService {
     private void loadOntologies() {
         try {
             ModelReader modelReader = new ModelReader();
-            this.seonNetwork = modelReader.parseAstah2Seon(astahFilePath);
+            this.seonNetwork = modelReader.parseAstah2Seon(System.getProperty("user.dir") + "/" + "astah_seon.asta");
         } catch (Exception e) {
             throw new RuntimeException("Failed to load SEON ontologies from Astah file", e);
         }
     }
 
     /**
-     * Constrói o cache de ontologias para busca rápida
+     * Builds ontology cache for fast searching
      */
     private void buildCache(Package seonNetwork) {
         for (Package pack : seonNetwork.getSubpacks()) {
@@ -68,5 +68,23 @@ public class OntologyService {
             initialize();
         }
         return ontologyNames.get(name.toLowerCase().trim());
+    }
+
+    /**
+     * Reloads ontologies from the Astah file.
+     * Useful when the .asta file has been updated.
+     */
+    public void reloadOntologies() {
+        System.out.println("Reloading ontologies from Astah file...");
+        
+        // Clear existing cache
+        ontologyNames.clear();
+        
+        // Reload from file
+        loadOntologies();
+        buildCache(seonNetwork);
+        
+        System.out.println("Ontologies reloaded successfully. Available ontologies:");
+        printOntologyNames();
     }
 }

@@ -690,8 +690,21 @@
                 return;
             }
 
-            const result = await response.text();
-            showOutput(`<p class="success"><i class="bi bi-check-circle me-2"></i>File uploaded and processed successfully: ${result}</p>`);
+            // Parse JSON response
+            const result = await response.json();
+            
+            if (result.success) {
+                showOutput(`<div class="alert alert-success">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <strong>Success!</strong> ${result.message}
+                    <br><small class="text-muted">Processed at: ${new Date(result.timestamp).toLocaleString()}</small>
+                </div>`);
+            } else {
+                showOutput(`<div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Error:</strong> ${result.message}
+                </div>`);
+            }
         } catch (error) {
             if (error instanceof TypeError && error.message.includes('fetch')) {
                 showServerWarning();
