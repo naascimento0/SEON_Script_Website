@@ -61,6 +61,7 @@ public class PageController {
                 return "ErrorPage";
             }
 
+            // Section 0
             String status = "Unknown";
             String additionalInfo = "<div class=\"container-fluid d-flex justify-content-end\"><span class=\"badge bg-danger text-lowercase\">" + status + "</span></div>";
             model.addAttribute("additionalinfo", additionalInfo);
@@ -71,14 +72,24 @@ public class PageController {
             String onLevel = ontologiesWriter.formatOntologyLevelText(ontology);
             model.addAttribute("onto_level", ontoLevel);
 
+            // Published paper information
+            model.addAttribute("ontoPublishedPaper", ontology.getShortName() + " published paper");
+
+            // Section 1
             model.addAttribute("description", ontologiesWriter.formatDescription(ontology.getDefinition()));
+
+            // Section 2
             model.addAttribute("myontologyDependencies", ontologiesWriter.generateDependenciesTable(ontology));
 
+            // Section 3
             String ontoDiags = ontologiesWriter.generateDiagramStructures(ontology);
             String ontoPacks = ontologiesWriter.generateSectionStructures(ontology, "3.");
             model.addAttribute("sectionContent",ontoDiags + ontoPacks);
 
+            // Section 4
             model.addAttribute("conceptDefinitions", ontologiesWriter.generateConceptsTable(ontology));
+
+            // Section 5
             model.addAttribute("detailedConcepts", ontologiesWriter.generateDetailedConcepts(ontology));
 
             // Footer
@@ -87,10 +98,22 @@ public class PageController {
             model.addAttribute("onlevel", onLevel);
             String addInfo = status;
             model.addAttribute("addinfo", addInfo);
+            
+            // Footer variables 
+            model.addAttribute("ontoName", ontology.getShortName());
+            model.addAttribute("onlyName", ontology.getFullName());
+            model.addAttribute("onLevel", onLevel);
+            model.addAttribute("addInfo", addInfo);
+            
+            // Links for footer (it is possible to customize these URLs as needed)
+            model.addAttribute("onlyNameLink", "#");
+            model.addAttribute("onLevelLink", "#");
+            model.addAttribute("addInfoLink", "#");
+            
             model.addAttribute("currentYear", String.valueOf(Year.now().getValue()));
             model.addAttribute("date", java.time.LocalDate.now());
 
-            // Adicionar variáveis para a sidebar da página de ontologia
+            // Variables for the ontology page sidebar
             model.addAttribute("ontologydescription", "ontologydescription");
             model.addAttribute("relatedontologies", "relatedontologies");
             model.addAttribute("ontologymodels", "ontologymodels");

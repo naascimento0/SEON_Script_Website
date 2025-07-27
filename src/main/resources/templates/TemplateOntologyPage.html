@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <title>SEON</title>
     <!-- Favicon -->
     <link rel="icon" href="/images/favicon.svg" sizes="32x32" type="image/svg">
     <!-- CDN from Bootstrap website -->
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-            crossorigin="anonymous"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -20,12 +17,18 @@
     <style>
         /* Tema verde claro */
         :root {
-            --light-green: #d4edda; /* Verde claro principal */
-            --dark-green: #155724;  /* Verde escuro para contraste */
-            --mid-green: #c3e6cb;   /* Tom intermediário */
-            --text-muted-green: #6c757d; /* Mantém o cinza muted padrão */
-            --sidebar-width: 280px; /* Largura do sidebar */
-            --navbar-height: 70px; /* Altura aumentada da navbar */
+            --light-green: #d4edda;
+            /* Verde claro principal */
+            --dark-green: #155724;
+            /* Verde escuro para contraste */
+            --mid-green: #c3e6cb;
+            /* Tom intermediário */
+            --text-muted-green: #6c757d;
+            /* Mantém o cinza muted padrão */
+            --sidebar-width: 280px;
+            /* Largura do sidebar */
+            --navbar-height: 70px;
+            /* Altura aumentada da navbar */
         }
 
         /* Barra de navegação melhorada */
@@ -102,7 +105,8 @@
             left: 100%;
         }
 
-        .nav-link:hover, .nav-link:focus {
+        .nav-link:hover,
+        .nav-link:focus {
             color: white !important;
             background: linear-gradient(135deg, var(--dark-green), #0d3c17);
             transform: translateY(-2px);
@@ -156,11 +160,13 @@
             transition: transform 0.3s ease;
         }
 
-        .dropdown-item:hover::before, .dropdown-item:focus::before {
+        .dropdown-item:hover::before,
+        .dropdown-item:focus::before {
             transform: scaleY(1);
         }
 
-        .dropdown-item:hover, .dropdown-item:focus {
+        .dropdown-item:hover,
+        .dropdown-item:focus {
             background: linear-gradient(90deg, rgba(21, 87, 36, 0.1), transparent);
             color: var(--dark-green);
             transform: translateX(8px);
@@ -212,6 +218,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -249,28 +256,37 @@
             color: var(--dark-green);
             padding-top: var(--navbar-height);
         }
-        .section, .bg-light {
+
+        .section,
+        .bg-light {
             border: 1px solid var(--mid-green);
             border-radius: 0.5rem;
             padding: 3rem;
             margin-bottom: 2rem;
         }
+
         .text-justify {
             text-align: justify;
         }
-        h1.display-4, h2.display-6 {
+
+        h1.display-4,
+        h2.display-6 {
             color: var(--dark-green);
         }
-        .lead, small {
+
+        .lead,
+        small {
             color: var(--dark-green);
         }
+
         hr {
             border-color: var(--mid-green);
             margin: 2rem 0;
         }
 
         /* Ajuste para âncoras com navbar fixa */
-        h2[id], h3[id] {
+        h2[id],
+        h3[id] {
             scroll-margin-top: 90px;
         }
 
@@ -287,7 +303,7 @@
                 padding: 1.5rem 0;
                 overflow-y: auto;
                 z-index: 1000;
-                box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             }
 
             .main-content {
@@ -314,7 +330,7 @@
                 overflow-y: auto;
                 z-index: 1050;
                 transition: left 0.3s ease;
-                box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
             }
 
             .sidebar.show {
@@ -339,7 +355,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
                 transition: all 0.3s ease;
             }
 
@@ -354,7 +370,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0,0,0,0.5);
+                background-color: rgba(0, 0, 0, 0.5);
                 z-index: 1040;
                 display: none;
             }
@@ -432,10 +448,12 @@
             border-top: 1px solid #dee2e6;
             border-radius: 0.3rem;
         }
+
         footer .text-muted a {
             color: #6c757d;
             text-decoration: none;
         }
+
         footer .text-muted a:hover {
             text-decoration: underline;
         }
@@ -443,370 +461,382 @@
 </head>
 
 <body>
-<header>
-    <!-- Barra de navegação -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container-fluid">
-            <!-- Marca -->
-            <a class="navbar-brand" href="/">SEON</a>
+    <header>
+        <!-- Barra de navegação -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid">
+                <!-- Marca -->
+                <a class="navbar-brand" href="/">SEON</a>
 
-            <!-- Botão hamburguer para telas pequenas -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Alternar navegação">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <!-- Botão hamburguer para telas pequenas -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Alternar navegação">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <!-- Menu colapsável -->
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <!-- Home -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
+                <!-- Menu colapsável -->
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <!-- Home -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
 
-                    <!-- The Network -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdownNetwork" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            The Network
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
-                            <li><a class="dropdown-item" href="/">SEON</a></li>
-                            <li><a class="dropdown-item" href="/#definition">Definition</a></li>
-                            <li><a class="dropdown-item" href="/#architecture">Architecture</a></li>
-                            <li><a class="dropdown-item" href="/#references">References</a></li>
-                        </ul>
-                    </li>
+                        <!-- The Network -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdownNetwork" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                The Network
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
+                                <li><a class="dropdown-item" href="/">SEON</a></li>
+                                <li><a class="dropdown-item" href="/#definition">Definition</a></li>
+                                <li><a class="dropdown-item" href="/#architecture">Architecture</a></li>
+                                <li><a class="dropdown-item" href="/#references">References</a></li>
+                            </ul>
+                        </li>
 
-                    <!-- Networked Ontologies -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdownOntologies" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Networked Ontologies
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownOntologies">
-                            <li><a class="dropdown-item disabled">Foundational Layer</a></li>
-                            <li><a class="dropdown-item" href="/ontology/ufo">UFO</a></li>
-                            <li><a class="dropdown-item disabled">Core Layer</a></li>
-                            <li><a class="dropdown-item" href="/ontology/sysswO">SysSwO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/spo">SPO</a></li>
-                            <li><a class="dropdown-item disabled">Domain Layer</a></li>
-                            <li><a class="dropdown-item" href="/ontology/cmpo">CMPO</a></li>
-                        </ul>
-                    </li>
+                        <!-- Networked Ontologies -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdownOntologies" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Networked Ontologies
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownOntologies">
+                                <li><a class="dropdown-item disabled">Foundational Layer</a></li>
+                                <li><a class="dropdown-item" href="/ontology/ufo">UFO</a></li>
+                                <li><a class="dropdown-item disabled">Core Layer</a></li>
+                                <li><a class="dropdown-item" href="/ontology/sysswO">SysSwO</a></li>
+                                <li><a class="dropdown-item" href="/ontology/spo">SPO</a></li>
+                                <li><a class="dropdown-item disabled">Domain Layer</a></li>
+                                <li><a class="dropdown-item" href="/ontology/cmpo">CMPO</a></li>
+                            </ul>
+                        </li>
 
-                    <!-- Publications -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/publications">Publications</a>
-                    </li>
-                    <!-- Upload -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/upload">Upload</a>
-                    </li>
-                </ul>
+                        <!-- Publications -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/publications">Publications</a>
+                        </li>
+                        <!-- Upload -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/upload">Upload</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
+        </nav>
+    </header>
+
+    <!-- Botão toggle para sidebar (mobile) -->
+    <button class="sidebar-toggle d-lg-none" type="button">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Overlay para fechar sidebar no mobile -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <button class="sidebar-close d-lg-none">&times;</button>
+
+        <div class="sidebar-title">
+            <i class="bi bi-bookmark-star me-2"></i>Page Contents
         </div>
+
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" th:href="'#' + ${ontologydescription}" href="#ontologydescription">
+                    <i class="bi bi-info-circle"></i>Ontology Description
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="'#' + ${relatedontologies}" href="#relatedontologies">
+                    <i class="bi bi-diagram-2"></i>Related Ontologies
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="'#' + ${ontologymodels}" href="#ontologymodels">
+                    <i class="bi bi-grid-3x2"></i>Ontology Models
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="'#' + ${conceptsdefinition}" href="#conceptsdefinition">
+                    <i class="bi bi-list-ul"></i>Concepts Definition
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="'#' + ${detailedconcepts}" href="#detailedconcepts">
+                    <i class="bi bi-zoom-in"></i>Detailed Concepts
+                </a>
+            </li>
+        </ul>
     </nav>
-</header>
 
-<!-- Botão toggle para sidebar (mobile) -->
-<button class="sidebar-toggle d-lg-none" type="button">
-    <i class="bi bi-list"></i>
-</button>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Conteúdo Principal -->
+            <main role="main" class="main-content col">
+                <section class="bg-light p-5 rounded mb-4">
+                    <div th:utext="${additionalinfo}"></div>
 
-<!-- Overlay para fechar sidebar no mobile -->
-<div class="sidebar-overlay"></div>
+                    <h1 class="display-4">The <span th:text="${title}">@title</span></h1>
+                    <p class="lead text-end fst-italic" th:utext="${onto_level}">@onto_level</p>
+                    <small><i class="bi-dot"></i><span th:utext="${ontoPublishedPaper}">@onto published
+                            paper</span></small>
+                </section>
 
-<!-- Sidebar -->
-<nav class="sidebar">
-    <button class="sidebar-close d-lg-none">&times;</button>
-    
-    <div class="sidebar-title">
-        <i class="bi bi-bookmark-star me-2"></i>Page Contents
-    </div>
-    
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link" th:href="'#' + ${ontologydescription}" href="#ontologydescription">
-                <i class="bi bi-info-circle"></i>Ontology Description
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="'#' + ${relatedontologies}" href="#relatedontologies">
-                <i class="bi bi-diagram-2"></i>Related Ontologies
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="'#' + ${ontologymodels}" href="#ontologymodels">
-                <i class="bi bi-grid-3x2"></i>Ontology Models
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="'#' + ${conceptsdefinition}" href="#conceptsdefinition">
-                <i class="bi bi-list-ul"></i>Concepts Definition
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="'#' + ${detailedconcepts}" href="#detailedconcepts">
-                <i class="bi bi-zoom-in"></i>Detailed Concepts
-            </a>
-        </li>
-    </ul>
-</nav>
+                <!-- 1. Ontology Description -->
+                <section class="section p-5 rounded" id="ontologydescription">
+                    <h2 class="display-6">1. Ontology Description</h2>
+                    <p class="lead text-justify" th:utext="${description}">@description</p>
+                </section>
 
-<div class="container-fluid">
-    <div class="row">
-        <!-- Conteúdo Principal -->
-        <main role="main" class="main-content col">
-            <section class="bg-light p-5 rounded mb-4">
-                <div th:utext="${additionalinfo}"></div>
-                
-                <h1 class="display-4">The <span th:text="${title}">@title</span></h1>
-                <p class="lead text-end fst-italic" th:text="${onto_level}">@onto_level</p>
-                <small><i class="bi-dot"></i><span th:utext="${ontoPublishedPaper}">@onto published paper</span></small>
-            </section>
+                <!-- 2. Related Ontologies -->
+                <section class="section p-5 rounded" id="relatedontologies">
+                    <h2 class="display-6">2. Related Ontologies</h2>
+                    <p class="lead">Networked ontologies used by <span th:text="${onto}">@onto</span>:</p>
+                    <div class="table-responsive my-5">
+                        <table class="table table-hover" aria-describedby="relatedOntologiesCaption">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Ontology</th>
+                                    <th scope="col">Relation</th>
+                                    <th scope="col">Integration Level</th>
+                                </tr>
+                            </thead>
+                            <tbody th:utext="${myOntologyDependencies}">@myontologyDependencies</tbody>
+                            <caption id="relatedOntologiesCaption">
+                                <small>Ontologies (re)used by <span th:text="${onto}">@onto</span>.</small>
+                            </caption>
+                        </table>
+                    </div>
+                </section>
 
-            <!-- 1. Ontology Description -->
-            <section class="section p-5 rounded" id="ontologydescription">
-                <h2 class="display-6">1. Ontology Description</h2>
-                <p class="lead text-justify" th:text="${description}">@description</p>
-            </section>
+                <!-- 3. Ontology Models -->
+                <section class="section p-5 rounded" id="ontologymodels">
+                    <h2 class="display-6">3. Ontology Models</h2>
+                    <div th:utext="${sectionContent}">@sectionContent</div>
+                </section>
 
-            <!-- 2. Related Ontologies -->
-            <section class="section p-5 rounded" id="relatedontologies">
-                <h2 class="display-6">2. Related Ontologies</h2>
-                <p class="lead">Networked ontologies used by <span th:text="${onto}">@onto</span>:</p>
-                <div class="table-responsive my-5">
-                    <table class="table table-hover" aria-describedby="relatedOntologiesCaption">
-                        <thead>
-                        <tr>
-                            <th scope="col">Ontology</th>
-                            <th scope="col">Relation</th>
-                            <th scope="col">Integration Level</th>
-                        </tr>
-                        </thead>
-                        <tbody th:utext="${myOntologyDependencies}">@myontologyDependencies</tbody>
-                        <caption id="relatedOntologiesCaption">
-                            <small>Ontologies (re)used by <span th:text="${onto}">@onto</span>.</small>
-                        </caption>
-                    </table>
-                </div>
-            </section>
+                <!-- 4. Concepts Definition -->
+                <section class="section p-5 rounded" id="conceptsdefinition">
+                    <h2 class="display-6">4. Concepts Definition</h2>
+                    <p class="lead">The following table shows the definitions for <span th:text="${onto}">@onto</span>
+                        concepts.</p>
+                    <div class="table-responsive my-5">
+                        <table class="table table-hover" aria-describedby="conceptsDefinitionCaption">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Concept</th>
+                                    <th scope="col">Definition</th>
+                                </tr>
+                            </thead>
+                            <tbody th:utext="${conceptDefinitions}">@conceptDefinitions</tbody>
+                            <caption id="conceptsDefinitionCaption">
+                                <small><span th:text="${onto}">@onto</span> concepts definition.</small>
+                            </caption>
+                        </table>
+                    </div>
+                </section>
 
-            <!-- 3. Ontology Models -->
-            <section class="section p-5 rounded" id="ontologymodels">
-                <h2 class="display-6">3. Ontology Models</h2>
-                <p class="lead" th:text="${sectionContent}">@sectionContent</p>
-            </section>
-
-            <!-- 4. Concepts Definition -->
-            <section class="section p-5 rounded" id="conceptsdefinition">
-                <h2 class="display-6">4. Concepts Definition</h2>
-                <p class="lead">The following table shows the definitions for <span th:text="${onto}">@onto</span> concepts.</p>
-                <div class="table-responsive my-5">
-                    <table class="table table-hover" aria-describedby="conceptsDefinitionCaption">
-                        <thead>
-                        <tr>
-                            <th scope="col">Concept</th>
-                            <th scope="col">Definition</th>
-                        </tr>
-                        </thead>
-                        <tbody th:utext="${conceptDefinitions}">@conceptDefinitions</tbody>
-                        <caption id="conceptsDefinitionCaption">
-                            <small><span th:text="${onto}">@onto</span> concepts definition.</small>
-                        </caption>
-                    </table>
-                </div>
-            </section>
-
-            <!-- 5. Detailed Concepts -->
-            <section class="section p-5 rounded" id="detailedconcepts">
-                <h2 class="display-6">5. Detailed Concepts</h2>
-                <p class="lead"><span th:text="${title}">@title</span> detailed concepts.</p>
-                <div th:utext="${detailedConcepts}">@detailedConcepts</div>
-            </section>
-        </main>
-    </div>
-</div>
-
-<!-- Footer -->
-<footer class="py-5 rounded border-top bg-light">
-    <div class="container">
-        <div class="row justify-content-md-center g-4">
-            <!-- Copyright -->
-            <div class="col-md-auto">
-                <h6>Copyright</h6>
-                <div class="d-flex align-items-center">
-                    <i class="material-icons text-muted me-1" aria-label="Símbolo de copyright">copyright</i>
-                    <span class="text-muted">
-                        <small th:text="'© ' + ${currentYear} + ' Simone Dornelas Costa'">© 2025 Simone Dornelas Costa</small>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Powered by -->
-            <div class="col-md-auto">
-                <h6>Powered by</h6>
-                <ul class="list-unstyled text-muted">
-                    <li>
-                        <a href="https://nemo.inf.ufes.br/" target="_blank" class="text-muted text-decoration-none">
-                            <img src="../../../../static/images/logoNemo.svg" alt="Logo NEMO" width="50" class="mb-1 d-block">
-                            NEMO
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Ontologia -->
-            <div class="col-md-auto">
-                <h5 th:text="${ontoName}">@onto</h5>
-                <ul class="list-unstyled text-muted">
-                    <li><small><a th:href="${onlyNameLink}" href="#" class="text-muted" th:text="${onlyName}">@onlyname</a></small></li>
-                    <li><small><a th:href="${onLevelLink}" href="#" class="text-muted" th:text="${onLevel}">@onlevel</a></small></li>
-                    <li><small><a th:href="${addInfoLink}" href="#" class="text-muted" th:text="${addInfo}">@addinfo</a></small></li>
-                </ul>
-            </div>
-
-            <!-- Contato -->
-            <div class="col-md-auto">
-                <h6>Contact us</h6>
-                <ul class="list-unstyled text-muted">
-                    <li class="d-flex align-items-center">
-                        <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
-                        <small><a href="mailto:simone.costa@ufes.br" class="text-muted">simone.costa@ufes.br</a></small>
-                    </li>
-                    <li class="d-flex align-items-center">
-                        <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
-                        <small><a href="mailto:monalessa@inf.ufes.br" class="text-muted">monalessa@inf.ufes.br</a></small>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Data -->
-        <div class="row mt-4 justify-content-md-center">
-            <div class="col-md-auto">
-                <small class="text-muted" th:text="${date}">June 3, 2025</small>
-            </div>
+                <!-- 5. Detailed Concepts -->
+                <section class="section p-5 rounded" id="detailedconcepts">
+                    <h2 class="display-6">5. Detailed Concepts</h2>
+                    <p class="lead"><span th:text="${title}">@title</span> detailed concepts.</p>
+                    <div th:utext="${detailedConcepts}">@detailedConcepts</div>
+                </section>
+            </main>
         </div>
     </div>
-</footer>
 
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous">
-</script>
+    <!-- Footer -->
+    <footer class="py-5 rounded border-top bg-light">
+        <div class="container">
+            <div class="row justify-content-md-center g-4">
+                <!-- Copyright -->
+                <div class="col-md-auto">
+                    <h6>Copyright</h6>
+                    <div class="d-flex align-items-center">
+                        <i class="material-icons text-muted me-1" aria-label="Símbolo de copyright">copyright</i>
+                        <span class="text-muted">
+                            <small th:text="'© ' + ${currentYear} + ' Simone Dornelas Costa'">© 2025 Simone Dornelas
+                                Costa</small>
+                        </span>
+                    </div>
+                </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const sidebarToggle = document.querySelector('.sidebar-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    const sidebarOverlay = document.querySelector('.sidebar-overlay');
-    const sidebarClose = document.querySelector('.sidebar-close');
-    const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
-    const navbar = document.querySelector('.navbar');
+                <!-- Powered by -->
+                <div class="col-md-auto">
+                    <h6>Powered by</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li>
+                            <a href="https://nemo.inf.ufes.br/" target="_blank" class="text-muted text-decoration-none">
+                                <img src="../../../../static/images/logoNemo.svg" alt="Logo NEMO" width="50"
+                                    class="mb-1 d-block">
+                                NEMO
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-    // Efeito de scroll na navbar
-    function handleScroll() {
-        const scrollPos = window.scrollY;
-        if (scrollPos > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    }
+                <!-- Ontologia -->
+                <div class="col-md-auto">
+                    <h5 th:text="${ontoName}">@onto</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li><small><a th:href="${onlyNameLink}" href="#" class="text-muted"
+                                    th:text="${onlyName}">@onlyname</a></small></li>
+                        <li><small><a th:href="${onLevelLink}" href="#" class="text-muted"
+                                    th:text="${onLevel}">@onlevel</a></small></li>
+                        <li><small><a th:href="${addInfoLink}" href="#" class="text-muted"
+                                    th:text="${addInfo}">@addinfo</a></small></li>
+                    </ul>
+                </div>
 
-    window.addEventListener('scroll', handleScroll);
+                <!-- Contato -->
+                <div class="col-md-auto">
+                    <h6>Contact us</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li class="d-flex align-items-center">
+                            <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
+                            <small><a href="mailto:simone.costa@ufes.br"
+                                    class="text-muted">simone.costa@ufes.br</a></small>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
+                            <small><a href="mailto:monalessa@inf.ufes.br"
+                                    class="text-muted">monalessa@inf.ufes.br</a></small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-    // Toggle sidebar no mobile
-    sidebarToggle?.addEventListener('click', function() {
-        sidebar.classList.add('show');
-        sidebarOverlay.classList.add('show');
-    });
+            <!-- Data -->
+            <div class="row mt-4 justify-content-md-center">
+                <div class="col-md-auto">
+                    <small class="text-muted" th:text="${date}">June 3, 2025</small>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-    // Fechar sidebar
-    function closeSidebar() {
-        sidebar.classList.remove('show');
-        sidebarOverlay.classList.remove('show');
-    }
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
 
-    sidebarClose?.addEventListener('click', closeSidebar);
-    sidebarOverlay?.addEventListener('click', closeSidebar);
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarOverlay = document.querySelector('.sidebar-overlay');
+            const sidebarClose = document.querySelector('.sidebar-close');
+            const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+            const navbar = document.querySelector('.navbar');
 
-    // Fechar sidebar ao clicar em link (mobile)
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            if (window.innerWidth < 992) {
-                closeSidebar();
+            // Efeito de scroll na navbar
+            function handleScroll() {
+                const scrollPos = window.scrollY;
+                if (scrollPos > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
             }
-        });
-    });
 
-    // Highlight do link ativo baseado na posição da página
-    function updateActiveLink() {
-        const sections = document.querySelectorAll('section[id]');
-        const scrollPos = window.scrollY + 150; // Aumentei o offset
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight;
-        
-        // Verifica se está no final da página
-        if (window.scrollY + windowHeight >= documentHeight - 100) {
-            // Remove active de todos os links
-            sidebarLinks.forEach(link => link.classList.remove('active'));
-            
-            // Ativa o último link (Detailed Concepts)
-            const lastLink = document.querySelector('.sidebar .nav-link[href="#detailedconcepts"]');
-            if (lastLink) {
-                lastLink.classList.add('active');
+            window.addEventListener('scroll', handleScroll);
+
+            // Toggle sidebar no mobile
+            sidebarToggle?.addEventListener('click', function () {
+                sidebar.classList.add('show');
+                sidebarOverlay.classList.add('show');
+            });
+
+            // Fechar sidebar
+            function closeSidebar() {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
             }
-            return;
-        }
 
-        let activeSection = null;
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            
-            if (scrollPos >= sectionTop - 100 && scrollPos < sectionTop + sectionHeight) {
-                activeSection = sectionId;
-            }
-        });
+            sidebarClose?.addEventListener('click', closeSidebar);
+            sidebarOverlay?.addEventListener('click', closeSidebar);
 
-        if (activeSection) {
-            // Remove active de todos os links
-            sidebarLinks.forEach(link => link.classList.remove('active'));
-            
-            // Adiciona active ao link correspondente
-            const activeLink = document.querySelector(`.sidebar .nav-link[href="#${activeSection}"]`);
-            if (activeLink) {
-                activeLink.classList.add('active');
-            }
-        }
-    }
-
-    // Atualizar link ativo no scroll
-    window.addEventListener('scroll', updateActiveLink);
-    
-    // Inicializar link ativo
-    updateActiveLink();
-
-    // Smooth scroll para links do sidebar
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                const offsetTop = targetElement.offsetTop - 80;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
+            // Fechar sidebar ao clicar em link (mobile)
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth < 992) {
+                        closeSidebar();
+                    }
                 });
+            });
+
+            // Highlight do link ativo baseado na posição da página
+            function updateActiveLink() {
+                const sections = document.querySelectorAll('section[id]');
+                const scrollPos = window.scrollY + 150; // Aumentei o offset
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+
+                // Verifica se está no final da página
+                if (window.scrollY + windowHeight >= documentHeight - 100) {
+                    // Remove active de todos os links
+                    sidebarLinks.forEach(link => link.classList.remove('active'));
+
+                    // Ativa o último link (Detailed Concepts)
+                    const lastLink = document.querySelector('.sidebar .nav-link[href="#detailedconcepts"]');
+                    if (lastLink) {
+                        lastLink.classList.add('active');
+                    }
+                    return;
+                }
+
+                let activeSection = null;
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+
+                    if (scrollPos >= sectionTop - 100 && scrollPos < sectionTop + sectionHeight) {
+                        activeSection = sectionId;
+                    }
+                });
+
+                if (activeSection) {
+                    // Remove active de todos os links
+                    sidebarLinks.forEach(link => link.classList.remove('active'));
+
+                    // Adiciona active ao link correspondente
+                    const activeLink = document.querySelector(`.sidebar .nav-link[href="#${activeSection}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                }
             }
+
+            // Atualizar link ativo no scroll
+            window.addEventListener('scroll', updateActiveLink);
+
+            // Inicializar link ativo
+            updateActiveLink();
+
+            // Smooth scroll para links do sidebar
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        const offsetTop = targetElement.offsetTop - 80;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 </body>
+
 </html>
