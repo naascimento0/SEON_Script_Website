@@ -13,7 +13,7 @@ public class AuthController {
                        @RequestParam(value = "logout", required = false) String logout,
                        Model model) {
         
-        // Adiciona atributos apenas se os parâmetros existirem
+        // Add attributes only if parameters exist
         if (error != null) {
             model.addAttribute("error", "Invalid username or password");
         }
