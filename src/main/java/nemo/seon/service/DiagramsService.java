@@ -51,11 +51,10 @@ public class DiagramsService {
      */
     private int executeAstahCommand(String scriptPath, String outputDir) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder(
-                scriptPath,                // Path to the script
-                "-image",                  // Export images
-                "-f", astahFilePath, // Astah file
-                "-o", outputDir,           // Output directory
-                "-t", "png"                // Image type (PNG)
+            scriptPath,           // Path to the script
+                "-image", "cl",             // Export images
+                "-f", astahFilePath,        // Astah file
+                "-o", outputDir             // Output directory
         );
 
         // Set working directory
