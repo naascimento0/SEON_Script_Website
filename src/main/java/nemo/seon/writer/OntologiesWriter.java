@@ -48,56 +48,13 @@ public class OntologiesWriter {
 
         figCount = 1; // Contador de figuras para mostrar no HTML (Figura 1, Figura 2, etc.)
 
-//        String onLevel = "";
-//        String ontoLevel = "";
-//
-//        // Constantes e ícones do Bootstrap 5
-//        final String STAR_EMPTY = "<i class=\"bi bi-star\"></i>";
-//        final String STAR_HALF = "<i class=\"bi bi-star-half\"></i>";
-//        final String STAR_FULL = "<i class=\"bi bi-star-fill\"></i>";
-
-
-//        Ontology.OntoLevel level = ontology.getLevel();
-//        if (level != null) {
-//            switch (level) {
-//                case FOUNDATIONAL:
-//                    ontoLevel = STAR_EMPTY + " Foundational Ontology";
-//                    onLevel = "Foundational Ontology";
-//                    break;
-//                case CORE:
-//                    if (ontology.getNetwork() != null && ontology.getNetwork().equals("SEON")) {
-//                        ontoLevel = STAR_HALF + " Core Ontology from SEON";
-//                        onLevel = "Core Ontology from SEON";
-//                    } else {
-//                        System.out.println("Network not recognized: " + ontology.getNetwork());
-//                        ontoLevel = STAR_HALF + " Core Ontology";
-//                        onLevel = "Core Ontology";
-//                    }
-//                    break;
-//                case DOMAIN:
-//                    if (ontology.getNetwork() != null && ontology.getNetwork().equals("SEON")) {
-//                        ontoLevel = STAR_FULL + " Domain Ontology from SEON";
-//                        onLevel = "Domain Ontology from SEON";
-//                    } else {
-//                        System.out.println("Network not recognized: " + ontology.getNetwork());
-//                        ontoLevel = STAR_FULL + " Domain Ontology";
-//                        onLevel = "Domain Ontology";
-//                    }
-//                    break;
-//                default:
-//                    System.out.println("Unknown ontology level: " + level);
-//
-//            }
-//        }
-
         String ontoLevel = formatOntologyLevelHtml(ontology);
         String onLevel = formatOntologyLevelText(ontology);
 
-        // Informações adicionais (status e versão)
+        // Informações adicionais (status)
         String additionalInfo;
         String addInfo;
         String status = /*onto.getStatus() != null ? onto.getStatus() :*/ "Unknown";
-        String version = /*onto.getVersion() != null ? onto.getVersion() :*/ "N/A";
         additionalInfo = "<div class=\"container-fluid d-flex justify-content-end\"><span class=\"badge bg-danger text-lowercase\">" + status + "</span></div>";
         addInfo = status;
 
@@ -277,6 +234,8 @@ public class OntologiesWriter {
                     labelText = name;
                     image = "<img class=\"map img-fluid\" src=\"images/" + name + ".png\" alt=\"" + name + "\">";
                     break;
+                case IGNORE:
+                    continue; // Skip ignored diagrams
             }
 
             String struct = diagramTemplate
@@ -308,7 +267,7 @@ public class OntologiesWriter {
 
         String imagePath = buildImagePath(diagram.getPack(), name);
 
-        String image = String.format("<img src=\"images/%s.png\" width=\"%d\" class=\"map img-fluid\" usemap=\"#%s\" alt=\"Diagram of %s\">",
+        String image = String.format("<img src=\"/images/%s.png\" width=\"%d\" class=\"map img-fluid\" usemap=\"#%s\" alt=\"Diagram of %s\">",
                 imagePath, width, name, name);
         return image + parseMap(diagram);
     }
@@ -649,5 +608,12 @@ public class OntologiesWriter {
             ).append("\n\n");
         }
         return detailedConcepts.toString();
+    }
+
+    /**
+     * Resets the figure counter to 1. Should be called at the beginning of each ontology processing.
+     */
+    public void resetFigureCounter() {
+        figCount = 1;
     }
 }

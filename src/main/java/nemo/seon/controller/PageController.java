@@ -82,6 +82,7 @@ public class PageController {
             model.addAttribute("myontologyDependencies", ontologiesWriter.generateDependenciesTable(ontology));
 
             // Section 3
+            ontologiesWriter.resetFigureCounter(); // Reset figCOunt for each ontology
             String ontoDiags = ontologiesWriter.generateDiagramStructures(ontology);
             String ontoPacks = ontologiesWriter.generateSectionStructures(ontology, "3.");
             model.addAttribute("sectionContent",ontoDiags + ontoPacks);
