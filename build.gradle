@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.6'
 }
 
 group = 'nemo.seon'
@@ -14,6 +16,23 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation fileTree(dir: 'jars', include: ['**/*.jar']) // The "**/*.jar" indicates that all .jar files, including those inside lib/, batik/, gvml/, etc., will be automatically added as dependencies.
     testImplementation 'org.mockito:mockito-core:5.5.0'
+
+    // Spring boot web for api rest
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Upload files
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+    // Logging
+    implementation 'org.slf4j:slf4j-api:2.0.13'
+    implementation 'ch.qos.logback:logback-classic:1.5.6'
+
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Authentication
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
 }
 
 test {

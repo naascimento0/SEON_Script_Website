@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SEON - Login</title>
+    <!-- Favicon -->
+    <link rel="icon" href="/images/favicon.svg" sizes="32x32" type="image/svg">
+    <!-- CDN from Bootstrap website -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+            crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Estilo customizado -->
+    <style>
+        /* Tema verde claro */
+        :root {
+            --light-green: #d4edda; /* Verde claro principal */
+            --dark-green: #155724;  /* Verde escuro para contraste */
+            --mid-green: #c3e6cb;   /* Tom intermediário */
+            --text-muted-green: #6c757d; /* Mantém o cinza muted padrão */
+            --navbar-height: 70px; /* Altura aumentada da navbar */
+        }
+
+        /* Barra de navegação melhorada */
+        .navbar {
+            background: linear-gradient(135deg, var(--light-green) 0%, var(--mid-green) 100%);
+            border-bottom: 2px solid var(--dark-green);
+            z-index: 1040;
+            box-shadow: 0 4px 12px rgba(21, 87, 36, 0.15);
+            backdrop-filter: blur(10px);
+            height: var(--navbar-height);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(212, 237, 218, 0.95);
+            box-shadow: 0 2px 20px rgba(21, 87, 36, 0.2);
+        }
+
+        /* Marca/Logo */
+        .navbar-brand {
+            color: var(--dark-green) !important;
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-brand::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--dark-green), var(--mid-green));
+            transition: width 0.3s ease;
+        }
+
+        .navbar-brand:hover::after {
+            width: 100%;
+        }
+
+        .navbar-brand:hover {
+            color: #0d3c17 !important;
+            transform: translateY(-2px);
+        }
+
+        /* Links de navegação */
+        .nav-link {
+            color: var(--dark-green) !important;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem !important;
+            margin: 0 0.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover, .nav-link:focus {
+            color: white !important;
+            background: linear-gradient(135deg, var(--dark-green), #0d3c17);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(21, 87, 36, 0.3);
+        }
+
+        .nav-link.active {
+            color: white !important;
+            background: linear-gradient(135deg, var(--dark-green), #0d3c17);
+            box-shadow: 0 2px 6px rgba(21, 87, 36, 0.4);
+        }
+
+        /* Dropdown melhorado */
+        .dropdown-toggle::after {
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown.show .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            background: linear-gradient(135deg, var(--mid-green) 0%, var(--light-green) 100%);
+            border: 2px solid var(--dark-green);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(21, 87, 36, 0.2);
+            margin-top: 0.5rem;
+            padding: 0.75rem 0;
+            min-width: 220px;
+            backdrop-filter: blur(10px);
+        }
+
+        .dropdown-item {
+            color: var(--dark-green);
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--dark-green);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-item:hover::before, .dropdown-item:focus::before {
+            transform: scaleY(1);
+        }
+
+        .dropdown-item:hover, .dropdown-item:focus {
+            background: linear-gradient(90deg, rgba(21, 87, 36, 0.1), transparent);
+            color: var(--dark-green);
+            transform: translateX(8px);
+            padding-left: 2rem;
+        }
+
+        .dropdown-item.disabled {
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            padding: 0.5rem 1.5rem;
+            background: rgba(21, 87, 36, 0.05);
+            margin: 0.25rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .dropdown-item.disabled:hover {
+            transform: none;
+            padding-left: 1.5rem;
+            background: rgba(21, 87, 36, 0.05);
+        }
+
+        /* Botão hamburguer customizado */
+        .navbar-toggler {
+            border: 2px solid var(--dark-green);
+            border-radius: 8px;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:hover {
+            background: var(--dark-green);
+            transform: scale(1.05);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2821, 87, 36, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .navbar-toggler:hover .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Animações de entrada */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu.show {
+            animation: slideInDown 0.3s ease;
+        }
+
+        /* Responsividade melhorada */
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background: rgba(212, 237, 218, 0.98);
+                border-radius: 12px;
+                margin-top: 1rem;
+                padding: 1rem;
+                box-shadow: 0 4px 15px rgba(21, 87, 36, 0.2);
+            }
+
+            .navbar-nav {
+                gap: 0.5rem;
+            }
+
+            .dropdown-menu {
+                border: none;
+                box-shadow: none;
+                background: rgba(195, 230, 203, 0.5);
+                margin-left: 1rem;
+            }
+        }
+
+        /* Corpo e seções */
+        body {
+            color: var(--dark-green);
+            padding-top: var(--navbar-height);
+            background: linear-gradient(135deg, #f8f9fa 0%, rgba(212, 237, 218, 0.1) 100%);
+            min-height: 100vh;
+        }
+
+        .section, .bg-light {
+            border: 1px solid var(--mid-green);
+            border-radius: 0.5rem;
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .text-justify {
+            text-align: justify;
+        }
+
+        h1.display-4, h2.display-6 {
+            color: var(--dark-green);
+        }
+
+        .lead, small {
+            color: var(--dark-green);
+        }
+
+        hr {
+            border-color: var(--mid-green);
+            margin: 2rem 0;
+        }
+
+        /* Login specific styles */
+        .login-container {
+            min-height: calc(100vh - var(--navbar-height) - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(212, 237, 218, 0.1) 100%);
+            border: 2px solid var(--mid-green);
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(21, 87, 36, 0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(21, 87, 36, 0.05) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .login-card:hover::before {
+            transform: scale(1);
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(21, 87, 36, 0.2);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-header h1 {
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header .lead {
+            color: var(--text-muted-green);
+        }
+
+        .login-icon {
+            font-size: 4rem;
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--mid-green);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-control:focus {
+            border-color: var(--dark-green);
+            box-shadow: 0 0 0 0.2rem rgba(21, 87, 36, 0.25);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, var(--dark-green), #0d3c17);
+            border: none;
+            color: white !important;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-login:hover::before {
+            left: 100%;
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #0d3c17, #0a2f14);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(21, 87, 36, 0.3);
+            color: white !important;
+        }
+
+        .btn-login:focus {
+            color: white !important;
+            box-shadow: 0 0 0 0.2rem rgba(21, 87, 36, 0.25);
+        }
+
+        .btn-login:active {
+            color: white !important;
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: 2px solid;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #f8d7da, rgba(245, 198, 203, 0.8));
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda, rgba(195, 230, 203, 0.8));
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .input-group {
+            position: relative;
+            z-index: 2;
+        }
+
+        .input-group .form-control {
+            border-right: none;
+        }
+
+        .input-group-text {
+            background: var(--light-green);
+            border: 2px solid var(--mid-green);
+            border-left: none;
+            color: var(--dark-green);
+        }
+
+        .form-control:focus + .input-group-text {
+            border-color: var(--dark-green);
+        }
+
+        /* Loading spinner */
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+    </style>
+
+    <!-- Estilo customizado footer-->
+    <style>
+        /* Footer */
+        footer {
+            background-color: #f8f9fa;
+            padding: 3rem 0;
+            border-top: 1px solid #dee2e6;
+            border-radius: 0.3rem;
+        }
+        footer .text-muted a {
+            color: #6c757d;
+            text-decoration: none;
+        }
+        footer .text-muted a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <!-- Barra de navegação -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <!-- Marca -->
+            <a class="navbar-brand" href="/">SEON</a>
+
+            <!-- Botão hamburguer para telas pequenas -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Alternar navegação">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu colapsável -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <!-- Home -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+
+                    <!-- The Network -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownNetwork" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            The Network
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
+                            <li><a class="dropdown-item" href="/">SEON</a></li>
+                            <li><a class="dropdown-item" href="/#definition">Definition</a></li>
+                            <li><a class="dropdown-item" href="/#architecture">Architecture</a></li>
+                            <li><a class="dropdown-item" href="/#references">References</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Networked Ontologies -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownOntologies" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Networked Ontologies
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownOntologies">
+                            <li><a class="dropdown-item disabled">Foundational Layer</a></li>
+                            <li><a class="dropdown-item" href="/ontology/ufo">UFO</a></li>
+                            <li><a class="dropdown-item disabled">Core Layer</a></li>
+                            <li><a class="dropdown-item" href="/ontology/sysswO">SysSwO</a></li>
+                            <li><a class="dropdown-item" href="/ontology/spo">SPO</a></li>
+                            <li><a class="dropdown-item disabled">Domain Layer</a></li>
+                            <li><a class="dropdown-item" href="/ontology/cmpo">CMPO</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Publications -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/publications">Publications</a>
+                    </li>
+
+                    <!-- Upload -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/upload">Upload</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid">
+    <div class="login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-md-6 col-lg-4">
+                <div class="login-card">
+                    <div class="login-header">
+                        <i class="bi bi-shield-lock login-icon"></i>
+                        <h1 class="display-6">Login Required</h1>
+                        <p class="lead">Please authenticate to access SEON Upload feature</p>
+                    </div>
+
+                    <!-- Mensagens de erro/sucesso -->
+                    <div th:if="${param.error}" class="alert alert-danger mb-3">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Authentication Failed!</strong> Invalid username or password.
+                    </div>
+                    
+                    <div th:if="${param.logout}" class="alert alert-success mb-3">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <strong>Logout Successful!</strong> You have been logged out.
+                    </div>
+
+                    <!-- Formulário de login -->
+                    <form th:action="@{/login}" method="post" id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                <i class="bi bi-person me-2"></i>Username
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       placeholder="Enter your username" required>
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-fill"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <i class="bi bi-lock me-2"></i>Password
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       placeholder="Enter your password" required>
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock-fill"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-login" id="loginBtn">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+                            <span id="loginText">Sign In</span>
+                        </button>
+                    </form>
+
+                    <!-- Informações adicionais -->
+                    <div class="text-center mt-4">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Use your SEON credentials to access the upload functionality
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="mt-5">
+    <div class="container">
+        <div class="row justify-content-md-center g-4">
+            <!-- Copyright -->
+            <div class="col-md-auto">
+                <h6>Copyright</h6>
+                <div class="d-flex align-items-center">
+                    <i class="material-icons text-muted me-1" aria-label="Símbolo de copyright">copyright</i>
+                    <span class="text-muted">
+                        <small th:text="'© ' + ${currentYear} + ' Simone Dornelas Costa'">© 2025 Simone Dornelas Costa</small>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Powered by -->
+            <div class="col-md-auto">
+                <h6>Powered by</h6>
+                <ul class="list-unstyled text-muted">
+                    <li>
+                        <a href="https://nemo.inf.ufes.br/" target="_blank" class="text-muted text-decoration-none">
+                            <img src="../../../../static/images/logoNemo.svg" alt="Logo NEMO" width="50" class="mb-1 d-block">
+                            NEMO
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contato -->
+            <div class="col-md-auto">
+                <h6>Contact us</h6>
+                <ul class="list-unstyled text-muted">
+                    <li class="d-flex align-items-center">
+                        <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
+                        <small><a href="mailto:simone.costa@ufes.br" class="text-muted">simone.costa@ufes.br</a></small>
+                    </li>
+                    <li class="d-flex align-items-center">
+                        <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
+                        <small><a href="mailto:monalessa@inf.ufes.br" class="text-muted">monalessa@inf.ufes.br</a></small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Data -->
+        <div class="row mt-4 justify-content-md-center">
+            <div class="col-md-auto">
+                <small class="text-muted" th:text="${date}">July 19, 2025</small>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navbar = document.querySelector('.navbar');
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginText = document.getElementById('loginText');
+
+        // Efeito de scroll na navbar
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Loading state no formulário
+        loginForm.addEventListener('submit', function() {
+            loginBtn.disabled = true;
+            loginText.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing In...';
+        });
+
+        // Focus automático no campo username
+        document.getElementById('username').focus();
+
+        // Enter key navigation
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('password').focus();
+            }
+        });
+
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                loginForm.submit();
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -10,13 +10,14 @@ public class Parser {
     public static final String PATH = System.getProperty("user.dir");  // Current working directory
     public static final String astahFilePath = PATH + "/" + "astah_seon.asta"; // Astah file name should always be "astah_seon.asta"
     public static void main(String[] args) {
-        exportAstahImages();
+        // Note: Diagram export is now handled by StartupDiagramGenerator in Spring Boot context
+        // exportAstahImages();
 
-        ModelReader modelReader = new ModelReader();
-        Package seonNetwork = modelReader.parseAstah2Seon(astahFilePath);
+       ModelReader modelReader = new ModelReader();
+       Package seonNetwork = modelReader.parseAstah2Seon(astahFilePath);
 
-        PageWriter pageWriter = new PageWriter();
-        pageWriter.generateSeonPages(seonNetwork);
+       PageWriter pageWriter = new PageWriter();
+       pageWriter.generateSeonPages(seonNetwork);
 
     }
 
@@ -30,7 +31,7 @@ public class Parser {
      *     -resized                   resized export image's font(Main purpose:Exporting at other OS)
      *     -diff <base astah project file> <reference astah project file>   jude/asta
      */
-    private static void exportAstahImages() {
+    public static void exportAstahImages() {
         String scriptPath = Parser.PATH + "/jars/astah-command.sh";  // astah-command.sh script is the command line tool for Astah
         String outputDir = Parser.PATH + "/page/images";  // Output directory for the images
 

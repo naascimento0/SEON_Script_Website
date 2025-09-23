@@ -18,12 +18,12 @@ public class Ontology extends Package{
         this.shortName = shortName;
     }
 
-    public static enum OntoLevel {
+    public enum OntoLevel {
         FOUNDATIONAL(1), CORE(1), DOMAIN(2);
 
         private final int value;
 
-        private OntoLevel(final int value) {
+        OntoLevel(final int value) {
             this.value = value;
         }
 
