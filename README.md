@@ -11,113 +11,185 @@ Logo, SEON é uma rede de ontologias em Engenharia de Software que fornece um co
 # Objetivo do Projeto
 Sendo uma rede de ontologias, SEON é como um organismo vivo e está em constante evolução. Requer um esforço contínuo e a longo prazo, com ontologias sendo adicionadas e integradas de maneira incremental e gradativa.
 
-Portanto, neste repositório temos o objetivo de criar um script que leia arquivos .asta e crie um site que mostre a rede de ontologias SEON.
+Este repositório evoluiu o script de geração do site de SEON criado pelo professor Fabiano Ruy para uma aplicação web Spring Boot completa, oferecendo navegação dinâmica, templates reutilizáveis e interface responsiva para explorar a rede SEON.
 
 # Requisitos
 
 * Java 21
-* IDE: IntelliJ IDEA
-* Linux
+* Gradle (incluído via wrapper)
+* Navegador web moderno
+* (Opcional) IDE: IntelliJ IDEA para desenvolvimento
 
 # Execução do Código
 
-## Passos
+## Aplicação Spring Boot (Recomendado)
 
-1. Clonar o repositório com o comando:
-```
+1. Clonar o repositório:
+```bash
 git clone https://github.com/naascimento0/SEON_Script_Website.git
 ```
-2. Colocar o arquivo Astah (.asta) na raiz do projeto com o nome "astah_seon.asta"
 
-3. Abrir o projeto com a IDE IntelliJ;
+2. Navegar para o diretório:
+```bash
+cd SEON_Script_Website
+```
 
-4. Em File/Project Structure, escolher a versão do Java 21;
+3. Configurar variáveis de ambiente para autenticação:
+```bash
+cp .env.example .env
+# Editar .env com suas credenciais seguras
+```
 
-5. Executar o arquivo Parser.java localizado em src/main/java/nemo/seon/parser/Parser.java;
+4. Colocar o arquivo Astah (.asta) na raiz do projeto com o nome "astah_seon.asta".
 
-6. Terminada a execução, abrir o arquivo HomePage.html localizado em pages/HomePage.html.
+5. Executar a aplicação:
+```bash
+./gradlew bootRun
+```
+
+6. Acessar no navegador:
+```
+http://localhost:8080
+```
+
+## Geração Estática (Método Legado)
+
+Para usar o sistema original de páginas estáticas:
+
+1. Colocar arquivo Astah (.asta) na raiz com nome "astah_seon.asta"
+2. Abrir projeto no IntelliJ IDEA
+3. Configurar Java 21 em File/Project Structure
+4. Executar Parser.java em `src/main/java/nemo/seon/parser/Parser.java`
+5. Abrir HomePage.html gerado em `pages/HomePage.html`
 
 
 # Estrutura do Projeto
 
-O projeto está dividido em três pacotes:
-* model: contém as classes que representam o modelo de dados;
-* parser: contém as classes que fazem a leitura do arquivo .asta e criam as instâncias das classes do modelo;
-* writer: contém as classes que escrevem os arquivos HTML.
+## Arquitetura Atual (Spring Boot)
 
-# Classes do Modelo
-## Package
-O Package é uma classe que guarda atributos de uma instância da classe IPackage no Astah. Toda pasta no arquivo asta é um pacote.
+O projeto migrou para uma aplicação web Spring Boot com sistema de templates dinâmicos:
 
-Atributos da classe Package:
-- String name: é o nome do pacote no Astah;
-- String definition: é a definição do pacote no Astah;
-- PackType type: tipo enumerado que determina o tipo de pacote. O valor desse tipo é determinado por um Tagged Value. O desenvolvedor de ontologias determina o valor de Tagged Value de um pacote dentro do Astah;
-- int order: (desconhecido);
-- IPackage pack: é objeto que representa a própria instância do IPackage;
-- List<Package\> subpacks: são os pacotes que estão no subdiretório de um pacote, ou seja, os pacotes filhos em um nível abaixo do pacote pai;
-- Package parent: é o pacote pai;
-- Map<IPackage, Package\> packageMap: objeto estático que mapeia um IPackage para um Package. Ele é usado para mapear um IPackage para um Package, para que seja possível acessar um Package a partir de um IPackage;
-- List<Diagram\> diagrams: são os diagramas que estão no pacote;
-- List<Dependency\> dependencies: são as dependências que o pacote tem com outros pacotes.
+```
+SEON_Script_Website/
+├── src/main/
+│   ├── java/                      # Código fonte Java
+│   │   └── nemo/seon/             # Pacotes principais
+│   │       ├── model/             # Classes do modelo de dados
+│   │       ├── parser/            # Leitura de arquivos .asta
+│   │       ├── writer/            # Geração de HTML
+│   │       ├── controller/        # Controllers Spring
+│   │       ├── service/           # Serviços de negócio
+│   │       └── config/            # Configurações
+│   └── resources/
+│       ├── templates/             # Templates Thymeleaf
+│       ├── static/                # CSS, JS, imagens
+│       └── application.properties # Configurações
+├── build.gradle                   # Build e dependências
+├── astah_seon.asta               # Arquivo Astah principal
+└── README.md                     # Este arquivo
+```
 
-## Ontology
-O Ontology é uma classe que herda de Package, ela precisa existir pois armazenará Concepts. Um pacote é dado como Ontology se ele tiver o Tagged Value "Ontology ou Subontology"
+## Sistema de Templates
 
-Além dos atributos de pacote, ela possui:
-- String fullName: nome completo da ontologia;
-- String shortName: nome abreviado da ontologia;
-- List<Concept\> concepts: classes que compõem a ontologia.
+### Templates Principais:
 
-OBS: O IPackage pack de Ontology é um Package, visto que a ontologia é uma pasta no arquivo.
-OBS: o fullName e o shortName são Tagged Values que o desenvolvedor define no Astah
+**TemplateHomePage.html**
+- Página inicial com visão geral da rede SEON
+- Sidebar responsiva com navegação para ontologias
+- Renderização dinâmica via Thymeleaf
 
-## Concept
-O Concept é uma classe que representa as classes dentro de uma ontologia. Por exemplo, a ontologia SysSwO tem os conceitos (classes no arquivo Astah) Complex Computer System, Computer System, Controller, dentre outros.
+**TemplateOntologyPage.html**
+- Template reutilizável para ontologias individuais
+- Geração automática de diagramas e estruturas
+- Navegação contextual integrada
 
-Atributos da classe Concept:
-- String name: nome do conceito;
-- String definition: definição do conceito;
-- String stereotype: um valor que o desenvolvedor determina no Astah (toda classe pode ter um Stereotype no Astah), valores podem ser 2ndOT, kind, role, mode, subkind, event, phase, category, rolemixin, dentre outros;
-- Ontology ontology: é a ontologia a qual o conceito pertence;
-- IClass object: é o objeto que representa a classe no Astah;
-- Map<IClass, Concept> conceptMap: objeto estático que mapeia um IClass para um Concept. Ele é usado para mapear um IClass para um Concept, para que seja possível acessar um Concept a partir de um IClass;
-- List<Concept>	generalizations: são as generalizações que o conceito tem com outros conceitos https://www.ibm.com/docs/en/dma?topic=diagrams-generalization-relationships).
+**TemplatePublications.html**
+- Lista de publicações acadêmicas da SEON
+- Organização cronológica e por categoria
+- Conteúdo baseado em pesquisas reais
 
-## Dependency
-A classe Dependency sinaliza uma relação de dependência entre dois pacotes.
+**UploadPage.html / LoginPage.html**
+- Interface de upload para arquivos Astah
+- Sistema de autenticação básico
 
-Atributos da classe Dependency:
-- Package source: pacote que recebe as dependências, ou seja, o pacote origem
-- Package target: pacote que é o cliente, ou seja, faz parte do conjunto de dependências do Package source
-- String definition: definição justificando porque ocorre uma relação de dependência
-- String level: um Tagged Value escolhido pelo desenvolvedor Astah.
+### Funcionamento:
 
-## Relation
-A classe Relation representa a relação entre dois conceitos (duas classes do Astah).
+1. **Requisição**: Usuario acessa endpoint como `/ontology/SPO`
+2. **Controller**: PageController processa requisição
+3. **Service**: OntologyService carrega dados da ontologia
+4. **Template**: Thymeleaf renderiza HTML com dados dinâmicos
+5. **Response**: Página completa enviada ao navegador
 
-Atributos da classe Relation:
-- String name: nome da relação;
-- String definition: (não encontrei nenhuma relação que tenha definition não vazio);
-- String stereotype: atributo "stereotype" de uma classe no Astah, definida pelo desenvolvedor Astah;
-- boolean composition: valor para informar se a relação é de Composição (https://www.uml-diagrams.org/composition.html);
-- Package pack: (não sei porque existe isso, dado que em todas as instâncias da classe o Package pack é nulo);
-- Concept source: qual é a classe do Astah na origem da relação;
-- Concept target: qual é a classe do Astah no destino da relação;
-- String smult: multiplicidade do source;
-- String tmult: multiplicidade do target;
-- List<Relation\> relationsList: lista estática que armazena todas as relações.
+### Recursos:
 
-## Diagram
-A classe Diagram representa os diagramas no arquivo Astah
-Atributos da classe Diagram:
-- String name: nome do diagrama;
-- String definition: definição do diagrama;
-- DiagType type: Tagged Value que pode representar os valores PACKAGE, CONCEPTUALMODEL, OTHER, IGNORE;
-- String network: Tagged Value que diz se pertence o diagrama pertence a SEON, HCI-ON, entre outros;
-- pack: pacote cujo diagrama está localizado;
-- IDiagram object: objeto que representa o diagrama no Astah.
+- **Navegação Dinâmica**: Sidebar automática com todas ontologias
+- **Responsividade**: Layout adaptativo via Bootstrap 5.3.3
+- **Geração Automática**: Diagramas UML convertidos de arquivos Astah
+- **Figuras Numeradas**: Sistema automático de numeração por ontologia
 
+## Arquitetura Legada (Estática)
 
-# Considerações
-É necessário o Astah Professional para colocar valores de Tagged Value em pacotes e classes. O Astah Community e Astah UML não permitem isso.
+O sistema original gerava páginas HTML estáticas:
+
+* **model**: Classes que representam o modelo de dados das ontologias
+* **parser**: Classes para leitura de arquivos .asta, criação de instâncias e escrita dos arquivos HTML
+
+## Tecnologias Utilizadas
+
+### Backend
+- **Spring Boot**: Framework web principal
+- **Thymeleaf**: Engine de templates dinâmicos  
+- **Java 21**: Linguagem de programação
+- **Gradle**: Gerenciamento de dependências
+
+### Frontend
+- **Bootstrap 5.3.3**: Framework CSS responsivo
+- **HTML5/CSS3**: Estrutura e estilização
+- **JavaScript**: Funcionalidades interativas
+
+### Processamento
+- **Astah API**: Leitura e conversão de diagramas UML
+- **Apache Commons**: Utilitários para manipulação de arquivos
+
+## Funcionalidades
+
+### Navegação Integrada
+- Homepage com visão geral da rede SEON
+- Acesso direto a qualquer ontologia via sidebar
+- Navegação breadcrumb e links contextuais
+
+### Visualização de Ontologias
+- Diagramas UML gerados automaticamente
+- Estruturas de classes organizadas hierarquicamente
+- Descrições detalhadas de cada ontologia
+
+### Publicações Acadêmicas
+- Lista completa de trabalhos relacionados à SEON
+- Organização cronológica e por categoria
+- Referencias formatadas em padrão acadêmico
+
+### Sistema de Upload
+- Interface para adição de novos arquivos Astah
+- Processamento automático de diagramas
+- Integração com sistema de ontologias existente
+
+## Configuração de Segurança
+
+### Variáveis de Ambiente
+A aplicação utiliza variáveis de ambiente para configurar credenciais de usuários:
+
+```bash
+# No arquivo .env
+SEON_ADMIN_USERNAME=admin
+SEON_ADMIN_PASSWORD=your_secure_admin_password
+```
+
+### Níveis de Acesso
+- **Público**: Acesso livre a páginas principais (home, ontologias, publicações)
+- **ADMIN**: Acesso à funcionalidade de upload de arquivos Astah
+
+### Configuração Inicial
+1. Copiar arquivo de exemplo: `cp .env.example .env`
+2. Editar `.env` com credenciais seguras
+3. Nunca versionar o arquivo `.env` no controle de versão
+4. Usar senhas fortes para ambiente de produção

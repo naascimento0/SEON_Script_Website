@@ -38,3 +38,12 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+// Configuração para lidar com dependências duplicadas
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
