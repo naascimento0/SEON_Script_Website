@@ -18,7 +18,6 @@ public class Parser {
 
        PageWriter pageWriter = new PageWriter();
        pageWriter.generateSeonPages(seonNetwork);
-
     }
 
     /**

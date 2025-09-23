@@ -1,5 +1,6 @@
 package nemo.seon.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -16,11 +17,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${seon.admin.username:admin}")
+    private String adminUsername;
+
+    @Value("${seon.admin.password:admin}")
+    private String adminPassword;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/upload-asta").hasRole("USER")
+                        .requestMatchers("/upload-asta").hasRole("ADMIN")
                         .requestMatchers("/", "/publications", "/ontology/**", "/login", "/static/**", "/css/**", "/js/**", "/images/**", "/generated-images/**", "/astah-images/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -49,17 +57,12 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER")
-                .build();
         UserDetails adminDetails = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
+                .username(adminUsername)
+                .password(passwordEncoder().encode(adminPassword))
                 .roles("ADMIN")
                 .build();
 
-        return new InMemoryUserDetailsManager(userDetails, adminDetails);
+        return new InMemoryUserDetailsManager(adminDetails);
     }
 }
