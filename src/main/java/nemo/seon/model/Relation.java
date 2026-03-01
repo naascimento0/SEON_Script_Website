@@ -1,13 +1,8 @@
 package nemo.seon.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class Relation {
     private final Concept source;
     private final Concept target;
-    private static final List<Relation> relationsList	= new ArrayList<>();
     private final String name;
     private final boolean composition;
     private final String sourceMult;
@@ -18,8 +13,6 @@ public class Relation {
     public Relation(String name, String definition, String stereotype, boolean composition, Package pack, Concept source, Concept target, String smult, String tmult) {
         this.source = source;
         this.target = target;
-        if (!relationsList.contains(this))
-            relationsList.add(this);
         this.name = name;
         this.composition = composition;
         this.sourceMult = smult;

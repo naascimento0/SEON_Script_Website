@@ -3,16 +3,13 @@ package nemo.seon.model;
 import com.change_vision.jude.api.inf.model.IPackage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Package implements Comparable<Package> {
     public enum PackType {
         NETWORK, SUBNETWORK, LEVEL, PACKAGE, ONTOLOGY, SUBONTOLOGY, IGNORE
     }
 
-    private static final Map<IPackage, Package> packageMap	= new HashMap<>();
     private final List<Package> subpacks;
     private final List<Dependency> dependencies;
     private Package parent;
@@ -26,7 +23,6 @@ public class Package implements Comparable<Package> {
     public Package(String name, String definition, PackType type, int order, IPackage pack) {
         this.pack = pack;
         this.subpacks = new ArrayList<>();
-        packageMap.put(pack, this);
         this.dependencies = new ArrayList<>();
         this.diagrams = new ArrayList<>();
         this.type = type;
@@ -63,14 +59,6 @@ public class Package implements Comparable<Package> {
         return PackType.PACKAGE;
     }
 
-    /**
-     * Returns the Package object associated with the given Astah package.
-     * @param pack The Astah package to search for.
-     * @return The Package object, or null if not found.
-     */
-    public static Package getAstahPackFromMap(IPackage pack) {
-        return packageMap.get(pack);
-    }
 
     /**
      * Returns the subpackages of this package.
@@ -80,17 +68,6 @@ public class Package implements Comparable<Package> {
         return subpacks;
     }
 
-    /**
-     * Returns the package with the given name.
-     * @param fullName The name of the package to search for.
-     * @return The Package object, or null if not found.
-     */
-    public static Package getPackageByFullName(String fullName) {
-        for (Package pack : packageMap.values())
-            if (pack.getAstahPack().getFullName("::").equals(fullName))
-                return pack;
-        return null;
-    }
 
     /**
      * Returns the type of this package.

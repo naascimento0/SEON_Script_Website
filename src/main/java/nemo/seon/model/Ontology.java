@@ -19,7 +19,7 @@ public class Ontology extends Package{
     }
 
     public enum OntoLevel {
-        FOUNDATIONAL(1), CORE(1), DOMAIN(2);
+        FOUNDATIONAL(0), CORE(1), DOMAIN(2);
 
         private final int value;
 

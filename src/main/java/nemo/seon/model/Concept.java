@@ -1,18 +1,15 @@
 package nemo.seon.model;
 
-import com.change_vision.jude.api.inf.model.IAssociation;
 import com.change_vision.jude.api.inf.model.IClass;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 public class Concept implements Comparable<Concept> {
 
     private Ontology ontology;
     private final IClass object;
-    private static final Map<IClass, Concept> conceptMap	= new HashMap<IClass, Concept>();
     private final List<Concept>	generalizations;
     private final String name;
     private final String definition;
@@ -35,7 +32,6 @@ public class Concept implements Comparable<Concept> {
 
     public Concept(String name, String definition, String stereotype, IClass object) {
         this.object = object;
-        conceptMap.put(object, this);
         this.generalizations = new ArrayList<>();
         this.name = name;
         this.definition = definition;
@@ -58,22 +54,7 @@ public class Concept implements Comparable<Concept> {
         return this.object;
     }
 
-    /**
-     * Returns the Concept object that corresponds to the given Astah object.
-     * @param object The Astah object that represents the concept.
-     * @return The Concept object that corresponds to the given Astah object.
-     */
-    public static Concept getConceptObjectByItsIClass(IClass object) {
-        return conceptMap.get(object);
-    }
 
-    /**
-     * Return all concepts.
-     * @return A list with all concepts.
-     */
-    public static List<Concept> getAllConcepts() {
-        return new ArrayList<>(conceptMap.values());
-    }
 
     /**
      * Returns the ontology to which this concept belongs.
@@ -91,19 +72,7 @@ public class Concept implements Comparable<Concept> {
         return this.definition;
     }
 
-    /**
-     * Returns the Concept with the full name parameter ("::" separator).
-     * @param fullName The full name of the concept.
-     * @return The concept with the given full name.
-     */
-    public static Concept getConceptByFullName(String fullName) {
-        for (Concept concept : conceptMap.values()) {
-            if (concept.getAstahConceptObject().getFullName("::").equals(fullName)) {
-                return concept;
-            }
-        }
-        return null;
-    }
+
 
     /**
      * Returns the string used for referencing this concept in the HTML.
@@ -182,5 +151,19 @@ public class Concept implements Comparable<Concept> {
     @Override
     public int compareTo(Concept o) {
         return this.name.compareTo(o.name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Concept concept = (Concept) o;
+        return Objects.equals(name, concept.name)
+                && Objects.equals(ontology, concept.ontology);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, ontology);
     }
 }
