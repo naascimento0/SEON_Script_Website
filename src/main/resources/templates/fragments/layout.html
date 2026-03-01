@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<!-- ==========================================
+     Navbar Fragment
+     Usage: <header th:replace="~{fragments/layout :: navbar(activePage='home')}"></header>
+     ========================================== -->
+<header th:fragment="navbar(activePage)">
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <!-- Marca -->
+            <a class="navbar-brand" href="/">SEON</a>
+
+            <!-- Botão hamburguer para telas pequenas -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Alternar navegação">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu colapsável -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <!-- Home -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activePage == 'home'} ? 'active'" href="/">
+                            Home
+                            <span class="visually-hidden" th:if="${activePage == 'home'}">(página atual)</span>
+                        </a>
+                    </li>
+
+                    <!-- The Network -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownNetwork" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            The Network
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
+                            <li><a class="dropdown-item" href="/">SEON</a></li>
+                            <li><a class="dropdown-item" href="/#definition">Definition</a></li>
+                            <li><a class="dropdown-item" href="/#architecture">Architecture</a></li>
+                            <li><a class="dropdown-item" href="/#references">References</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Networked Ontologies -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" th:classappend="${activePage == 'ontology'} ? 'active'" href="#" id="dropdownOntologies" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Networked Ontologies
+                            <span class="visually-hidden" th:if="${activePage == 'ontology'}">(página atual)</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownOntologies">
+                            <li><a class="dropdown-item disabled">Foundational Layer</a></li>
+                            <li><a class="dropdown-item" href="/ontology/ufo">UFO</a></li>
+                            <li><a class="dropdown-item disabled">Core Layer</a></li>
+                            <li><a class="dropdown-item" href="/ontology/sysswO">SysSwO</a></li>
+                            <li><a class="dropdown-item" href="/ontology/spo">SPO</a></li>
+                            <li><a class="dropdown-item disabled">Domain Layer</a></li>
+                            <li><a class="dropdown-item" href="/ontology/cmpo">CMPO</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Publications -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activePage == 'publications'} ? 'active'" href="/publications">
+                            Publications
+                            <span class="visually-hidden" th:if="${activePage == 'publications'}">(página atual)</span>
+                        </a>
+                    </li>
+                    <!-- Upload -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activePage == 'upload'} ? 'active'" href="/upload">
+                            Upload
+                            <span class="visually-hidden" th:if="${activePage == 'upload'}">(página atual)</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- ==========================================
+     Footer Fragment
+     Usage: <footer th:replace="~{fragments/layout :: footer}"></footer>
+     ========================================== -->
+<footer th:fragment="footer" class="py-5 rounded border-top bg-light">
+    <div class="container">
+        <div class="row justify-content-md-center g-4">
+            <!-- Copyright -->
+            <div class="col-md-auto">
+                <h6>Copyright</h6>
+                <div class="d-flex align-items-center">
+                    <i class="material-icons text-muted me-1" aria-label="Símbolo de copyright">copyright</i>
+                    <span class="text-muted">
+                        <small th:text="'© ' + ${currentYear} + ' Simone Dornelas Costa'">© 2025 Simone Dornelas Costa</small>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Powered by -->
+            <div class="col-md-auto">
+                <h6>Powered by</h6>
+                <ul class="list-unstyled text-muted">
+                    <li>
+                        <a href="https://nemo.inf.ufes.br/" target="_blank" class="text-muted text-decoration-none">
+                            <img src="/images/logoNemo.svg" alt="Logo NEMO" width="50" class="mb-1 d-block">
+                            NEMO
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contato -->
+            <div class="col-md-auto">
+                <h6>Contact us</h6>
+                <ul class="list-unstyled text-muted">
+                    <li class="d-flex align-items-center">
+                        <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
+                        <small><a href="mailto:simone.costa@ufes.br" class="text-muted">simone.costa@ufes.br</a></small>
+                    </li>
+                    <li class="d-flex align-items-center">
+                        <i class="material-icons text-muted me-1" aria-label="E-mail">email</i>
+                        <small><a href="mailto:monalessa@inf.ufes.br" class="text-muted">monalessa@inf.ufes.br</a></small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Data -->
+        <div class="row mt-4 justify-content-md-center">
+            <div class="col-md-auto">
+                <small class="text-muted" th:text="${date}">@date</small>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</html>
