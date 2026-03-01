@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .failureUrl("/login?error")
                         .permitAll()
                 )
-                .csrf(csrf -> csrf.disable())
+                .csrf(Customizer.withDefaults())
                 .logout(logout -> logout
                     .logoutSuccessUrl("/login?logout")
                     .permitAll()
