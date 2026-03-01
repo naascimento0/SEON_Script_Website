@@ -45,6 +45,7 @@ bin/
 .env
 
 images/
+!**/images/SEON_Architecture.png
 page/
 /jars/
 astah_seon.asta
