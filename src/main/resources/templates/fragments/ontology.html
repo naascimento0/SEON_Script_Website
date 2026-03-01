@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<!-- ==========================================
+     Reusable fragment for rendering diagrams.
+     Usage: <div th:replace="~{fragments/ontology :: diagrams(diagrams=${diagramList})}"></div>
+     ========================================== -->
+<div th:fragment="diagrams(diagrams)">
+    <th:block th:each="diag : ${diagrams}">
+        <p class="lead" th:text="'Figure ' + ${diag.figureNumber()} + ' presents the ' + ${diag.introText()} + '.'">
+            Figure 1 presents the conceptual model of the UFO.
+        </p>
+        <div class="container-fluid my-5 text-center">
+            <!-- Simple image (no map) -->
+            <th:block th:if="${diag.simpleImage()}">
+                <img class="map img-fluid" th:src="${diag.imageSrc()}" th:alt="${diag.labelText()}">
+            </th:block>
+            <!-- Image with map -->
+            <th:block th:unless="${diag.simpleImage()}">
+                <img th:src="${diag.imageSrc()}" th:width="${diag.imageWidth()}"
+                     class="map img-fluid" th:usemap="'#' + ${diag.mapName()}" th:alt="'Diagram of ' + ${diag.mapName()}">
+                <map th:name="${diag.mapName()}">
+                    <area th:each="area : ${diag.mapAreas()}"
+                          shape="rect"
+                          th:coords="${area.coords()}"
+                          th:href="${area.href()}"
+                          th:target="${area.target()}"
+                          th:alt="${area.alt()}">
+                </map>
+            </th:block>
+            <p class="fw-bold mt-4" th:text="'Figure ' + ${diag.figureNumber()} + '. ' + ${diag.labelText()} + '.'">
+                Figure 1. UFO Conceptual Model.
+            </p>
+        </div>
+        <p class="lead text-justify" th:if="${diag.description() != null}" th:utext="${diag.description()}">Description</p>
+    </th:block>
+</div>
+
+<!-- ==========================================
+     Reusable recursive fragment for sections (subpackages).
+     Usage: <div th:replace="~{fragments/ontology :: sections(sections=${sectionList})}"></div>
+     ========================================== -->
+<div th:fragment="sections(sections)">
+    <th:block th:each="sec : ${sections}">
+        <hr class="my-5">
+        <div class="py-5">
+            <!--/* Dynamic heading level via th:switch */-->
+            <th:block th:switch="${sec.headingLevel()}">
+                <h3 th:case="3" class="display-6" th:id="${sec.sectionRef()}"
+                    th:text="${sec.sectionNumber()} + ' ' + ${sec.sectionName()}">3.1. Section</h3>
+                <h4 th:case="4" th:id="${sec.sectionRef()}"
+                    th:text="${sec.sectionNumber()} + ' ' + ${sec.sectionName()}">3.1.1. Section</h4>
+                <h5 th:case="5" th:id="${sec.sectionRef()}"
+                    th:text="${sec.sectionNumber()} + ' ' + ${sec.sectionName()}">3.1.1.1. Section</h5>
+                <h6 th:case="*" th:id="${sec.sectionRef()}"
+                    th:text="${sec.sectionNumber()} + ' ' + ${sec.sectionName()}">Section</h6>
+            </th:block>
+
+            <p class="lead text-justify" th:if="${sec.description() != null}" th:utext="${sec.description()}">Description</p>
+
+            <!-- Diagrams within this section -->
+            <div th:if="${!sec.diagrams().isEmpty()}" th:replace="~{fragments/ontology :: diagrams(diagrams=${sec.diagrams()})}"></div>
+        </div>
+
+        <!-- Recursive subsections -->
+        <div th:if="${!sec.subsections().isEmpty()}" th:replace="~{fragments/ontology :: sections(sections=${sec.subsections()})}"></div>
+    </th:block>
+</div>
+
+<!-- ==========================================
+     Dependencies table body fragment.
+     Usage: <tbody th:replace="~{fragments/ontology :: dependenciesBody(deps=${dependencies})}"></tbody>
+     ========================================== -->
+<tbody th:fragment="dependenciesBody(deps)">
+    <tr th:if="${#lists.isEmpty(deps)}">
+        <td colspan="3" class="text-center">No dependencies available</td>
+    </tr>
+    <tr th:each="dep : ${deps}">
+        <td>
+            <a class="text-dark" th:href="${dep.url()}"
+               th:target="${dep.openInNewTab()} ? '_blank'"
+               th:text="${dep.shortName()} + ' - ' + ${dep.fullName()}">
+                SPO - Software Process Ontology
+            </a>
+        </td>
+        <td th:utext="${dep.description() != null} ? ${dep.description()} : 'No description'">Dependency description</td>
+        <td class="text-center" th:text="${dep.level()}">N/A</td>
+    </tr>
+</tbody>
+
+<!-- ==========================================
+     Concepts Definition table body fragment.
+     Usage: <tbody th:replace="~{fragments/ontology :: conceptsBody(concepts=${conceptRows})}"></tbody>
+     ========================================== -->
+<tbody th:fragment="conceptsBody(concepts)">
+    <tr th:if="${#lists.isEmpty(concepts)}">
+        <td colspan="2" class="text-center">No concepts available</td>
+    </tr>
+    <tr th:each="c : ${concepts}">
+        <td>
+            <p th:id="${c.label()}">
+                <span th:class="${c.styleClass()}" th:text="${c.name()}">ConceptName</span>
+                <a class="text-muted" th:href="'#' + ${c.detailLabel()}">
+                    <span class="m-1"><i class="bi bi-plus-circle"></i></span>
+                </a>
+            </p>
+        </td>
+        <td>
+            <p>
+                <span th:text="${c.definition()}">Definition text</span>
+                <th:block th:if="${c.example() != null}">
+                    <br><span class="fw-light">E.g.: </span><span class="fst-italic" th:text="${c.example()}">example</span>
+                </th:block>
+                <th:block th:if="${c.source() != null}">
+                    <br><span class="fw-light">Src.: </span><span th:text="${c.source()}">source</span>
+                </th:block>
+            </p>
+        </td>
+    </tr>
+</tbody>
+
+<!-- ==========================================
+     Detailed Concepts fragment.
+     Usage: <div th:replace="~{fragments/ontology :: detailedConcepts(details=${conceptDetails})}"></div>
+     ========================================== -->
+<div th:fragment="detailedConcepts(details)">
+    <p th:if="${#lists.isEmpty(details)}" class="text-center">No detailed concepts available</p>
+    <th:block th:each="d : ${details}">
+        <hr>
+        <div class="container-fluid" th:id="${d.detailLabel()}">
+            <h4>
+                <i class="bi bi-diagram-3"></i>
+                <span th:text="${' ' + d.fullName()}">SPO::Artifact</span>
+            </h4>
+            <div class="row d-flex">
+                <!-- Left column: stereotype box + generalizations -->
+                <div class="p-3 m-3 col">
+                    <div class="border border-dark mb-3">
+                        <p class="text-center">
+                            <th:block th:if="${d.stereotype() != null}">
+                                <br><code class="text-muted" th:text="'&lt;&lt;' + ${d.stereotype()} + '&gt;&gt;'">&lt;&lt;kind&gt;&gt;</code>
+                            </th:block>
+                            <br><span class="fw-bold" th:text="${d.name()}">ConceptName</span>
+                        </p>
+                    </div>
+                    <br>
+                    <h5>Specializes:</h5>
+                    <p th:if="${#lists.isEmpty(d.generalizations())}" class="bi bi-diagram-2"> No specializations</p>
+                    <p th:each="gen : ${d.generalizations()}">
+                        <i class="bi bi-diagram-2"></i> <span th:text="${gen}">General::Concept</span>
+                    </p>
+                </div>
+
+                <!-- Middle column: definition -->
+                <div class="p-3 m-3 col">
+                    <h5>Definition:</h5>
+                    <p>
+                        <span th:text="${d.definition()}">Definition</span>
+                        <th:block th:if="${d.example() != null}">
+                            <br><span class="fw-bold">Example: </span><span class="fst-italic" th:text="${d.example()}">example</span>
+                        </th:block>
+                        <th:block th:if="${d.source() != null}">
+                            <br><span class="fw-bold">Source: </span><span th:text="${d.source()}">source</span>
+                        </th:block>
+                    </p>
+                </div>
+
+                <!-- Right column: relations -->
+                <div class="p-3 m-3 col">
+                    <h5>Relations:</h5>
+                    <p th:if="${#lists.isEmpty(d.relations())}" class="text-muted">No relations</p>
+                    <code th:unless="${#lists.isEmpty(d.relations())}" class="text-muted">
+                        <th:block th:each="rel,iterStat : ${d.relations()}">
+                            <span th:utext="${rel}">relation text</span>
+                            <br th:unless="${iterStat.last}">
+                        </th:block>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+</html>

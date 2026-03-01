@@ -13,520 +13,12 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- Estilo customizado -->
-    <style>
-        /* Tema verde claro */
-        :root {
-            --light-green: #d4edda;
-            /* Verde claro principal */
-            --dark-green: #155724;
-            /* Verde escuro para contraste */
-            --mid-green: #c3e6cb;
-            /* Tom intermediário */
-            --text-muted-green: #6c757d;
-            /* Mantém o cinza muted padrão */
-            --sidebar-width: 280px;
-            /* Largura do sidebar */
-            --navbar-height: 70px;
-            /* Altura aumentada da navbar */
-        }
-
-        /* Barra de navegação melhorada */
-        .navbar {
-            background: linear-gradient(135deg, var(--light-green) 0%, var(--mid-green) 100%);
-            border-bottom: 2px solid var(--dark-green);
-            z-index: 1040;
-            box-shadow: 0 4px 12px rgba(21, 87, 36, 0.15);
-            backdrop-filter: blur(10px);
-            height: var(--navbar-height);
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            background: rgba(212, 237, 218, 0.95);
-            box-shadow: 0 2px 20px rgba(21, 87, 36, 0.2);
-        }
-
-        /* Marca/Logo */
-        .navbar-brand {
-            color: var(--dark-green) !important;
-            font-weight: 700;
-            font-size: 1.8rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .navbar-brand::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--dark-green), var(--mid-green));
-            transition: width 0.3s ease;
-        }
-
-        .navbar-brand:hover::after {
-            width: 100%;
-        }
-
-        .navbar-brand:hover {
-            color: #0d3c17 !important;
-            transform: translateY(-2px);
-        }
-
-        /* Links de navegação */
-        .nav-link {
-            color: var(--dark-green) !important;
-            font-weight: 500;
-            padding: 0.75rem 1.25rem !important;
-            margin: 0 0.25rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .nav-link:hover,
-        .nav-link:focus {
-            color: white !important;
-            background: linear-gradient(135deg, var(--dark-green), #0d3c17);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(21, 87, 36, 0.3);
-        }
-
-        .nav-link.active {
-            color: white !important;
-            background: linear-gradient(135deg, var(--dark-green), #0d3c17);
-            box-shadow: 0 2px 6px rgba(21, 87, 36, 0.4);
-        }
-
-        /* Dropdown melhorado */
-        .dropdown-toggle::after {
-            transition: transform 0.3s ease;
-        }
-
-        .dropdown.show .dropdown-toggle::after {
-            transform: rotate(180deg);
-        }
-
-        .dropdown-menu {
-            background: linear-gradient(135deg, var(--mid-green) 0%, var(--light-green) 100%);
-            border: 2px solid var(--dark-green);
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(21, 87, 36, 0.2);
-            margin-top: 0.5rem;
-            padding: 0.75rem 0;
-            min-width: 220px;
-            backdrop-filter: blur(10px);
-        }
-
-        .dropdown-item {
-            color: var(--dark-green);
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dropdown-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--dark-green);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .dropdown-item:hover::before,
-        .dropdown-item:focus::before {
-            transform: scaleY(1);
-        }
-
-        .dropdown-item:hover,
-        .dropdown-item:focus {
-            background: linear-gradient(90deg, rgba(21, 87, 36, 0.1), transparent);
-            color: var(--dark-green);
-            transform: translateX(8px);
-            padding-left: 2rem;
-        }
-
-        .dropdown-item.disabled {
-            color: #6c757d;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-            padding: 0.5rem 1.5rem;
-            background: rgba(21, 87, 36, 0.05);
-            margin: 0.25rem 0.5rem;
-            border-radius: 6px;
-        }
-
-        .dropdown-item.disabled:hover {
-            transform: none;
-            padding-left: 1.5rem;
-            background: rgba(21, 87, 36, 0.05);
-        }
-
-        /* Botão hamburguer customizado */
-        .navbar-toggler {
-            border: 2px solid var(--dark-green);
-            border-radius: 8px;
-            padding: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-toggler:hover {
-            background: var(--dark-green);
-            transform: scale(1.05);
-        }
-
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2821, 87, 36, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        }
-
-        .navbar-toggler:hover .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        }
-
-        /* Animações de entrada */
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .dropdown-menu.show {
-            animation: slideInDown 0.3s ease;
-        }
-
-        /* Responsividade melhorada */
-        @media (max-width: 991.98px) {
-            .navbar-collapse {
-                background: rgba(212, 237, 218, 0.98);
-                border-radius: 12px;
-                margin-top: 1rem;
-                padding: 1rem;
-                box-shadow: 0 4px 15px rgba(21, 87, 36, 0.2);
-            }
-
-            .navbar-nav {
-                gap: 0.5rem;
-            }
-
-            .dropdown-menu {
-                border: none;
-                box-shadow: none;
-                background: rgba(195, 230, 203, 0.5);
-                margin-left: 1rem;
-            }
-        }
-
-        /* Corpo e seções */
-        body {
-            color: var(--dark-green);
-            padding-top: var(--navbar-height);
-        }
-
-        .section,
-        .bg-light {
-            border: 1px solid var(--mid-green);
-            border-radius: 0.5rem;
-            padding: 3rem;
-            margin-bottom: 2rem;
-        }
-
-        .text-justify {
-            text-align: justify;
-        }
-
-        h1.display-4,
-        h2.display-6 {
-            color: var(--dark-green);
-        }
-
-        .lead,
-        small {
-            color: var(--dark-green);
-        }
-
-        hr {
-            border-color: var(--mid-green);
-            margin: 2rem 0;
-        }
-
-        /* Ajuste para âncoras com navbar fixa */
-        h2[id],
-        h3[id] {
-            scroll-margin-top: 90px;
-        }
-
-        /* Sidebar - Desktop */
-        @media (min-width: 992px) {
-            .sidebar {
-                position: fixed;
-                top: var(--navbar-height);
-                left: 0;
-                width: var(--sidebar-width);
-                height: calc(100vh - var(--navbar-height));
-                background-color: #f8f9fa;
-                border-right: 2px solid var(--mid-green);
-                padding: 1.5rem 0;
-                overflow-y: auto;
-                z-index: 1000;
-                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            }
-
-            .main-content {
-                margin-left: var(--sidebar-width);
-                padding: 0 2rem;
-            }
-
-            .sidebar-toggle {
-                display: none;
-            }
-        }
-
-        /* Sidebar - Mobile/Tablet */
-        @media (max-width: 991.98px) {
-            .sidebar {
-                position: fixed;
-                top: var(--navbar-height);
-                left: -100%;
-                width: 280px;
-                height: calc(100vh - var(--navbar-height));
-                background-color: #f8f9fa;
-                border-right: 2px solid var(--mid-green);
-                padding: 1.5rem 0;
-                overflow-y: auto;
-                z-index: 1050;
-                transition: left 0.3s ease;
-                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-            }
-
-            .sidebar.show {
-                left: 0;
-            }
-
-            .main-content {
-                padding: 0 1rem;
-            }
-
-            .sidebar-toggle {
-                position: fixed;
-                top: 85px;
-                left: 15px;
-                z-index: 1060;
-                background-color: var(--light-green);
-                border: 1px solid var(--dark-green);
-                color: var(--dark-green);
-                border-radius: 50%;
-                width: 50px;
-                height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-                transition: all 0.3s ease;
-            }
-
-            .sidebar-toggle:hover {
-                background-color: var(--mid-green);
-                transform: scale(1.1);
-            }
-
-            .sidebar-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                z-index: 1040;
-                display: none;
-            }
-
-            .sidebar-overlay.show {
-                display: block;
-            }
-        }
-
-        /* Estilos do sidebar */
-        .sidebar .nav {
-            padding: 0 1rem;
-        }
-
-        .sidebar .nav-link {
-            color: var(--dark-green);
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            margin-bottom: 0.25rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: var(--mid-green);
-            color: var(--dark-green);
-            transform: translateX(5px);
-        }
-
-        .sidebar .nav-link.active {
-            background-color: var(--dark-green);
-            color: white !important;
-        }
-
-        .sidebar .nav-link i {
-            margin-right: 0.5rem;
-            font-size: 1.1em;
-        }
-
-        .sidebar-title {
-            color: var(--dark-green);
-            font-weight: bold;
-            text-align: center;
-            padding: 0 1rem 1rem 1rem;
-            border-bottom: 1px solid var(--mid-green);
-            margin-bottom: 1rem;
-        }
-
-        .sidebar-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--dark-green);
-            cursor: pointer;
-        }
-
-        @media (min-width: 992px) {
-            .sidebar-close {
-                display: none;
-            }
-        }
-    </style>
-
-    <!-- Estilo customizado footer-->
-    <style>
-        /* Footer */
-        footer {
-            background-color: #f8f9fa;
-            padding: 3rem 0;
-            border-top: 1px solid #dee2e6;
-            border-radius: 0.3rem;
-        }
-
-        footer .text-muted a {
-            color: #6c757d;
-            text-decoration: none;
-        }
-
-        footer .text-muted a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <!-- SEON Custom Theme -->
+    <link rel="stylesheet" href="/css/seon-theme.css">
 </head>
 
 <body>
-    <header>
-        <!-- Barra de navegação -->
-        <nav class="navbar navbar-expand-lg fixed-top">
-            <div class="container-fluid">
-                <!-- Marca -->
-                <a class="navbar-brand" href="/">SEON</a>
-
-                <!-- Botão hamburguer para telas pequenas -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                    aria-label="Alternar navegação">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- Menu colapsável -->
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <!-- Home -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Home</a>
-                        </li>
-
-                        <!-- The Network -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="dropdownNetwork" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                The Network
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
-                                <li><a class="dropdown-item" href="/">SEON</a></li>
-                                <li><a class="dropdown-item" href="/#definition">Definition</a></li>
-                                <li><a class="dropdown-item" href="/#architecture">Architecture</a></li>
-                                <li><a class="dropdown-item" href="/#references">References</a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Networked Ontologies -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="dropdownOntologies" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Networked Ontologies
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownOntologies">
-                                <li><a class="dropdown-item disabled">Foundational Layer</a></li>
-                                <li><a class="dropdown-item" href="/ontology/ufo">UFO</a></li>
-                                <li><a class="dropdown-item disabled">Core Layer</a></li>
-                                <li><a class="dropdown-item" href="/ontology/sysswO">SysSwO</a></li>
-                                <li><a class="dropdown-item" href="/ontology/spo">SPO</a></li>
-                                <li><a class="dropdown-item disabled">Domain Layer</a></li>
-                                <li><a class="dropdown-item" href="/ontology/cmpo">CMPO</a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Publications -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/publications">Publications</a>
-                        </li>
-                        <!-- Upload -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/upload">Upload</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <header th:replace="~{fragments/layout :: navbar(activePage='ontology')}"></header>
 
     <!-- Botão toggle para sidebar (mobile) -->
     <button class="sidebar-toggle d-lg-none" type="button">
@@ -578,24 +70,29 @@
             <!-- Conteúdo Principal -->
             <main role="main" class="main-content col">
                 <section class="bg-light p-5 rounded mb-4">
-                    <div th:utext="${additionalinfo}"></div>
+                    <div class="container-fluid d-flex justify-content-end">
+                        <span class="badge bg-danger text-lowercase" th:text="${status}">Unknown</span>
+                    </div>
 
-                    <h1 class="display-4">The <span th:text="${title}">@title</span></h1>
-                    <p class="lead text-end fst-italic" th:utext="${onto_level}">@onto_level</p>
-                    <small><i class="bi-dot"></i><span th:utext="${ontoPublishedPaper}">@onto published
-                            paper</span></small>
+                    <h1 class="display-4">The <span th:text="${title}">Ontology Title</span></h1>
+                    <p class="lead text-end fst-italic" th:if="${ontoLevelIcon != null}">
+                        <i th:class="'bi bi-' + ${ontoLevelIcon}"></i>
+                        <span th:text="${ontoLevelText}">Level Text</span>
+                    </p>
+                    <small><i class="bi-dot"></i><span th:text="${ontoPublishedPaper}">onto published paper</span></small>
                 </section>
 
                 <!-- 1. Ontology Description -->
                 <section class="section p-5 rounded" id="ontologydescription">
                     <h2 class="display-6">1. Ontology Description</h2>
-                    <p class="lead text-justify" th:utext="${description}">@description</p>
+                    <p class="lead text-justify" th:if="${description != null}" th:utext="${description}">Description</p>
+                    <p class="lead text-danger fw-bold" th:if="${description == null}">No definition available</p>
                 </section>
 
                 <!-- 2. Related Ontologies -->
                 <section class="section p-5 rounded" id="relatedontologies">
                     <h2 class="display-6">2. Related Ontologies</h2>
-                    <p class="lead">Networked ontologies used by <span th:text="${onto}">@onto</span>:</p>
+                    <p class="lead">Networked ontologies used by <span th:text="${onto}">ONTO</span>:</p>
                     <div class="table-responsive my-5">
                         <table class="table table-hover" aria-describedby="relatedOntologiesCaption">
                             <thead>
@@ -605,9 +102,10 @@
                                     <th scope="col">Integration Level</th>
                                 </tr>
                             </thead>
-                            <tbody th:utext="${myOntologyDependencies}">@myontologyDependencies</tbody>
+                            <tbody th:replace="~{fragments/ontology :: dependenciesBody(deps=${dependencies})}">
+                            </tbody>
                             <caption id="relatedOntologiesCaption">
-                                <small>Ontologies (re)used by <span th:text="${onto}">@onto</span>.</small>
+                                <small>Ontologies (re)used by <span th:text="${onto}">ONTO</span>.</small>
                             </caption>
                         </table>
                     </div>
@@ -616,14 +114,19 @@
                 <!-- 3. Ontology Models -->
                 <section class="section p-5 rounded" id="ontologymodels">
                     <h2 class="display-6">3. Ontology Models</h2>
-                    <div th:utext="${sectionContent}">@sectionContent</div>
+
+                    <!-- Top-level diagrams of this ontology -->
+                    <div th:if="${!ontoDiagrams.isEmpty()}" th:replace="~{fragments/ontology :: diagrams(diagrams=${ontoDiagrams})}"></div>
+                    <p th:if="${ontoDiagrams.isEmpty() and ontoSections.isEmpty()}" class="lead text-center">No diagrams available for this package.</p>
+
+                    <!-- Subpackage sections (recursive) -->
+                    <div th:if="${!ontoSections.isEmpty()}" th:replace="~{fragments/ontology :: sections(sections=${ontoSections})}"></div>
                 </section>
 
                 <!-- 4. Concepts Definition -->
                 <section class="section p-5 rounded" id="conceptsdefinition">
                     <h2 class="display-6">4. Concepts Definition</h2>
-                    <p class="lead">The following table shows the definitions for <span th:text="${onto}">@onto</span>
-                        concepts.</p>
+                    <p class="lead">The following table shows the definitions for <span th:text="${onto}">ONTO</span> concepts.</p>
                     <div class="table-responsive my-5">
                         <table class="table table-hover" aria-describedby="conceptsDefinitionCaption">
                             <thead>
@@ -632,9 +135,10 @@
                                     <th scope="col">Definition</th>
                                 </tr>
                             </thead>
-                            <tbody th:utext="${conceptDefinitions}">@conceptDefinitions</tbody>
+                            <tbody th:replace="~{fragments/ontology :: conceptsBody(concepts=${conceptRows})}">
+                            </tbody>
                             <caption id="conceptsDefinitionCaption">
-                                <small><span th:text="${onto}">@onto</span> concepts definition.</small>
+                                <small><span th:text="${onto}">ONTO</span> concepts definition.</small>
                             </caption>
                         </table>
                     </div>
@@ -643,8 +147,8 @@
                 <!-- 5. Detailed Concepts -->
                 <section class="section p-5 rounded" id="detailedconcepts">
                     <h2 class="display-6">5. Detailed Concepts</h2>
-                    <p class="lead"><span th:text="${title}">@title</span> detailed concepts.</p>
-                    <div th:utext="${detailedConcepts}">@detailedConcepts</div>
+                    <p class="lead"><span th:text="${title}">title</span> detailed concepts.</p>
+                    <div th:replace="~{fragments/ontology :: detailedConcepts(details=${conceptDetails})}"></div>
                 </section>
             </main>
         </div>

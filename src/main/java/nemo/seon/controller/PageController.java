@@ -1,25 +1,31 @@
 package nemo.seon.controller;
 
 import nemo.seon.model.Ontology;
+import nemo.seon.model.dto.*;
 import nemo.seon.service.OntologyService;
+import nemo.seon.service.OntologyViewService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import nemo.seon.writer.OntologiesWriter;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.Year;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Controller
 public class PageController {
-    private final OntologiesWriter ontologiesWriter;
+    private static final Logger logger = LoggerFactory.getLogger(PageController.class);
+    private final OntologyViewService viewService;
     private final OntologyService ontologyService;
 
     @Autowired
-    public PageController(OntologyService ontologyService) {
+    public PageController(OntologyService ontologyService, OntologyViewService viewService) {
         this.ontologyService = ontologyService;
-        this.ontologiesWriter = new OntologiesWriter();
+        this.viewService = viewService;
     }
 
     @GetMapping("/")
@@ -57,60 +63,54 @@ public class PageController {
             // Search for the ontology by name using the service
             Ontology ontology = ontologyService.findByName(ontologyName);
             if (ontology == null) {
-                System.out.println("Ontology not found: " + ontologyName);
+                logger.warn("Ontology not found: {}", ontologyName);
                 return "ErrorPage";
             }
 
-            // Section 0
-            String status = "Unknown";
-            String additionalInfo = "<div class=\"container-fluid d-flex justify-content-end\"><span class=\"badge bg-danger text-lowercase\">" + status + "</span></div>";
-            model.addAttribute("additionalinfo", additionalInfo);
-
+            // Title and level
             model.addAttribute("title", ontology.getFullName() + " (" + ontology.getShortName() + ")");
+            model.addAttribute("ontoLevelIcon", viewService.getOntologyLevelIcon(ontology));
+            model.addAttribute("ontoLevelText", viewService.getOntologyLevelText(ontology));
+            model.addAttribute("onto", ontology.getShortName());
 
-            String ontoLevel = ontologiesWriter.formatOntologyLevelHtml(ontology);
-            String onLevel = ontologiesWriter.formatOntologyLevelText(ontology);
-            model.addAttribute("onto_level", ontoLevel);
+            // Status badge
+            String status = "Unknown";
+            model.addAttribute("status", status);
 
-            // Published paper information
+            // Published paper info
             model.addAttribute("ontoPublishedPaper", ontology.getShortName() + " published paper");
 
-            // Section 1
-            model.addAttribute("description", ontologiesWriter.formatDescription(ontology.getDefinition()));
+            // Section 1 - Description
+            model.addAttribute("description", viewService.formatDescription(ontology.getDefinition()));
 
-            // Section 2
-            model.addAttribute("myontologyDependencies", ontologiesWriter.generateDependenciesTable(ontology));
+            // Section 2 - Dependencies (as DTOs)
+            List<DependencyView> dependencies = viewService.buildDependencies(ontology);
+            model.addAttribute("dependencies", dependencies);
 
-            // Section 3
-            ontologiesWriter.resetFigureCounter(); // Reset figCOunt for each ontology
-            String ontoDiags = ontologiesWriter.generateDiagramStructures(ontology);
-            String ontoPacks = ontologiesWriter.generateSectionStructures(ontology, "3.");
-            model.addAttribute("sectionContent",ontoDiags + ontoPacks);
+            // Section 3 - Diagrams and Sections (as DTOs)
+            AtomicInteger figureCounter = new AtomicInteger(1);
+            List<DiagramView> ontoDiagrams = viewService.buildDiagrams(ontology, figureCounter);
+            List<SectionView> ontoSections = viewService.buildSections(ontology, "3.", figureCounter);
+            model.addAttribute("ontoDiagrams", ontoDiagrams);
+            model.addAttribute("ontoSections", ontoSections);
 
-            // Section 4
-            model.addAttribute("conceptDefinitions", ontologiesWriter.generateConceptsTable(ontology));
+            // Section 4 - Concepts table (as DTOs)
+            List<ConceptRow> conceptRows = viewService.buildConceptRows(ontology);
+            model.addAttribute("conceptRows", conceptRows);
 
-            // Section 5
-            model.addAttribute("detailedConcepts", ontologiesWriter.generateDetailedConcepts(ontology));
+            // Section 5 - Detailed concepts (as DTOs)
+            List<ConceptDetail> conceptDetails = viewService.buildConceptDetails(ontology);
+            model.addAttribute("conceptDetails", conceptDetails);
 
-            // Footer
-            model.addAttribute("onto", ontology.getShortName());
-            model.addAttribute("onlyname", ontology.getFullName());
-            model.addAttribute("onlevel", onLevel);
-            String addInfo = status;
-            model.addAttribute("addinfo", addInfo);
-            
-            // Footer variables 
+            // Footer variables
             model.addAttribute("ontoName", ontology.getShortName());
             model.addAttribute("onlyName", ontology.getFullName());
-            model.addAttribute("onLevel", onLevel);
-            model.addAttribute("addInfo", addInfo);
-            
-            // Links for footer (it is possible to customize these URLs as needed)
+            model.addAttribute("onLevel", viewService.getOntologyLevelText(ontology));
+            model.addAttribute("addInfo", status);
             model.addAttribute("onlyNameLink", "#");
             model.addAttribute("onLevelLink", "#");
             model.addAttribute("addInfoLink", "#");
-            
+
             model.addAttribute("currentYear", String.valueOf(Year.now().getValue()));
             model.addAttribute("date", java.time.LocalDate.now());
 
@@ -124,11 +124,7 @@ public class PageController {
             return "TemplateOntologyPage";
 
         } catch (Exception e) {
-            // Log the error
-            System.err.println("Error loading ontology page for: " + ontologyName);
-            e.printStackTrace();
-
-            // Redirection to error page
+            logger.error("Error loading ontology page for: {}", ontologyName, e);
             model.addAttribute("error", "Error loading ontology: " + e.getMessage());
             return "ErrorPage";
         }
