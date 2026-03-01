@@ -20,176 +20,123 @@ Este repositório evoluiu o script de geração do site de SEON criado pelo prof
 * Navegador web moderno
 * (Opcional) IDE: IntelliJ IDEA para desenvolvimento
 
-# Execução do Código
-
-## Aplicação Spring Boot (Recomendado)
+# Execução
 
 1. Clonar o repositório:
 ```bash
 git clone https://github.com/naascimento0/SEON_Script_Website.git
-```
-
-2. Navegar para o diretório:
-```bash
 cd SEON_Script_Website
 ```
 
-3. Configurar variáveis de ambiente para autenticação:
+2. Configurar variáveis de ambiente para autenticação:
 ```bash
 cp .env.example .env
 # Editar .env com suas credenciais seguras
 ```
 
-4. Colocar o arquivo Astah (.asta) na raiz do projeto com o nome "astah_seon.asta".
+3. Colocar o arquivo Astah (`.asta`) na raiz do projeto com o nome `astah_seon.asta`.
 
-5. Executar a aplicação:
+4. Executar a aplicação:
 ```bash
 ./gradlew bootRun
 ```
 
-6. Acessar no navegador:
-```
-http://localhost:8080
-```
+5. Acessar no navegador: [http://localhost:8080](http://localhost:8080)
 
-## Geração Estática (Método Legado)
-
-Para usar o sistema original de páginas estáticas:
-
-1. Colocar arquivo Astah (.asta) na raiz com nome "astah_seon.asta"
-2. Abrir projeto no IntelliJ IDEA
-3. Configurar Java 21 em File/Project Structure
-4. Executar Parser.java em `src/main/java/nemo/seon/parser/Parser.java`
-5. Abrir HomePage.html gerado em `pages/HomePage.html`
-
+> Na inicialização, a aplicação parseia o arquivo `.asta` via Astah API e exporta automaticamente todos os diagramas UML como imagens PNG para `src/main/resources/static/images/`.
 
 # Estrutura do Projeto
-
-## Arquitetura Atual (Spring Boot)
-
-O projeto migrou para uma aplicação web Spring Boot com sistema de templates dinâmicos:
 
 ```
 SEON_Script_Website/
 ├── src/main/
-│   ├── java/                      # Código fonte Java
-│   │   └── nemo/seon/             # Pacotes principais
-│   │       ├── model/             # Classes do modelo de dados
-│   │       ├── parser/            # Leitura de arquivos .asta
-│   │       ├── writer/            # Geração de HTML
-│   │       ├── controller/        # Controllers Spring
-│   │       ├── service/           # Serviços de negócio
-│   │       └── config/            # Configurações
+│   ├── java/nemo/seon/
+│   │   ├── config/                # Configurações (Security, StartupDiagramGenerator)
+│   │   ├── controller/            # Controllers Spring MVC
+│   │   ├── model/                 # Entidades do domínio (Ontology, Concept, Relation…)
+│   │   │   └── dto/               # Records de apresentação (SectionView, ConceptRow…)
+│   │   ├── parser/                # ModelReader — leitura de arquivos .asta
+│   │   └── service/               # Lógica de negócio
+│   │       ├── OntologyService        # Carrega e registra ontologias no SeonRegistry
+│   │       ├── OntologyViewService    # Monta DTOs para renderização Thymeleaf
+│   │       └── DiagramsService        # Exporta diagramas via Astah API
 │   └── resources/
-│       ├── templates/             # Templates Thymeleaf
-│       ├── static/                # CSS, JS, imagens
-│       └── application.properties # Configurações
-├── build.gradle                   # Build e dependências
-├── astah_seon.asta               # Arquivo Astah principal
-└── README.md                     # Este arquivo
+│       ├── templates/
+│       │   ├── fragments/         # Fragmentos reutilizáveis (navbar, footer, ontology)
+│       │   ├── TemplateHomePage.html
+│       │   ├── TemplateOntologyPage.html
+│       │   ├── TemplatePublications.html
+│       │   ├── UploadPage.html
+│       │   ├── LoginPage.html
+│       │   └── ErrorPage.html
+│       └── static/
+│           ├── css/seon-theme.css  # CSS customizado do projeto
+│           ├── css/bootstrap*.css  # Bootstrap 5.3.3 (local)
+│           └── images/             # Diagramas gerados (gitignored, exceto estáticos)
+├── jars/                          # JARs proprietários do Astah API
+├── build.gradle
+├── .env.example                   # Template de variáveis de ambiente
+├── astah_seon.asta                # Arquivo Astah principal (gitignored)
+└── README.md
 ```
 
-## Sistema de Templates
+## Fluxo de Funcionamento
 
-### Templates Principais:
+1. **Startup**: `StartupDiagramGenerator` invoca `DiagramsService` para exportar diagramas PNG do `.asta`
+2. **Parsing**: `ModelReader` lê o `.asta` e popula o `SeonRegistry` com ontologias, conceitos e relações
+3. **Requisição**: Usuário acessa endpoint (ex.: `/ontology/SPO`)
+4. **Controller**: `PageController` recebe a requisição
+5. **View Service**: `OntologyViewService` monta DTOs (`SectionView`, `ConceptRow`, `DiagramView`…)
+6. **Template**: Thymeleaf renderiza o HTML usando os DTOs e fragmentos reutilizáveis
+7. **Response**: Página completa enviada ao navegador
 
-**TemplateHomePage.html**
-- Página inicial com visão geral da rede SEON
-- Sidebar responsiva com navegação para ontologias
-- Renderização dinâmica via Thymeleaf
+## Templates e Fragmentos
 
-**TemplateOntologyPage.html**
-- Template reutilizável para ontologias individuais
-- Geração automática de diagramas e estruturas
-- Navegação contextual integrada
+| Template | Descrição |
+|---|---|
+| `TemplateHomePage.html` | Página inicial com definição, arquitetura e visão da rede SEON |
+| `TemplateOntologyPage.html` | Template reutilizável para qualquer ontologia individual |
+| `TemplatePublications.html` | Publicações acadêmicas da SEON |
+| `UploadPage.html` | Upload de arquivos `.asta` (requer autenticação ADMIN) |
+| `LoginPage.html` | Tela de login |
+| `ErrorPage.html` | Página de erro genérica |
 
-**TemplatePublications.html**
-- Lista de publicações acadêmicas da SEON
-- Organização cronológica e por categoria
-- Conteúdo baseado em pesquisas reais
+**Fragmentos** (`fragments/`):
+- `layout.html` — Navbar com navegação dinâmica e footer
+- `ontology.html` — Fragmentos recursivos para renderizar seções, diagramas e tabelas de conceitos
 
-**UploadPage.html / LoginPage.html**
-- Interface de upload para arquivos Astah
-- Sistema de autenticação básico
+## Tecnologias
 
-### Funcionamento:
-
-1. **Requisição**: Usuario acessa endpoint como `/ontology/SPO`
-2. **Controller**: PageController processa requisição
-3. **Service**: OntologyService carrega dados da ontologia
-4. **Template**: Thymeleaf renderiza HTML com dados dinâmicos
-5. **Response**: Página completa enviada ao navegador
-
-### Recursos:
-
-- **Navegação Dinâmica**: Sidebar automática com todas ontologias
-- **Responsividade**: Layout adaptativo via Bootstrap 5.3.3
-- **Geração Automática**: Diagramas UML convertidos de arquivos Astah
-- **Figuras Numeradas**: Sistema automático de numeração por ontologia
-
-## Arquitetura Legada (Estática)
-
-O sistema original gerava páginas HTML estáticas:
-
-* **model**: Classes que representam o modelo de dados das ontologias
-* **parser**: Classes para leitura de arquivos .asta, criação de instâncias e escrita dos arquivos HTML
-
-## Tecnologias Utilizadas
-
-### Backend
-- **Spring Boot**: Framework web principal
-- **Thymeleaf**: Engine de templates dinâmicos  
-- **Java 21**: Linguagem de programação
-- **Gradle**: Gerenciamento de dependências
-
-### Frontend
-- **Bootstrap 5.3.3**: Framework CSS responsivo
-- **HTML5/CSS3**: Estrutura e estilização
-- **JavaScript**: Funcionalidades interativas
-
-### Processamento
-- **Astah API**: Leitura e conversão de diagramas UML
-- **Apache Commons**: Utilitários para manipulação de arquivos
-
-## Funcionalidades
-
-### Navegação Integrada
-- Homepage com visão geral da rede SEON
-- Acesso direto a qualquer ontologia via sidebar
-- Navegação breadcrumb e links contextuais
-
-### Visualização de Ontologias
-- Diagramas UML gerados automaticamente
-- Estruturas de classes organizadas hierarquicamente
-- Descrições detalhadas de cada ontologia
-
-### Publicações Acadêmicas
-- Lista completa de trabalhos relacionados à SEON
-- Organização cronológica e por categoria
-- Referencias formatadas em padrão acadêmico
-
-### Sistema de Upload
-- Interface para adição de novos arquivos Astah
-- Processamento automático de diagramas
-- Integração com sistema de ontologias existente
+| Camada | Tecnologia | Versão |
+|---|---|---|
+| Framework | Spring Boot | 3.2.5 |
+| Templates | Thymeleaf | (gerenciado pelo Spring) |
+| Segurança | Spring Security + BCrypt | (gerenciado pelo Spring) |
+| Env | spring-dotenv | 4.0.0 |
+| Frontend | Bootstrap (CDN + local) | 5.3.3 |
+| Logging | SLF4J + Logback | 2.0.13 / 1.5.6 |
+| Upload | Commons FileUpload | 1.5 |
+| Diagramas | Astah API (JARs locais) | — |
+| Build | Gradle (wrapper) | 8.10 |
+| Linguagem | Java | 21 |
 
 ## Configuração de Segurança
 
 ### Variáveis de Ambiente
-A aplicação utiliza variáveis de ambiente para configurar credenciais de usuários:
+
+A aplicação usa [spring-dotenv](https://github.com/paulschwarz/spring-dotenv) para carregar automaticamente o arquivo `.env`:
 
 ```bash
-# No arquivo .env
+# .env (copiar de .env.example)
 SEON_ADMIN_USERNAME=admin
 SEON_ADMIN_PASSWORD=your_secure_admin_password
 ```
 
 ### Níveis de Acesso
-- **Público**: Acesso livre a páginas principais (home, ontologias, publicações)
-- **ADMIN**: Acesso à funcionalidade de upload de arquivos Astah
+- **Público**: Home, ontologias, publicações
+- **ADMIN**: Upload de arquivos Astah (requer login)
 
 ### Configuração Inicial
-1. Copiar arquivo de exemplo: `cp .env.example .env`
+1. `cp .env.example .env`
 2. Editar `.env` com credenciais seguras
-3. Nunca versionar o arquivo `.env` no controle de versão
-4. Usar senhas fortes para ambiente de produção
+3. Nunca versionar o arquivo `.env`
