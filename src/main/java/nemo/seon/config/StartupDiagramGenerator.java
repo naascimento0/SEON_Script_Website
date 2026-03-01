@@ -1,6 +1,8 @@
 package nemo.seon.config;
 
 import nemo.seon.service.DiagramsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class StartupDiagramGenerator implements ApplicationRunner {
 
+    private static final Logger logger = LoggerFactory.getLogger(StartupDiagramGenerator.class);
     private final DiagramsService diagramsService;
 
     @Autowired
@@ -22,13 +25,13 @@ public class StartupDiagramGenerator implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        System.out.println("=== Generating diagrams at startup ===");
+        logger.info("=== Generating diagrams at startup ===");
         
         try {
             diagramsService.exportAstahDiagrams();
-            System.out.println("=== Diagram generation completed ===");
+            logger.info("=== Diagram generation completed ===");
         } catch (Exception e) {
-            System.err.println("Failed to generate diagrams at startup: " + e.getMessage());
+            logger.error("Failed to generate diagrams at startup: {}", e.getMessage(), e);
             // Don't fail the application startup
         }
     }
