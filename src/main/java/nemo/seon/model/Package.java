@@ -1,11 +1,47 @@
 package nemo.seon.model;
 
-import com.change_vision.jude.api.inf.model.IPackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.change_vision.jude.api.inf.model.IPackage;
+
+/**
+ * Represents a package in the SEON ontology model.
+ * 
+ * A Package is a container that stores attributes from an Astah IPackage instance.
+ * Every folder in the .asta file is represented as a Package. Packages form a hierarchical
+ * structure with parent-child relationships (subpackages) and can contain diagrams and concepts.
+ * 
+ * Package Classification:
+ * The type of a package is determined by a Tagged Value defined by the developer in Astah
+ * and can be one of: NETWORK, SUBNETWORK, LEVEL, PACKAGE, ONTOLOGY, SUBONTOLOGY, or IGNORE.
+ * 
+ * Attributes:
+ * - String name: the package name (retrieved from Astah)
+ * - PackType type: the package type (determined by Tagged Value in Astah)
+ * - int order: the ordering value for sorting and displaying packages
+ * - IPackage pack: the Astah IPackage object representing this package
+ * - List<Package> subpacks: child packages (subfolders)
+ * - Package parent: the parent package (folder)
+ * - List<Diagram> diagrams: diagrams contained in this package
+ * - List<Dependency> dependencies: dependencies that this package has with other packages
+ * 
+ * Important Note:
+ * The definition of a package is obtained dynamically via pack.getDefinition().
+ * It is NOT stored as a field; instead, it is retrieved directly from the Astah object.
+ */
 public class Package implements Comparable<Package> {
+    /**
+     * Enumeration of package types in SEON, determined by Tagged Values in Astah.
+     * 
+     * NETWORK: the root network containing all ontologies
+     * SUBNETWORK: a division or subset of the network
+     * LEVEL: a hierarchical level grouping (e.g., "Foundational", "Core", "Domain")
+     * PACKAGE: a general-purpose package or subpackage
+     * ONTOLOGY: a top-level ontology (extends Package as Ontology class)
+     * SUBONTOLOGY: a sub-ontology within a parent ontology
+     * IGNORE: a package that should be ignored in processing
+     */
     public enum PackType {
         NETWORK, SUBNETWORK, LEVEL, PACKAGE, ONTOLOGY, SUBONTOLOGY, IGNORE
     }
@@ -20,6 +56,15 @@ public class Package implements Comparable<Package> {
     private final int order;
 
 
+    /**
+     * Creates a package with the specified attributes.
+     * 
+     * @param name the package name (from Astah).
+     * @param definition the package definition or description (from Astah).
+     * @param type the PackType (NETWORK, ONTOLOGY, PACKAGE, etc.).
+     * @param order the ordering value for sorting packages.
+     * @param pack the Astah IPackage object representing this package.
+     */
     public Package(String name, String definition, PackType type, int order, IPackage pack) {
         this.pack = pack;
         this.subpacks = new ArrayList<>();
@@ -31,47 +76,92 @@ public class Package implements Comparable<Package> {
     }
 
 
+    /**
+     * Returns the name of this package (from Astah).
+     * @return the package name.
+     */
     public String getName() {
         return this.pack.getName();
     }
 
+    /**
+     * Returns the Astah IPackage object that represents this package.
+     * @return the IPackage object.
+     */
     public IPackage getAstahPack() {
         return this.pack;
     }
 
+    /**
+     * Converts a string package type (from Astah Tagged Value) to the corresponding PackType enum.
+     * 
+     * Mapping:
+     * - "Level" -> LEVEL
+     * - "Subnetwork" -> SUBNETWORK
+     * - "Package" -> PACKAGE
+     * - "Ontology" -> ONTOLOGY
+     * - "Subontology" -> SUBONTOLOGY
+     * - "Ignore" -> IGNORE
+     * - null or unrecognized -> PACKAGE (default)
+     * 
+     * @param givenType the package type string from Astah (or null).
+     * @return the corresponding PackType enum value, or PACKAGE if not recognized.
+     */
     public static PackType getPackType(String givenType) {
-        if (givenType != null) {
-            switch (givenType) {
-                case "Level":
-                    return PackType.LEVEL;
-                case "Subnetwork":
-                    return PackType.SUBNETWORK;
-                case "Package":
-                    return PackType.PACKAGE;
-                case "Ontology":
-                    return PackType.ONTOLOGY;
-                case "Subontology":
-                    return PackType.SUBONTOLOGY;
-                case "Ignore":
-                    return PackType.IGNORE;
-            }
-        }
-        return PackType.PACKAGE;
+        return switch (givenType) {
+            case "Level" -> PackType.LEVEL;
+            case "Subnetwork" -> PackType.SUBNETWORK;
+            case "Package" -> PackType.PACKAGE;
+            case "Ontology" -> PackType.ONTOLOGY;
+            case "Subontology" -> PackType.SUBONTOLOGY;
+            case "Ignore" -> PackType.IGNORE;
+            default -> PackType.PACKAGE;
+        };
     }
 
+    /**
+     * Sets the parent package of this package.
+     * @param parent the parent Package, or null if this is a root package.
+     */
+    public void setParent(Package parent) {
+        this.parent = parent;
+    }
 
     /**
-     * Returns the subpackages of this package.
-     * @return A list of Package objects.
+     * Adds a dependency to this package.
+     * @param dependency the Dependency to add.
+     */
+    public void addDependency(Dependency dependency) {
+        this.dependencies.add(dependency);
+    }
+
+    /**
+     * Adds a subpackage (child package) to this package.
+     * @param pack the Package to add as a subpackage.
+     */
+    public void addSubPack(Package pack) {
+        this.subpacks.add(pack);
+    }
+
+    /**
+     * Adds a diagram to this package.
+     * @param diagram the Diagram to add.
+     */
+    public void addDiagram(Diagram diagram) {
+        this.diagrams.add(diagram);
+    }
+
+    /**
+     * Returns the subpackages (child packages) of this package.
+     * @return a list of Package objects representing subfolders.
      */
     public List<Package> getSubpacks() {
         return subpacks;
     }
 
-
     /**
-     * Returns the type of this package.
-     * @return The PackType enum value.
+     * Returns the type of this package (NETWORK, ONTOLOGY, PACKAGE, etc.).
+     * @return the PackType enum value.
      */
     public PackType getPackageType() {
         return this.type;
@@ -79,15 +169,15 @@ public class Package implements Comparable<Package> {
 
     /**
      * Returns the parent package of this package.
-     * @return The parent Package object, or null if this is a root package.
+     * @return the parent Package object, or null if this is a root package.
      */
     public Package getParent() {
         return this.parent;
     }
 
     /**
-     * Returns the network name of this package.
-     * @return The network name, or null if not found.
+     * Returns the network name of this package (from "Network" Tagged Value in Astah).
+     * @return the network name, or null if not defined.
      */
     public String getNetwork() {
         return this.pack.getTaggedValue("Network");
@@ -95,15 +185,17 @@ public class Package implements Comparable<Package> {
 
     /**
      * Returns the dependencies of this package.
-     * @return A list of Dependency objects.
+     * @return a list of Dependency objects.
      */
     public List<Dependency> getDependencies() {
         return this.dependencies;
     }
 
     /**
-     * Returns the definition of this package.
-     * @return The definition string, or null if not found.
+     * Returns the definition of this package (from Astah).
+     * Note: This is retrieved dynamically from the Astah object, not stored as a field.
+     * 
+     * @return the definition string, or null if not defined.
      */
     public String getDefinition() {
         return this.pack.getDefinition();
@@ -111,15 +203,17 @@ public class Package implements Comparable<Package> {
 
     /**
      * Returns the diagrams of this package.
-     * @return A list of Diagram objects.
+     * @return a list of Diagram objects contained in this package.
      */
     public List<Diagram> getDiagrams() {
         return this.diagrams;
     }
 
     /**
-     * Returns the main ontology this package belongs to by traversing the hierarchy.
-     * @return The main Ontology object, or null if not found or invalid.
+     * Returns the main (root) ontology that this package belongs to.
+     * Traverses the package hierarchy upward until an Ontology (PackType.ONTOLOGY) is found.
+     * 
+     * @return the main Ontology object, or null if not found or this is not part of an ontology.
      */
     public Ontology getMainOntology() {
         Package current = this;
@@ -130,8 +224,14 @@ public class Package implements Comparable<Package> {
     }
 
     /**
-     * Returns the string used for referencing this package in the HTML.
+     * Returns the string used for referencing this package in HTML.
+     * Format: "[OntologyShortName].html#[ShortName]_[PackageName]"
      * Example: "SPO.html#SPO_Standard+Process+Structure"
+     * 
+     * If no ontology is found, returns just the formatted package name.
+     * If the package name is empty, returns "#".
+     * 
+     * @return HTML reference string for linking to this package.
      */
     public String getReference() {
         if (name == null || name.trim().isEmpty()) {
@@ -148,8 +248,14 @@ public class Package implements Comparable<Package> {
     }
 
     /**
-     * Returns a unique label for this package, prefixed by the main ontology short name if available.
+     * Returns a unique label for this package used in HTML identification.
+     * Format: "[OntologyShortName]_[PackageName]" (with spaces replaced by '+')
      * Example: "SPO_Standard+Process"
+     * 
+     * If no ontology is found, returns just the formatted package name.
+     * If the package name is empty, returns "Unnamed".
+     * 
+     * @return HTML label string for identification and referencing.
      */
     public String getLabel() {
         String formattedName = name != null && !name.trim().isEmpty() ?
@@ -160,8 +266,10 @@ public class Package implements Comparable<Package> {
     }
 
     /**
-     * Calculates the hierarchical level of this package by counting parent packages.
-     * @return The depth level (0 for root, 1 for first child, etc.).
+     * Calculates the hierarchical depth of this package in the package tree.
+     * Counts the number of parent packages by traversing upward until reaching the root.
+     * 
+     * @return the depth level: 0 for root packages, 1 for direct children of root, etc.
      */
     public int getPackLevel() {
         int level = 0;
@@ -174,58 +282,60 @@ public class Package implements Comparable<Package> {
     }
 
     /**
-     * Returns the ontology level of this package
-     * @return The OntoLevel enum value, or null if not found.
+     * Returns the ontology level of this package (FOUNDATIONAL, CORE, or DOMAIN).
+     * Determined by examining the name of the LEVEL or NETWORK package in the hierarchy.
+     * 
+     * Looks for keywords in the package names:
+     * - "Foundational" -> OntoLevel.FOUNDATIONAL
+     * - "Core" -> OntoLevel.CORE
+     * - "Domain" -> OntoLevel.DOMAIN
+     * 
+     * @return the OntoLevel enum value, or null if not found or indeterminable.
      */
     public Ontology.OntoLevel getLevel() {
-        Package pack = this;
-        while (pack.getPackageType() != PackType.LEVEL && pack.getPackageType() != PackType.NETWORK)
-            pack = pack.getParent();
-        if (pack.getName().contains("Foundational"))
+        Package current = this;
+        while (current.getPackageType() != PackType.LEVEL && current.getPackageType() != PackType.NETWORK)
+            current = current.getParent();
+        if (current.getName().contains("Foundational"))
             return Ontology.OntoLevel.FOUNDATIONAL;
-        else if (pack.getName().contains("Core"))
+        else if (current.getName().contains("Core"))
             return Ontology.OntoLevel.CORE;
-        else if (pack.getName().contains("Domain"))
+        else if (current.getName().contains("Domain"))
             return Ontology.OntoLevel.DOMAIN;
         return null;
     }
 
     /**
-     * Returns all concepts of this package and its subpackages.
-     * @return A list of Concept objects.
+     * Returns all concepts from this package and its subpackages recursively.
+     * If this package is an Ontology, its concepts are included.
+     * Subpackages are traversed recursively to collect all nested concepts.
+     * 
+     * @return a list of all Concept objects in this package and subpackages.
      */
     public List<Concept> getAllConcepts() {
-        List<Concept> concepts = new ArrayList<Concept>();
-        if (this instanceof Ontology) {
-            concepts.addAll(((Ontology) this).getConcepts());
+        List<Concept> concepts = new ArrayList<>();
+        if (this instanceof Ontology ontology) {
+            concepts.addAll(ontology.getConcepts());
         }
-        for (Package pack : this.subpacks) {
-            concepts.addAll(pack.getAllConcepts());
+        for (Package subPack : this.subpacks) {
+            concepts.addAll(subPack.getAllConcepts());
         }
         return concepts;
     }
 
 
-    public void setParent(Package parent) {
-        this.parent = parent;
-    }
-
-    public void addDependency(Dependency dependency) {
-        this.dependencies.add(dependency);
-    }
-
-    public void addSubPack(Package pack) {
-        this.subpacks.add(pack);
-    }
-
-    public void addDiagram(Diagram diagram) {
-        this.diagrams.add(diagram);
-    }
+    // ========== Comparable and Sorting ==========
 
     /**
-     * Compares this package to another based on strength (level precedence and order).
-     * @param pack The package to compare with.
-     * @return A negative integer, zero, or a positive integer if this package is less than, equal to, or greater than the specified package.
+     * Compares this package to another package based on strength (ontology level and order).
+     * Packages are sorted primarily by ontology level (DOMAIN > CORE > FOUNDATIONAL),
+     * and secondarily by order value within the same level.
+     * 
+     * @param pack the package to compare with.
+     * @return a negative integer if this package has lower strength,
+     *         zero if equal strength,
+     *         a positive integer if this package has higher strength;
+     *         returns 1 if the specified package is null.
      */
     @Override
     public int compareTo(Package pack) {
@@ -235,9 +345,14 @@ public class Package implements Comparable<Package> {
 
     /**
      * Calculates the precedence strength of a package based on its ontology level and order.
-     * Levels: DOMAIN (1000000), CORE (10000), FOUNDATIONAL (100), others (0).
-     * @param pack The package to evaluate.
-     * @return The strength value (higher means higher precedence).
+     * Uses exponential weighting for levels: DOMAIN (100^3 = 1,000,000), CORE (100^2 = 10,000),
+     * FOUNDATIONAL (100^1 = 100). The order value is added to the level weight to break ties.
+     * 
+     * This allows packages to be sorted by level first, then by order within the same level.
+     * Example: A DOMAIN package with order 5 has strength 1,000,005.
+     * 
+     * @param pack The package to evaluate, or null.
+     * @return The strength value (higher means higher precedence), or 0 if pack is null.
      */
     private int getStrength(Package pack) {
         if (pack == null) return 0;
