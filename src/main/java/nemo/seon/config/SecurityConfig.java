@@ -29,23 +29,18 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/upload-asta").hasRole("ADMIN")
-                        .requestMatchers("/", "/publications", "/ontology/**", "/login", "/static/**", "/css/**", "/js/**", "/images/**", "/generated-images/**", "/astah-images/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+                        .requestMatchers("/", "/publications", "/ontology/**", "/login").permitAll()
+                        .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        // .defaultSuccessUrl("/", true)
                         .defaultSuccessUrl("/upload", true)
                         .failureUrl("/login?error")
-                        .permitAll()
-                )
+                        .permitAll())
                 .csrf(Customizer.withDefaults())
                 .logout(logout -> logout
-                    .logoutSuccessUrl("/login?logout")
-                    .permitAll()
-                );
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll());
 
         return http.build();
     }

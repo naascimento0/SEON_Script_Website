@@ -23,6 +23,15 @@ public class StartupDiagramGenerator implements ApplicationRunner {
         this.diagramsService = diagramsService;
     }
 
+    /**
+     * Executes diagram generation when the Spring Boot application starts.
+     * Ensures all diagrams from the Astah file are pre-generated and available
+     * for the web pages. If diagram generation fails, the application startup
+     * continues without interruption.
+     *
+     * @param args command-line arguments passed to the application
+     * @throws Exception if an error occurs during diagram export (caught and logged)
+     */
     @Override
     public void run(ApplicationArguments args) throws Exception {
         logger.info("=== Generating diagrams at startup ===");
