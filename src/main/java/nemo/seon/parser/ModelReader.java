@@ -100,13 +100,13 @@ public class ModelReader {
                     parsePackages(pack);
                 }
 
-            } else if (object instanceof IClass) {
+            } else if (object instanceof IClass iclass) {
                 String stereotype = "";
-                if ((object.getStereotypes()).length > 0) {
-                    stereotype = object.getStereotypes()[0]; // only the first for while
+                if ((iclass.getStereotypes()).length > 0) {
+                    stereotype = iclass.getStereotypes()[0]; // only the first for while
                 }
-                Concept concept = new Concept(object.getName(), object.getDefinition(), stereotype, (IClass) object);
-                registry.registerConcept((IClass) object, concept);
+                Concept concept = new Concept(iclass.getName(), iclass.getDefinition(), stereotype, iclass);
+                registry.registerConcept(iclass, concept);
                 concept.setOntology((Ontology) mainPackage);
                 ((Ontology) mainPackage).addConcept(concept);
             }

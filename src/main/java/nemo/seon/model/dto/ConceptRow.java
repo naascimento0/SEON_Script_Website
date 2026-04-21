@@ -1,7 +1,5 @@
 package nemo.seon.model.dto;
 
-import java.util.List;
-
 /**
  * DTO for rendering a concept row in the Concepts Definition table.
  */
