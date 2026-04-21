@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -29,21 +31,16 @@ public class DiagramsService {
         return basePath.resolve(astahFileName).toString();
     }
 
-    /**
-     * Exports the astah images to the static/images directory for web access.
-     */
     public void exportAstahDiagrams() {
         String scriptPath = basePath.resolve(astahScriptPath).toString();
         String outputDir = basePath.resolve(imagesOutputDir).toString();
         String astahFilePath = getAstahFilePath();
 
-        // Verifies if the astah-command.sh script exists
         if (!new File(scriptPath).exists()) {
             logger.error("The file '{}' was not found.", scriptPath);
             return;
         }
 
-        // Verifies if the astah file exists
         if (!new File(astahFilePath).exists()) {
             logger.error("Astah file not found: {}", astahFilePath);
             return;
@@ -62,13 +59,6 @@ public class DiagramsService {
         }
     }
 
-    /**
-     * Executes the astah-command.sh script to export diagrams.
-     * @param scriptPath Path to the astah-command.sh script
-     * @param astahFilePath Path to the .asta file
-     * @param outputDir Output directory for the images
-     * @return The exit code of the process
-     */
     private int executeAstahCommand(String scriptPath, String astahFilePath, String outputDir) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder(
             scriptPath,
@@ -76,16 +66,19 @@ public class DiagramsService {
                 "-f", astahFilePath,
                 "-o", outputDir
         );
-
-        // Set working directory
         processBuilder.directory(basePath.toFile());
+        processBuilder.redirectErrorStream(true);
 
         logger.debug("Executing: {}", String.join(" ", processBuilder.command()));
-        
-        // Start the process
         Process process = processBuilder.start();
 
-        // Wait for the process to finish
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                logger.debug("[astah-command] {}", line);
+            }
+        }
+
         return process.waitFor();
     }
 }

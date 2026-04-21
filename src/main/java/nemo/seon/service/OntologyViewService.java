@@ -1,22 +1,39 @@
 package nemo.seon.service;
 
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.IPackage;
 import com.change_vision.jude.api.inf.presentation.INodePresentation;
 import com.change_vision.jude.api.inf.presentation.IPresentation;
-import nemo.seon.model.*;
-import nemo.seon.model.Package;
-import nemo.seon.model.dto.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.awt.geom.Rectangle2D;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import nemo.seon.model.Concept;
+import nemo.seon.model.Dependency;
+import nemo.seon.model.Diagram;
+import nemo.seon.model.Ontology;
+import nemo.seon.model.Package;
+import nemo.seon.model.Relation;
+import nemo.seon.model.SeonRegistry;
+import nemo.seon.model.dto.ConceptDetail;
+import nemo.seon.model.dto.ConceptRow;
+import nemo.seon.model.dto.DependencyView;
+import nemo.seon.model.dto.DiagramView;
+import nemo.seon.model.dto.MapArea;
+import nemo.seon.model.dto.SectionView;
 
 /**
  * Service responsible for building view DTOs for ontology page rendering.
@@ -28,9 +45,28 @@ public class OntologyViewService {
 
     private static final Logger logger = LoggerFactory.getLogger(OntologyViewService.class);
 
+    private static final Map<String, String> ONTO_URLS = Map.ofEntries(
+            Map.entry("UFO", "UFO.html"),
+            Map.entry("SEON", "https://dev.nemo.inf.ufes.br/seon/"),
+            Map.entry("COM", "COM.html"),
+            Map.entry("EO", "EO.html"),
+            Map.entry("SysSwO", "SysSwO.html"),
+            Map.entry("RSRO", "RSRO.html"),
+            Map.entry("RRO", "RRO.html"),
+            Map.entry("GORO", "GORO.html"),
+            Map.entry("RDPO", "RDPO.html"),
+            Map.entry("DPO", "DPO.html"),
+            Map.entry("CPO", "CPO.html"),
+            Map.entry("ROoST", "ROoST.html"),
+            Map.entry("QAPO", "QAPO.html"),
+            Map.entry("SPMO", "SPMO.html"),
+            Map.entry("CMPO", "CMPO.html"),
+            Map.entry("RSMO", "RSMO.html"),
+            Map.entry("SDRO", "SDRO.html")
+    );
+
     private final OntologyService ontologyService;
 
-    @Autowired
     public OntologyViewService(OntologyService ontologyService) {
         this.ontologyService = ontologyService;
     }
@@ -136,7 +172,7 @@ public class OntologyViewService {
             List<MapArea> mapAreas = Collections.emptyList();
 
             switch (diag.getType()) {
-                case CONCEPTUALMODEL:
+                case CONCEPTUALMODEL -> {
                     introText = "conceptual model of the " + name +
                             (pack.getPackageType() == Package.PackType.SUBONTOLOGY ? " subontology" : "");
                     labelText = name + " Conceptual Model";
@@ -145,8 +181,8 @@ public class OntologyViewService {
                         imageWidth = (int) Math.round(diag.getDiagramAstahObject().getBoundRect().getWidth());
                     }
                     mapAreas = buildConceptualModelMap(diag);
-                    break;
-                case PACKAGE:
+                }
+                case PACKAGE -> {
                     introText = "packages of the " + name;
                     labelText = name;
                     imageSrc = "/images/" + buildImagePath(diag.getPack(), name) + ".png";
@@ -154,15 +190,16 @@ public class OntologyViewService {
                         imageWidth = (int) Math.round(diag.getDiagramAstahObject().getBoundRect().getWidth());
                     }
                     mapAreas = buildPackageMap(diag);
-                    break;
-                case OTHER:
+                }
+                case OTHER -> {
                     introText = name;
                     labelText = name;
                     imageSrc = "/images/" + name + ".png";
                     simpleImage = true;
-                    break;
-                default:
+                }
+                default -> {
                     continue;
+                }
             }
 
             String description = diag.getDefinition() != null
@@ -425,26 +462,6 @@ public class OntologyViewService {
 
     private static String networkedOntoURL(String network) {
         if (network == null || network.trim().isEmpty()) return "#";
-
-        Map<String, String> urlMap = Map.ofEntries(
-                Map.entry("UFO", "UFO.html"),
-                Map.entry("SEON", "https://dev.nemo.inf.ufes.br/seon/"),
-                Map.entry("COM", "COM.html"),
-                Map.entry("EO", "EO.html"),
-                Map.entry("SysSwO", "SysSwO.html"),
-                Map.entry("RSRO", "RSRO.html"),
-                Map.entry("RRO", "RRO.html"),
-                Map.entry("GORO", "GORO.html"),
-                Map.entry("RDPO", "RDPO.html"),
-                Map.entry("DPO", "DPO.html"),
-                Map.entry("CPO", "CPO.html"),
-                Map.entry("ROoST", "ROoST.html"),
-                Map.entry("QAPO", "QAPO.html"),
-                Map.entry("SPMO", "SPMO.html"),
-                Map.entry("CMPO", "CMPO.html"),
-                Map.entry("RSMO", "RSMO.html"),
-                Map.entry("SDRO", "SDRO.html")
-        );
-        return urlMap.getOrDefault(network, "#");
+        return ONTO_URLS.getOrDefault(network, "#");
     }
 }

@@ -18,21 +18,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class OntologyService {
     private static final Logger logger = LoggerFactory.getLogger(OntologyService.class);
     private Package seonNetwork;
-    private SeonRegistry registry = new SeonRegistry();
+    private final SeonRegistry registry = new SeonRegistry();
     private final Map<String, Ontology> ontologyNames = new ConcurrentHashMap<>();
 
     @Value("${seon.astah.filepath}")
     private String astahFileName;
 
-    private volatile boolean initialized = false;
     @PostConstruct
     public void initialize() {
-        if (!initialized) {
-            loadOntologies();
-            buildCache(seonNetwork);
-            printOntologyNames();
-            initialized = true;
-        }
+        loadOntologies();
+        buildCache(seonNetwork);
+        printOntologyNames();
     }
 
     private void loadOntologies() {
@@ -46,16 +42,10 @@ public class OntologyService {
         }
     }
 
-    /**
-     * Returns the current SeonRegistry (for use by writers that need lookups).
-     */
     public SeonRegistry getRegistry() {
         return registry;
     }
 
-    /**
-     * Builds ontology cache for fast searching
-     */
     private void buildCache(Package seonNetwork) {
         for (Package pack : seonNetwork.getSubpacks()) {
             if (pack.getPackageType() == Package.PackType.ONTOLOGY) {
@@ -67,11 +57,10 @@ public class OntologyService {
         }
     }
 
-    public void printOntologyNames() {
-        ontologyNames.forEach((name, ontology) -> {
-            logger.info("Ontology loaded: {} ({})", name, ontology.getShortName());
-        });
-        if(ontologyNames.isEmpty()) {
+    private void printOntologyNames() {
+        ontologyNames.forEach((name, ontology) ->
+            logger.info("Ontology loaded: {} ({})", name, ontology.getShortName()));
+        if (ontologyNames.isEmpty()) {
             logger.warn("No ontologies found");
         }
     }
@@ -80,27 +69,15 @@ public class OntologyService {
         if (name == null || name.trim().isEmpty()) {
             return null;
         }
-
-        if (!initialized) {
-            initialize();
-        }
         return ontologyNames.get(name.toLowerCase().trim());
     }
 
-    /**
-     * Reloads ontologies from the Astah file.
-     * Useful when the .asta file has been updated.
-     */
+    /** Reloads ontologies from the Astah file when the .asta file has been updated. */
     public void reloadOntologies() {
         logger.info("Reloading ontologies from Astah file...");
-        
-        // Clear existing cache
         ontologyNames.clear();
-        
-        // Reload from file
         loadOntologies();
         buildCache(seonNetwork);
-        
         logger.info("Ontologies reloaded successfully.");
         printOntologyNames();
     }
