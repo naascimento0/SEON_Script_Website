@@ -29,9 +29,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/upload-asta").hasRole("ADMIN")
-                        .requestMatchers("/", "/publications", "/ontology/**", "/login").permitAll()
+                        .requestMatchers(
+                                "/", "/publications", "/ontology/**", "/login",
+                                "/css/**", "/images/**", "/js/**", "/error"
+                        ).permitAll()
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/upload", true)
