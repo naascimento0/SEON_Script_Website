@@ -1,8 +1,6 @@
-package nemo.seon.controller;
+package nemo.seon.model.dto;
 
-/**
- * DTO for upload response JSON serialized by Jackson.
- */
+/** DTO for upload response JSON serialized by Jackson. */
 public record UploadResponse(boolean success, String message, Long timestamp) {
 
     public static UploadResponse ok(String message) {
