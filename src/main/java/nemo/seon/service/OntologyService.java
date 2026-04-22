@@ -35,7 +35,7 @@ public class OntologyService {
         try {
             registry.clear();
             ModelReader modelReader = new ModelReader(registry);
-            String astahFilePath = Paths.get(System.getProperty("user.dir"), astahFileName).toString();
+            String astahFilePath = Paths.get(System.getProperty("user.dir")).resolve(astahFileName).toString();
             this.seonNetwork = modelReader.parseAstah2Seon(astahFilePath);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load SEON ontologies from Astah file", e);

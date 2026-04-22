@@ -35,6 +35,10 @@ dependencies {
 
 }
 
+bootRun {
+    jvmArgs = ['-Xss16m', '-Djava.awt.headless=true']
+}
+
 test {
     useJUnitPlatform()
 }

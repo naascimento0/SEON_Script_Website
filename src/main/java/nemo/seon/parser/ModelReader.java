@@ -35,6 +35,8 @@ public class ModelReader {
     public Package parseAstah2Seon(String astahFilePath) {
         Package seonNetwork;
         try {
+            java.io.File f = new java.io.File(astahFilePath);
+            logger.info("Opening Astah file at: {} | exists={} | readable={}", astahFilePath, f.exists(), f.canRead());
             ProjectAccessor acessor = AstahAPI.getAstahAPI().getProjectAccessor();
             // Opening a astah project (filepath, true not to check model version, false not to lock a project file, true to open a project file with the read only mode if the file is locked.)
             acessor.open(astahFilePath, true, false, true);
