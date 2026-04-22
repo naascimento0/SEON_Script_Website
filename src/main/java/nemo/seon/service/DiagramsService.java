@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -47,6 +48,7 @@ public class DiagramsService {
         }
 
         try {
+            clearPngFiles(outputDir);
             logger.info("Starting Astah diagram export...");
             int exitCode = executeAstahCommand(scriptPath, astahFilePath, outputDir);
             if (exitCode == 0) {
@@ -57,6 +59,21 @@ public class DiagramsService {
         } catch (Exception e) {
             logger.error("Error while executing Astah command: {}", e.getMessage(), e);
         }
+    }
+
+    private void clearPngFiles(String outputDir) {
+        File dir = new File(outputDir);
+        if (!dir.exists()) return;
+        File[] pngs = dir.listFiles((d, name) -> name.toLowerCase().endsWith(".png"));
+        if (pngs == null) return;
+        for (File png : pngs) {
+            try {
+                Files.delete(png.toPath());
+            } catch (IOException e) {
+                logger.warn("Could not delete old diagram: {}", png.getName());
+            }
+        }
+        logger.info("Cleared {} old diagram(s) from: {}", pngs.length, outputDir);
     }
 
     private int executeAstahCommand(String scriptPath, String astahFilePath, String outputDir) throws IOException, InterruptedException {
