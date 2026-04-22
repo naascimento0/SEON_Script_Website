@@ -1,11 +1,16 @@
 package nemo.seon.model;
 
-import com.change_vision.jude.api.inf.model.IPackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ontology extends Package{
+import com.change_vision.jude.api.inf.model.IPackage;
+
+/**
+ * Represents a SEON ontology — a Package that contains Concepts.
+ * An Ontology is classified as FOUNDATIONAL, CORE, or DOMAIN based on its position
+ * in the package hierarchy. Full name and short name come from Tagged Values in Astah.
+ */
+public class Ontology extends Package {
 
     private final List<Concept> concepts;
     private final String fullName;
@@ -19,32 +24,18 @@ public class Ontology extends Package{
     }
 
     public enum OntoLevel {
-        FOUNDATIONAL(1), CORE(1), DOMAIN(2);
+        FOUNDATIONAL(0), CORE(1), DOMAIN(2);
 
         private final int value;
 
-        OntoLevel(final int value) {
-            this.value = value;
-        }
+        OntoLevel(final int value) { this.value = value; }
 
-        public int getValue() {
-            return value;
-        }
+        public int getValue() { return value; }
     }
 
-    public String getFullName() {
-        return this.fullName;
-    }
+    public String getFullName() { return this.fullName; }
+    public String getShortName() { return this.shortName; }
+    public List<Concept> getConcepts() { return this.concepts; }
 
-    public String getShortName() {
-        return this.shortName;
-    }
-
-    public List<Concept> getConcepts() {
-        return this.concepts;
-    }
-
-    public void addConcept(Concept concept) {
-        this.concepts.add(concept);
-    }
+    public void addConcept(Concept concept) { this.concepts.add(concept); }
 }

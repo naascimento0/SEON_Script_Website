@@ -1,0 +1,14 @@
+services:
+  seon:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      SEON_ASTAH_FILEPATH: /app/data/astah_seon.asta
+      SEON_ASTAH_SCRIPT: /app/jars/astah-command.sh
+      SEON_IMAGES_OUTPUT: /app/static/images
+      SPRING_WEB_RESOURCES_STATIC_LOCATIONS: "classpath:/static/,file:/app/static/"
+      SEON_ADMIN_USERNAME: ${SEON_ADMIN_USERNAME:-admin}
+      SEON_ADMIN_PASSWORD: ${SEON_ADMIN_PASSWORD}

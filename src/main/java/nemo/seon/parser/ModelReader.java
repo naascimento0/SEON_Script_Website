@@ -14,8 +14,18 @@ import nemo.seon.model.Package.PackType;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class ModelReader {
+
+    private static final Logger logger = LoggerFactory.getLogger(ModelReader.class);
+    private final SeonRegistry registry;
+
+    public ModelReader(SeonRegistry registry) {
+        this.registry = registry;
+    }
 
     /**
      * Reads the Astah file and builds the Seon Model.
@@ -25,6 +35,8 @@ public class ModelReader {
     public Package parseAstah2Seon(String astahFilePath) {
         Package seonNetwork;
         try {
+            java.io.File f = new java.io.File(astahFilePath);
+            logger.info("Opening Astah file at: {} | exists={} | readable={}", astahFilePath, f.exists(), f.canRead());
             ProjectAccessor acessor = AstahAPI.getAstahAPI().getProjectAccessor();
             // Opening a astah project (filepath, true not to check model version, false not to lock a project file, true to open a project file with the read only mode if the file is locked.)
             acessor.open(astahFilePath, true, false, true);
@@ -32,25 +44,26 @@ public class ModelReader {
             IModel model = acessor.getProject();
 
             seonNetwork = new Package(model.getName(), model.getDefinition(), PackType.NETWORK, 0, model);
+            registry.registerPackage(model, seonNetwork);
 
             parsePackages(seonNetwork);
-            System.out.println("Parsed Network Packages and Concepts");
+            logger.info("Parsed Network Packages and Concepts");
 
             parseDependencies(seonNetwork);
-            System.out.println("Parsed Network Dependencies");
+            logger.info("Parsed Network Dependencies");
 
-            parseGeneralizations(Concept.getAllConcepts());
-            System.out.println("Parsed Generalizations");
+            parseGeneralizations(registry.getAllConcepts());
+            logger.info("Parsed Generalizations");
 
-            parseRelations(Concept.getAllConcepts());
-            System.out.println("Parsed Relations");
+            parseRelations(registry.getAllConcepts());
+            logger.info("Parsed Relations");
 
             parseDiagrams(seonNetwork);
-            System.out.println("Parsed Diagrams");
+            logger.info("Parsed Diagrams");
 
         } catch (ClassNotFoundException | ProjectNotFoundException | ProjectLockedException | LicenseNotFoundException |
                  IOException | NonCompatibleException e) {
-            System.out.println("Error while parsing the Astah file.");
+            logger.error("Error while parsing the Astah file.", e);
             throw new RuntimeException(e);
         }
         return seonNetwork;
@@ -65,7 +78,7 @@ public class ModelReader {
             if (object instanceof IPackage) {
                 String givenType = object.getTaggedValue("Type");
                 if (givenType == null)
-                    System.out.println("No type defined for package: " + object.getName());
+                    logger.warn("No type defined for package: {}", object.getName());
 
                 PackType type = Package.getPackType(givenType);
                 if (type != PackType.IGNORE) {
@@ -83,17 +96,19 @@ public class ModelReader {
 
                     if (pack == null)
                         throw new RuntimeException("Package not created");
+                    registry.registerPackage((IPackage) object, pack);
                     pack.setParent(mainPackage);
                     mainPackage.addSubPack(pack);
                     parsePackages(pack);
                 }
 
-            } else if (object instanceof IClass) {
+            } else if (object instanceof IClass iclass) {
                 String stereotype = "";
-                if ((object.getStereotypes()).length > 0) {
-                    stereotype = object.getStereotypes()[0]; // only the first for while
+                if ((iclass.getStereotypes()).length > 0) {
+                    stereotype = iclass.getStereotypes()[0]; // only the first for while
                 }
-                Concept concept = new Concept(object.getName(), object.getDefinition(), stereotype, (IClass) object);
+                Concept concept = new Concept(iclass.getName(), iclass.getDefinition(), stereotype, iclass);
+                registry.registerConcept(iclass, concept);
                 concept.setOntology((Ontology) mainPackage);
                 ((Ontology) mainPackage).addConcept(concept);
             }
@@ -106,8 +121,8 @@ public class ModelReader {
      */
     private void parseDependencies(Package seonNetwork) {
         for (IDependency object : seonNetwork.getAstahPack().getClientDependencies()) {
-            Package client = Package.getAstahPackFromMap((IPackage) object.getClient());
-            Package supplier = Package.getAstahPackFromMap((IPackage) object.getSupplier());
+            Package client = registry.getPackageByIPackage((IPackage) object.getClient());
+            Package supplier = registry.getPackageByIPackage((IPackage) object.getSupplier());
 
             Dependency dependency = new Dependency(client, supplier, object.getDefinition(), object.getTaggedValue("Level"));
             client.addDependency(dependency);
@@ -126,7 +141,7 @@ public class ModelReader {
     private void parseGeneralizations(List<Concept> concepts) {
         for (Concept child : concepts) {
             for (IGeneralization generalization : child.getAstahConceptObject().getGeneralizations()) {
-                Concept parent = Concept.getConceptObjectByItsIClass(generalization.getSuperType());
+                Concept parent = registry.getConceptByIClass(generalization.getSuperType());
                 child.addGeneralization(parent);
             }
         }
@@ -138,7 +153,7 @@ public class ModelReader {
      */
     private void parseRelations(List<Concept> concepts) {
         if (concepts == null || concepts.isEmpty()) {
-            System.out.println("No concepts provided to parse relations.");
+            logger.warn("No concepts provided to parse relations.");
             return;
         }
 
@@ -162,8 +177,8 @@ public class ModelReader {
                         String targetMultiplicity = secondEnd.getMultiplicity().length > 0 ?
                                 multiplicityToString(secondEnd.getMultiplicity()[0]) : "";
 
-                        Concept target = Concept.getConceptObjectByItsIClass(secondEnd.getType());
-                        Package pack = Package.getPackageByFullName(association.getFullName("::"));
+                        Concept target = registry.getConceptByIClass(secondEnd.getType());
+                        Package pack = registry.getPackageByFullName(association.getFullName("::"));
 
                         if (target != null) { // Só cria relação se o alvo for válido
                             Relation relation = new Relation(association.getName(), association.getDefinition(),
@@ -172,7 +187,7 @@ public class ModelReader {
                             source.addRelation(relation);
                             target.addRelation(relation); // Adiciona ao alvo também, se desejado
                         } else {
-                            System.out.println("Warning: Target concept not found for relation from " + source.getName());
+                            logger.warn("Target concept not found for relation from {}", source.getName());
                         }
                     }
                 }

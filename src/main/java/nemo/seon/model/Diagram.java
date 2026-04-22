@@ -2,9 +2,10 @@ package nemo.seon.model;
 
 import com.change_vision.jude.api.inf.model.IDiagram;
 
+/** Represents a diagram inside a Package, parsed from the Astah file. */
 public class Diagram {
 
-    private Package	pack;
+    private Package pack;
     private final String name;
     private final String definition;
     private final DiagType type;
@@ -21,49 +22,25 @@ public class Diagram {
         PACKAGE, CONCEPTUALMODEL, OTHER, IGNORE
     }
 
+    /**
+     * Maps an Astah Tagged Value string to a DiagType.
+     * Returns CONCEPTUALMODEL as default for null or unrecognized values.
+     */
     public static DiagType getDiagramType(String type) {
-        if (type != null) {
-            switch (type) {
-                case "CM":
-                    return DiagType.CONCEPTUALMODEL;
-                case "Package":
-                    return DiagType.PACKAGE;
-                case "Other":
-                    return DiagType.OTHER;
-                case "Ignore":
-                    return DiagType.IGNORE;
-            }
-        }
-        return DiagType.CONCEPTUALMODEL;
+        if (type == null) return DiagType.CONCEPTUALMODEL;
+        return switch (type) {
+            case "CM" -> DiagType.CONCEPTUALMODEL;
+            case "Package" -> DiagType.PACKAGE;
+            case "Other" -> DiagType.OTHER;
+            case "Ignore" -> DiagType.IGNORE;
+            default -> DiagType.CONCEPTUALMODEL;
+        };
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDefinition() {
-        return this.definition;
-    }
-
-    public DiagType getType() {
-        return this.type;
-    }
-
-    /**
-     * @return the Astah object
-     */
-    public IDiagram getDiagramAstahObject() {
-        return this.object;
-    }
-
-    /**
-     * @return the pack of the diagram
-     */
-    public Package getPack() {
-        return pack;
-    }
-
-    public void setPack(Package pack) {
-        this.pack = pack;
-    }
+    public String getName() { return this.name; }
+    public String getDefinition() { return this.definition; }
+    public DiagType getType() { return this.type; }
+    public IDiagram getDiagramAstahObject() { return this.object; }
+    public Package getPack() { return pack; }
+    public void setPack(Package pack) { this.pack = pack; }
 }
