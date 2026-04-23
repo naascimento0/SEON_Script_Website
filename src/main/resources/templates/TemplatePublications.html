@@ -6,24 +6,15 @@
     <!-- Favicon -->
     <link rel="icon" href="/images/favicon.svg" sizes="32x32" type="image/svg">
     <!-- CDN from Bootstrap website -->
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-            crossorigin="anonymous"
-    />
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <!-- SEON Custom Theme -->
     <link rel="stylesheet" href="/css/seon-theme.css">
 </head>
-
 <body>
-<header th:replace="~{fragments/layout :: navbar(activePage='publications')}">
-    <!-- Navbar loaded from fragment -->
-</header>
+<header th:replace="~{fragments/layout :: navbar(activePage='publications')}"></header>
 
 <!-- Botão toggle para sidebar (mobile) -->
 <button class="sidebar-toggle d-lg-none" type="button">
@@ -36,25 +27,23 @@
 <!-- Sidebar -->
 <nav class="sidebar">
     <button class="sidebar-close d-lg-none">&times;</button>
-    
     <div class="sidebar-title">
         <i class="bi bi-bookmark-star me-2"></i>Page Contents
     </div>
-    
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link" href="#published-works">
-                <i class="bi bi-journal-text"></i>Published Works
+            <a class="nav-link" href="#site-ontologies">
+                <i class="bi bi-journal-check"></i>Site Ontologies
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#by-category">
-                <i class="bi bi-tags"></i>By Category
+            <a class="nav-link" href="#other-ontologies">
+                <i class="bi bi-journal-plus"></i>Other Ontologies
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#recent-publications">
-                <i class="bi bi-clock-history"></i>Recent Publications
+            <a class="nav-link" href="#general-seon">
+                <i class="bi bi-journal-text"></i>General SEON
             </a>
         </li>
     </ul>
@@ -62,106 +51,322 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Conteúdo Principal -->
         <main role="main" class="main-content col">
+
+            <!-- Hero -->
             <section class="bg-light p-5 rounded mb-4 text-center">
                 <h1 class="display-4">Publications</h1>
-                <p class="lead">
-                    Explore the research papers and articles that have contributed to the development and application of the SEON framework.
-                </p>
+                <p class="lead">Research papers associated with SEON ontologies and the SEON network.</p>
             </section>
 
-            <section class="section p-5 rounded" id="published-works">
-                <h2 class="display-6">Published Works</h2>
-                <ul class="list-unstyled lead text-justify">
-                    <li class="mt-4 mb-4">
-                        <strong>[1] Guizzardi, G. (2005).</strong> "Ontological foundations for structural conceptual models." Doctoral dissertation, University of Twente, The Netherlands.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[2] Guizzardi, R. S., De Almeida Falbo, R., & Guizzardi, G. (2008).</strong> "Grounding software domain ontologies in the unified foundational ontology (UFO): The case of the ODE software process ontology." In <i>Proceedings of the 11th Iberoamerican Conference on Software Engineering</i> (pp. 127-140).
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[3] De Almeida Falbo, R., Bertollo, G., & Vijaykumar, N. L. (2010).</strong> "SEON: A Software Engineering Ontology Network." In <i>Enterprise Information Systems</i> (pp. 117-128). Springer Berlin Heidelberg.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[4] Barcellos, M. P., De Almeida Falbo, R., & Dal Moro, R. (2010).</strong> "A well-founded software measurement ontology." In <i>Proceedings of the 6th International Conference on Formal Ontology in Information Systems</i> (pp. 213-226).
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[5] Bera, P., Burton-Jones, A., & Wand, Y. (2011).</strong> "Guidelines for designing visual ontologies to support knowledge identification." <i>MIS Quarterly</i>, 35(4), 883-908.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[6] Wohlin, C., Runeson, P., Höst, M., Ohlsson, M. C., Regnell, B., & Wesslén, A. (2012).</strong> "Experimentation in software engineering." <i>Springer Science & Business Media</i>.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[7] Costa, S. D., De Almeida Falbo, R., & Bertollo, G. (2016).</strong> "A software configuration management ontology for the analysis of consistency rules." In <i>International Conference on Enterprise Information Systems</i> (pp. 245-252). Springer.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[8] De Souza, É. F., De Almeida Falbo, R., & Vijaykumar, N. L. (2017).</strong> "ROoST: Reference ontology on software testing." <i>Applied Ontology</i>, Vol. 12, Number 1, pp. 59-90.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[9] Ruy, F. B., De Almeida Falbo, R., Perini Barcellos, M., Dornelas Costa, S., & Guizzardi, G. (2017).</strong> "SEON: A software engineering ontology network." In <i>International Conference on Knowledge Engineering and Knowledge Management</i> (pp. 527-542). Springer.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[10] Duarte, B. B., De Almeida Falbo, R., Guizzardi, G., Guizzardi, R. S., & Souza, V. E. (2018).</strong> "Towards an ontology of software defects, errors and failures." In <i>International Conference on Conceptual Modeling</i> (pp. 349-362). Springer.
-                    </li>
-                </ul>
-            </section>
-
-            <section class="section p-5 rounded" id="by-category">
-                <h2 class="display-6">Publications by Category</h2>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4><i class="bi bi-layers me-2"></i>Foundational Ontologies</h4>
-                        <ul class="list-unstyled">
-                            <li class="mb-2">• UFO (Unified Foundational Ontology)</li>
-                            <li class="mb-2">• Ontological foundations for conceptual models</li>
-                            <li class="mb-2">• Guidelines for designing visual ontologies</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h4><i class="bi bi-gear me-2"></i>Core Ontologies</h4>
-                        <ul class="list-unstyled">
-                            <li class="mb-2">• Software Process Ontologies (SPO)</li>
-                            <li class="mb-2">• Software Measurement Ontologies</li>
-                            <li class="mb-2">• SEON Network Architecture</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h4><i class="bi bi-puzzle me-2"></i>Domain Ontologies</h4>
-                        <ul class="list-unstyled">
-                            <li class="mb-2">• ROoST (Reference Ontology on Software Testing)</li>
-                            <li class="mb-2">• Software Configuration Management</li>
-                            <li class="mb-2">• Software Defects, Errors and Failures</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h4><i class="bi bi-book me-2"></i>Methodology & Research</h4>
-                        <ul class="list-unstyled">
-                            <li class="mb-2">• Software Engineering Experimentation</li>
-                            <li class="mb-2">• Knowledge Engineering Methods</li>
-                            <li class="mb-2">• Ontology Network Development</li>
-                        </ul>
-                    </div>
+            <!-- 1. Publications for ontologies on the site -->
+            <section class="section p-5 rounded" id="site-ontologies">
+                <h2 class="display-6">1. Publications on Site Ontologies</h2>
+                <p class="lead">Papers directly associated with ontologies available in this site, listed chronologically.</p>
+                <div class="table-responsive my-4">
+                    <table class="table table-hover" aria-describedby="siteOntologiesCaption">
+                        <thead>
+                            <tr>
+                                <th scope="col">Year</th>
+                                <th scope="col">Ontology</th>
+                                <th scope="col">Reference</th>
+                                <th scope="col">Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge bg-secondary">2005</span></td>
+                                <td><strong>UFO</strong></td>
+                                <td>Guizzardi, G. (2005). <em>Ontological foundations for structural conceptual models</em>. Ph.D. Thesis, Netherlands, Universal Press.</td>
+                                <td>
+                                    <a href="https://nemo.inf.ufes.br/wp-content/papercite-data/pdf/ontological_foundations_for_structural_conceptual_models_2005.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2010</span></td>
+                                <td><strong>UFO</strong></td>
+                                <td>Guizzardi, G. &amp; Wagner, G. (2010). Using the unified foundational ontology (UFO) as a foundation for general conceptual modeling languages. In <em>Theory and Applications of Ontology: Computer Applications</em>. Springer.</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2017</span></td>
+                                <td><strong>ROoST</strong></td>
+                                <td>De Souza, É. F., De Almeida Falbo, R., and Vijaykumar, N. L. (2017). ROoST: Reference ontology on software testing. <em>Applied Ontology</em>, Vol. 12, Number 1.</td>
+                                <td>
+                                    <a href="https://nemo.inf.ufes.br/wp-content/papercite-data/pdf/roost__reference_ontology_on_software_testing_2017.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2018</span></td>
+                                <td><strong>SwO, RSRO, RRO</strong></td>
+                                <td>Duarte, B. B., de Castro Leal, A. L., de Almeida Falbo, R., Guizzardi, G., Guizzardi, R. S. S., &amp; Souza, V. E. S. (2018). Ontological foundations for software requirements with a focus on requirements at runtime. <em>Applied Ontology</em>, 13(2), 73–105. doi:10.3233/AO-180197</td>
+                                <td>
+                                    <a href="https://journals.sagepub.com/doi/10.3233/AO-180197"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open article">
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2018</span></td>
+                                <td><strong>SPMO</strong></td>
+                                <td>Bastos, E. C., Barcellos, M. P., and De Almeida Falbo, R. (2018). Using Semantic Documentation to Support Software Project Management. <em>Journal on Data Semantics</em>, vol. 7, p. 107–132.</td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/using_semantic_documentation_to_support_software_project_management_2018.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2021</span></td>
+                                <td><strong>SDRO</strong></td>
+                                <td>Castro, M. V. H. B., Barcellos, M. P., and Falbo, R. A. (2021). An Ontological View of Design in the Software Context. In <em>14th Seminar on Ontology Research in Brazil (ONTOBRAS)</em>.</td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/an_ontological_view_of_design_in_the_software_context_2021.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <caption id="siteOntologiesCaption"><small>Papers associated with ontologies available in this site.</small></caption>
+                    </table>
                 </div>
             </section>
 
-            <section class="section p-5 rounded" id="recent-publications">
-                <h2 class="display-6">Recent Publications (2015-2025)</h2>
-                <p class="lead">Latest research contributions to the SEON network:</p>
-                <ul class="list-unstyled lead text-justify">
-                    <li class="mt-4 mb-4">
-                        <strong>[11] Costa, S. D., De Almeida Falbo, R., & Bertollo, G. (2018).</strong> "Extending SEON with a Software Configuration Management Ontology." <i>International Journal of Software Engineering and Knowledge Engineering</i>, 28(4), 515-542.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[12] Ruy, F. B., De Almeida Falbo, R., & Guizzardi, G. (2019).</strong> "From reference ontologies to ontology patterns and back." <i>Data & Knowledge Engineering</i>, 109, 41-69.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[13] Duarte, B. B., De Almeida Falbo, R., & Guizzardi, G. (2020).</strong> "An ontological approach to domain engineering." <i>Software and Systems Modeling</i>, 19(3), 721-752.
-                    </li>
-                    <li class="mt-4 mb-4">
-                        <strong>[14] Barcellos, M. P., De Almeida Falbo, R., & Rocha, A. R. (2021).</strong> "Establishing a well-founded conceptual base for software measurement through ontologies." <i>Journal of Systems and Software</i>, 174, 110891.
-                    </li>
-                </ul>
+            <!-- 2. Publications for ontologies NOT on the site -->
+            <section class="section p-5 rounded" id="other-ontologies">
+                <h2 class="display-6">2. Publications on Other SEON Ontologies</h2>
+                <p class="lead">Papers associated with SEON ontologies that exist but are not yet available in this site.</p>
+                <div class="table-responsive my-4">
+                    <table class="table table-hover" aria-describedby="otherOntologiesCaption">
+                        <thead>
+                            <tr>
+                                <th scope="col">Year</th>
+                                <th scope="col">Ontology</th>
+                                <th scope="col">Reference</th>
+                                <th scope="col">Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge bg-secondary">2018</span></td>
+                                <td><strong>OSDEF</strong></td>
+                                <td>Falbo, R., Duarte, B., and Guizzardi, G. (2018). Towards an Ontology of Software Defects, Errors and Failures. doi:10.1007/978-3-030-00847-5_25.</td>
+                                <td>
+                                    <a href="https://www.academia.edu/36919969/Towards_an_Ontology_of_Software_Defects_Errors_and_Failures"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open article">
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2019</span></td>
+                                <td><strong>MTO</strong></td>
+                                <td>Santos, L. A., Barcellos, M. P., De Almeida Falbo, R., Reginato, C. C., and Campos, P. M. C. (2019). Measurement Task Ontology. In <em>12th Seminar on Ontology Research in Brazil (Ontobras 2019)</em> – CEUR Workshop Proceedings.</td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/measurement_task_ontology_2019.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2019</span></td>
+                                <td><strong>OOC-O</strong></td>
+                                <td>de Aguiar, C. Z., de Almeida Falbo, R., and Souza, V. E. S. (2019). OOC-O: A Reference Ontology on Object-Oriented Code.</td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~vitorsouza/wp-content/papercite-data/pdf/aguiar-et-al-er19.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2021</span></td>
+                                <td><strong>SRO</strong></td>
+                                <td>SantosJr, P. S., Barcellos, M. P., de Falbo, R. A., and Almeida, J. P. A. (2021). From a Scrum Reference Ontology to the Integration of Applications for Data-Driven Software Development. <em>Information and Software Technology</em>, vol. 136.</td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/from_a_scrum_reference_ontology_to_the_integration_of_applications_for_data_driven_software_development_2021.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2021</span></td>
+                                <td><strong>OSDEF, ROSS</strong></td>
+                                <td>Duarte, B. B., de Falbo, R. A., Guizzardi, G., Guizzardi, R., and Souza, V. E. S. (2021). An ontological analysis of software system anomalies and their associated risks. <em>Data &amp; Knowledge Engineering</em>, vol. 134, p. 101892.</td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~vitorsouza/wp-content/papercite-data/pdf/duarte-et-al-dke21.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2023</span></td>
+                                <td><strong>Continuum Ontology Network</strong></td>
+                                <td>dos Santos Júnior, P. S., Almeida, J. P. A., and Barcellos, M. P. (2023). Towards Federated Ontology-Driven Data Integration in Continuous Software Engineering. In <em>Proceedings of SBES 2023</em>, p. 31–36.</td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/towards_federated_ontology_driven_data_integration_in_continuous_software_engineering_2023.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2023</span></td>
+                                <td><strong>DepIn-O</strong></td>
+                                <td>Guterres, C. S., de Aguiar, C. Z., and Souza, V. E. S. (2023). DepIn-O: an Ontology on Dependency Injection Software Frameworks. In <em>Proc. of the 16th Seminar on Ontology Research in Brazil (ONTOBRAS 2023)</em>, Brasília, DF, Brasil.</td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~vitorsouza/wp-content/papercite-data/pdf/guterres-et-al-ontobras23.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <caption id="otherOntologiesCaption"><small>Papers associated with SEON ontologies not yet available in this site.</small></caption>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. General SEON publications -->
+            <section class="section p-5 rounded" id="general-seon">
+                <h2 class="display-6">3. General SEON Publications</h2>
+                <p class="lead">Papers that address SEON broadly without focusing on a specific ontology, listed chronologically.</p>
+                <div class="table-responsive my-4">
+                    <table class="table table-hover" aria-describedby="generalSeonCaption">
+                        <thead>
+                            <tr>
+                                <th scope="col">Year</th>
+                                <th scope="col"></th>
+                                <th scope="col">Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge bg-secondary">2016</span></td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/seon__a_software_engineering_ontology_network_2016.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>Ruy, F., Falbo, R. A., Barcellos, M. P., Costa, S. D., and Guizzardi, G. (2016). SEON: A software engineering ontology network. In <em>20th International Conference on Knowledge Engineering and Knowledge Management</em>.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2017</span></td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/software_testing_processes_in_iso_standards__how_to_harmonize_them__2017.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>Ruy, F. B., Souza, É., De Almeida Falbo, R., and Barcellos, M. P. (2017). Software Testing Processes in ISO Standards: How to Harmonize Them? In <em>XVI Brazilian Symposium on Software Quality (SBQS 2017)</em>.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2017</span></td>
+                                <td>
+                                    <a href="https://nemo.inf.ufes.br/wp-content/papercite-data/pdf/exploring_the_role_of_enterprise_architecture_models_in_the_modularization_of_an_ontology_network__a_case_in_the_public_security_domain_2017.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>Detoni, A. A., Miranda, G. M., Renault, L. D. C., Falbo, R. A., Almeida, J. P. A., Guizzardi, G., and Barcellos, M. P. (2017). Exploring the Role of Enterprise Architecture Models in the Modularization of an Ontology Network: A Case in the Public Security Domain. In <em>2017 IEEE 21st International Enterprise Distributed Object Computing Workshop (EDOCW)</em>, p. 117–126.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2018</span></td>
+                                <td>
+                                    <a href="https://nemo.inf.ufes.br/wp-content/papercite-data/pdf/building_an_ontology_network_to_support_environmental_quality_research__first_steps_2018.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>Campos, P. M. C., Reginato, C. C., Almeida, J. P. A., Nardi, J. C., Barcellos, M. P., Falbo, R. A., and Guizzardi, R. S. S. (2018). Building an Ontology Network to Support Environmental Quality Research: First Steps. In <em>Proceedings of the XI Seminar on Ontology Research in Brazil (ONTOBRAS)</em>, p. 227–232.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2018</span></td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/using_an_ontology_based_approach_for_integrating_applications_to_support_software_processes_2018.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>Renault, L. D. C., Barcellos, M. P., and De Almeida Falbo, R. (2018). Using an Ontology-based Approach for Integrating Applications to support Software Processes. In <em>XVII Brazilian Symposium on Software Quality (SBQS 2018)</em>.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2020</span></td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/am_i_going_to_heaven__first_step_climbing_the_stairway_to_heaven_model_2020.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>dos SantosJr, P. S., Barcellos, M. P., and Calhau, R. F. (2020). Am I Going to Heaven? First Step Climbing the Stairway to Heaven Model – Results from a Case Study in Industry. In <em>34th Brazilian Symposium on Software Engineering (SBES 2020)</em>, p. 309–318.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2020</span></td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/towards_a_framework_for_continuous_software_engineering_2020.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>Barcellos, M. P. (2020). Towards a Framework for Continuous Software Engineering. In <em>34th Brazilian Symposium on Software Engineering (SBES 2020)</em>, p. 626–631.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2021</span></td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/an_ontology_based_approach_to_enable_data_driven_decision_making_in_agile_software_organizations_2021.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>SantosJr, P. S., Barcellos, M. P., and Almeida, J. P. A. (2021). An Ontology-based Approach to enable Data-Driven Decision-Making in Agile Software Organizations. In <em>5th Doctoral and Masters Consortium on Ontologies – 14th Seminar on Ontology Research in Brazil (ONTOBRAS)</em>.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2021</span></td>
+                                <td>
+                                    <a href="https://nemo.inf.ufes.br/wp-content/uploads/ufo_unified_foundational_ontology_2021.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>Guizzardi, G., Benevides, A. B., Fonseca, C. M., Porello, D., Almeida, J. P. A., and Sales, T. P. (2022). UFO: Unified Foundational Ontology. <em>Applied Ontology</em>, vol. 17, p. 167–210.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2022</span></td>
+                                <td>
+                                    <a href="https://www.inf.ufes.br/~monalessa/wp-content/papercite-data/pdf/first_step_climbing_the_stairway_to_heaven_model__results_from_a_case_study_in_industry_2022.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>dos Santos Júnior, P. S., Perini Barcellos, M., and Fernandes Calhau, R. (2022). First Step Climbing the Stairway to Heaven Model – Results from a Case Study in Industry. <em>Journal of Software Engineering Research and Development</em>, vol. 9, iss. 1, p. 21:1–21:17.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary">2023</span></td>
+                                <td>
+                                    <a href="https://nemo.inf.ufes.br/wp-content/papercite-data/pdf/towards_federated_ontology_driven_data_integration_in_continuous_software_engineering_2023.pdf"
+                                       target="_blank" class="btn btn-sm btn-outline-success" title="Open PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </td>
+                                <td>Santos Júnior, P. S., Almeida, J. P. A., and Barcellos, M. (2023). Towards Federated Ontology-Driven Data Integration in Continuous Software Engineering. In <em>Proceedings of SBES '23</em>. ACM, New York, p. 31–36. doi:10.1145/3613372.3613380</td>
+                            </tr>
+                        </tbody>
+                        <caption id="generalSeonCaption"><small>Papers that address SEON broadly without focusing on a specific ontology.</small></caption>
+                    </table>
+                </div>
             </section>
 
         </main>
@@ -171,14 +376,12 @@
 <!-- Footer -->
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const sidebarToggle = document.querySelector('.sidebar-toggle');
     const sidebar = document.querySelector('.sidebar');
     const sidebarOverlay = document.querySelector('.sidebar-overlay');
@@ -186,8 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
     const navbar = document.querySelector('.navbar');
 
-    // Efeito de scroll na navbar
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
         } else {
@@ -195,13 +397,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Toggle sidebar no mobile
-    sidebarToggle?.addEventListener('click', function() {
+    sidebarToggle?.addEventListener('click', function () {
         sidebar.classList.add('show');
         sidebarOverlay.classList.add('show');
     });
 
-    // Fechar sidebar
     function closeSidebar() {
         sidebar.classList.remove('show');
         sidebarOverlay.classList.remove('show');
@@ -210,74 +410,51 @@ document.addEventListener('DOMContentLoaded', function() {
     sidebarClose?.addEventListener('click', closeSidebar);
     sidebarOverlay?.addEventListener('click', closeSidebar);
 
-    // Fechar sidebar ao clicar em link (mobile)
     sidebarLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            if (window.innerWidth < 992) {
-                closeSidebar();
-            }
+        link.addEventListener('click', function () {
+            if (window.innerWidth < 992) closeSidebar();
         });
     });
 
-    // Highlight do link ativo baseado na posição da página
     function updateActiveLink() {
         const sections = document.querySelectorAll('section[id]');
         const scrollPos = window.scrollY + 150;
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
-        
-        // Verifica se está no final da página
+
         if (window.scrollY + windowHeight >= documentHeight - 100) {
             sidebarLinks.forEach(link => link.classList.remove('active'));
-            
-            const lastLink = document.querySelector('.sidebar .nav-link[href="#recent-publications"]');
-            if (lastLink) {
-                lastLink.classList.add('active');
-            }
+            const lastLink = document.querySelector('.sidebar .nav-link[href="#general-seon"]');
+            if (lastLink) lastLink.classList.add('active');
             return;
         }
 
         let activeSection = null;
-        
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            
             if (scrollPos >= sectionTop - 100 && scrollPos < sectionTop + sectionHeight) {
-                activeSection = sectionId;
+                activeSection = section.getAttribute('id');
             }
         });
 
         if (activeSection) {
             sidebarLinks.forEach(link => link.classList.remove('active'));
-            
             const activeLink = document.querySelector(`.sidebar .nav-link[href="#${activeSection}"]`);
-            if (activeLink) {
-                activeLink.classList.add('active');
-            }
+            if (activeLink) activeLink.classList.add('active');
         }
     }
 
-    // Atualizar link ativo no scroll
     window.addEventListener('scroll', updateActiveLink);
-    
-    // Inicializar link ativo
     updateActiveLink();
 
-    // Smooth scroll para links do sidebar
     sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href').substring(1);
             const targetElement = document.getElementById(targetId);
-            
             if (targetElement) {
-                const offsetTop = targetElement.offsetTop - 90;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: targetElement.offsetTop - 90, behavior: 'smooth' });
             }
         });
     });
