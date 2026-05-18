@@ -9,7 +9,7 @@
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
             <!-- Marca -->
-            <a class="navbar-brand" href="/">SEON</a>
+            <a class="navbar-brand" th:href="@{/}">SEON</a>
 
             <!-- Botão hamburguer para telas pequenas -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Alternar navegação">
@@ -21,7 +21,7 @@
                 <ul class="navbar-nav">
                     <!-- Home -->
                     <li class="nav-item">
-                        <a class="nav-link" th:classappend="${activePage == 'home'} ? 'active'" href="/">
+                        <a class="nav-link" th:classappend="${activePage == 'home'} ? 'active'" th:href="@{/}">
                             Home
                             <span class="visually-hidden" th:if="${activePage == 'home'}">(página atual)</span>
                         </a>
@@ -33,10 +33,10 @@
                             The Network
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
-                            <li><a class="dropdown-item" href="/">SEON</a></li>
-                            <li><a class="dropdown-item" href="/#definition">Definition</a></li>
-                            <li><a class="dropdown-item" href="/#architecture">Architecture</a></li>
-                            <li><a class="dropdown-item" href="/#references">References</a></li>
+                            <li><a class="dropdown-item" th:href="@{/}">SEON</a></li>
+                            <li><a class="dropdown-item" th:href="@{/#definition}">Definition</a></li>
+                            <li><a class="dropdown-item" th:href="@{/#architecture}">Architecture</a></li>
+                            <li><a class="dropdown-item" th:href="@{/#references}">References</a></li>
                         </ul>
                     </li>
 
@@ -48,33 +48,33 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownOntologies">
                             <li><a class="dropdown-item disabled">Foundational Layer</a></li>
-                            <li><a class="dropdown-item" href="/ontology/ufo">UFO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/ufo}">UFO</a></li>
                             <li><a class="dropdown-item disabled">Core Layer</a></li>
-                            <li><a class="dropdown-item" href="/ontology/sysswO">SysSwO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/spo">SPO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/sysswO}">SysSwO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/spo}">SPO</a></li>
                             <li><a class="dropdown-item disabled">Domain Layer</a></li>
-                            <li><a class="dropdown-item" href="/ontology/cmpo">CMPO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/rsro">RSRO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/rro">RRO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/goro">GORO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/rdpo">RDPO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/dpo">DPO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/cpo">CPO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/qapo">QAPO</a></li>
-                            <li><a class="dropdown-item" href="/ontology/rsmo">RSMO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/cmpo}">CMPO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/rsro}">RSRO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/rro}">RRO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/goro}">GORO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/rdpo}">RDPO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/dpo}">DPO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/cpo}">CPO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/qapo}">QAPO</a></li>
+                            <li><a class="dropdown-item" th:href="@{/ontology/rsmo}">RSMO</a></li>
                         </ul>
                     </li>
 
                     <!-- Publications -->
                     <li class="nav-item">
-                        <a class="nav-link" th:classappend="${activePage == 'publications'} ? 'active'" href="/publications">
+                        <a class="nav-link" th:classappend="${activePage == 'publications'} ? 'active'" th:href="@{/publications}">
                             Publications
                             <span class="visually-hidden" th:if="${activePage == 'publications'}">(página atual)</span>
                         </a>
                     </li>
                     <!-- Upload -->
                     <li class="nav-item">
-                        <a class="nav-link" th:classappend="${activePage == 'upload'} ? 'active'" href="/upload">
+                        <a class="nav-link" th:classappend="${activePage == 'upload'} ? 'active'" th:href="@{/upload}">
                             Upload
                             <span class="visually-hidden" th:if="${activePage == 'upload'}">(página atual)</span>
                         </a>
@@ -109,7 +109,7 @@
                 <ul class="list-unstyled text-muted">
                     <li>
                         <a href="https://nemo.inf.ufes.br/" target="_blank" class="text-muted text-decoration-none">
-                            <img src="/images/logoNemo.svg" alt="Logo NEMO" width="50" class="mb-1 d-block">
+                            <img th:src="@{/images/logoNemo.svg}" alt="Logo NEMO" width="50" class="mb-1 d-block">
                             NEMO
                         </a>
                     </li>
