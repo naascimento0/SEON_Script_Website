@@ -13,11 +13,11 @@
         <div class="container-fluid my-5 text-center">
             <!-- Simple image (no map) -->
             <th:block th:if="${diag.simpleImage()}">
-                <img class="map img-fluid" th:src="${diag.imageSrc()}" th:alt="${diag.labelText()}">
+                <img class="map img-fluid" th:src="@{${diag.imageSrc()}}" th:alt="${diag.labelText()}">
             </th:block>
             <!-- Image with map -->
             <th:block th:unless="${diag.simpleImage()}">
-                <img th:src="${diag.imageSrc()}" th:width="${diag.imageWidth()}"
+                <img th:src="@{${diag.imageSrc()}}" th:width="${diag.imageWidth()}"
                      class="map img-fluid" th:usemap="'#' + ${diag.mapName()}" th:alt="'Diagram of ' + ${diag.mapName()}">
                 <map th:name="${diag.mapName()}">
                     <area th:each="area : ${diag.mapAreas()}"
