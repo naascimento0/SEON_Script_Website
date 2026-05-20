@@ -68,6 +68,11 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="#downloads">
+                <i class="bi bi-download"></i>Downloads
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="#references">
                 <i class="bi bi-book"></i>References
             </a>
@@ -132,6 +137,18 @@
                 </p>
                 <p class="lead pt-2 text-justify">
                     In a nutshell, the foundational ontology offers the ontological distinctions for the core and domain layers, while the core layer offers the SE core knowledge for building the domain networked ontologies. This way of grounding the ontologies in the network is helpful for engineering the networked ontologies, since it provides ontological consistency and makes a number of modeling decisions easier.
+                </p>
+            </section>
+
+            <section class="section p-5 rounded" id="downloads">
+                <h2 class="display-6">Downloads</h2>
+                <p class="lead">
+                    SEON is also available as an OWL file containing the core and domain layers of the network. The file is generated on demand from the current Astah model and can be opened in tools like Prot&eacute;g&eacute;.
+                </p>
+                <p class="lead">
+                    <a th:href="@{/seon.owl}" class="btn btn-dark" download>
+                        <i class="bi bi-download me-2"></i>Download SEON.owl
+                    </a>
                 </p>
             </section>
 
