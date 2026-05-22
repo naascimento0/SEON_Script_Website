@@ -1,17 +1,17 @@
 package nemo.seon.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 
 @Service
 public class DiagramsService {
@@ -48,7 +48,7 @@ public class DiagramsService {
         }
 
         try {
-            clearPngFiles(outputDir);
+            clearGeneratedDiagrams(outputDir);
             logger.info("Starting Astah diagram export...");
             int exitCode = executeAstahCommand(scriptPath, astahFilePath, outputDir);
             if (exitCode == 0) {
@@ -61,19 +61,23 @@ public class DiagramsService {
         }
     }
 
-    private void clearPngFiles(String outputDir) {
+    private void clearGeneratedDiagrams(String outputDir) {
         File dir = new File(outputDir);
         if (!dir.exists()) return;
-        File[] pngs = dir.listFiles((d, name) -> name.toLowerCase().endsWith(".png"));
-        if (pngs == null) return;
-        for (File png : pngs) {
+        /* Generated diagrams are exported into subfolders (named after the Astah project and its packages). 
+        Fixed images that are not part of the model(e.g. SEON_Architecture.png) live as top-level files and must survive every upload, so only the generated subfolders are cleared here. */
+        File[] subdirs = dir.listFiles(File::isDirectory);
+        if (subdirs == null) return;
+        int cleared = 0;
+        for (File subdir : subdirs) {
             try {
-                Files.delete(png.toPath());
+                FileSystemUtils.deleteRecursively(subdir.toPath());
+                cleared++;
             } catch (IOException e) {
-                logger.warn("Could not delete old diagram: {}", png.getName());
+                logger.warn("Could not delete old diagram folder: {}", subdir.getName());
             }
         }
-        logger.info("Cleared {} old diagram(s) from: {}", pngs.length, outputDir);
+        logger.info("Cleared {} old diagram folder(s) from: {}", cleared, outputDir);
     }
 
     private int executeAstahCommand(String scriptPath, String astahFilePath, String outputDir) throws IOException, InterruptedException {
