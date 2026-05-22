@@ -6,6 +6,8 @@
     <!-- CSRF Token for secure AJAX requests -->
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <!-- Upload endpoint resolved with the app context-path (e.g. /seon2/upload-asta) -->
+    <meta name="_upload_url" th:content="@{/upload-asta}"/>
     <!-- Favicon -->
     <link rel="icon" th:href="@{/images/favicon.svg}" sizes="32x32" type="image/svg">
     <!-- CDN from Bootstrap website -->
@@ -302,8 +304,9 @@
             // CSRF token for Spring Security
             const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
             const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            const uploadUrl = document.querySelector('meta[name="_upload_url"]').getAttribute('content');
 
-            const response = await fetch('/upload-asta', {
+            const response = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formData,
                 headers: {
