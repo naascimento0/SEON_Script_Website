@@ -368,7 +368,10 @@ h2[id], h3[id] {
     border-radius: 0.375rem;
     margin-bottom: 0.25rem;
     font-weight: 500;
-    transition: all 0.2s ease;
+    /* Only animate the hover slide; background/color of the active state must
+       change instantly, otherwise the scroll-spy fade makes two adjacent items
+       (e.g. Downloads/References) look highlighted at the same time. */
+    transition: transform 0.2s ease;
     display: flex;
     align-items: center;
 }
