@@ -72,11 +72,6 @@
                 <i class="bi bi-download"></i>Downloads
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#references">
-                <i class="bi bi-book"></i>References
-            </a>
-        </li>
     </ul>
 </nav>
 
@@ -152,21 +147,6 @@
                 </p>
             </section>
 
-            <section class="section p-5 rounded" id="references">
-                <h2 class="display-6">References</h2>
-                <ul class="list-unstyled lead text-justify">
-                    <li>
-                        [1] Smith, J., & Doe, A. (2020). "Foundational Ontologies in Software Engineering." <i>Journal of Software Engineering</i>, 15(3), 123-145. <a href="https://example.com/foundational" target="_blank" class="text-dark">https://example.com/foundational</a>
-                    </li>
-                    <li>
-                        [2] Johnson, R. (2019). "Core Concepts in Software Process Ontologies." In <i>Proceedings of the International Conference on Software Engineering</i> (pp. 56-67). IEEE. <a href="https://example.com/core" target="_blank" class="text-dark">https://example.com/core</a>
-                    </li>
-                    <li>
-                        [3] Lee, S., & Kim, T. (2021). "Domain-Specific Ontologies: A Review." <i>Software Engineering Review</i>, 8(2), 89-102. <a href="https://example.com/domain" target="_blank" class="text-dark">https://example.com/domain</a>
-                    </li>
-                </ul>
-            </section>
-
         </main>
 
     </div>
@@ -226,8 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Scroll-spy targets derived from the sidebar links themselves, so every
-    // item participates: sections (#definition, #architecture, #downloads,
-    // #references) AND the h3 sub-items (#foundational, #core, #domain).
+    // item participates: sections (#definition, #architecture, #downloads)
+    // AND the h3 sub-items (#foundational, #core, #domain).
     const spyTargets = Array.from(sidebarLinks)
         .map(link => {
             const id = link.getAttribute('href').slice(1);
@@ -243,10 +223,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const maxScroll = document.documentElement.scrollHeight - winH;
 
         // Linha de leitura (coordenadas do documento): normalmente 150px abaixo
-        // do topo da viewport. No último viewport — onde as seções curtas do
-        // rodapé (Downloads/References) não conseguem ser roladas até essa linha
-        // — a linha desliza para baixo até o fim do conteúdo, dando a vez a cada
-        // seção final em vez de pular direto da Architecture para References.
+        // do topo da viewport. No último viewport — onde a seção curta de
+        // Downloads não consegue ser rolada até essa linha — a linha desliza
+        // para baixo até o fim do conteúdo, dando a vez à seção final em vez de
+        // pular direto da Architecture para Downloads.
         const zoneStart = Math.max(0, maxScroll - winH);
         const t = maxScroll > zoneStart
             ? Math.min(1, Math.max(0, (scrollY - zoneStart) / (maxScroll - zoneStart)))
