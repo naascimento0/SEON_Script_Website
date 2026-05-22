@@ -23,7 +23,10 @@ out/
 # Environment variables
 .env
 
-images/
+# Ignore generated diagrams (subfolders + files) but keep fixed images that are
+# not part of the model. Must ignore the *contents* of images/ rather than the
+# directory itself, otherwise Git won't descend into it to honor the exception.
+**/images/*
 !**/images/SEON_Architecture.png
 page/
 /jars/

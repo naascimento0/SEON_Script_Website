@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/upload-asta").hasRole("ADMIN")
                         .requestMatchers(
                                 "/", "/publications", "/ontology/**", "/login",
+                                "/seon.owl",
                                 "/css/**", "/images/**", "/js/**", "/error"
                         ).permitAll()
                         .anyRequest().authenticated())

@@ -33,6 +33,9 @@ dependencies {
     // .env file support (replaces manual EnvLoader)
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
+    // OWL API for generating the SEON .owl file
+    implementation 'net.sourceforge.owlapi:owlapi-apibinding:5.5.0'
+
 }
 
 bootRun {
