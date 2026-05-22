@@ -28,6 +28,7 @@ out/
 # directory itself, otherwise Git won't descend into it to honor the exception.
 **/images/*
 !**/images/SEON_Architecture.png
+!**/images/logo_nemo.svg
 page/
 /jars/
 astah_seon.asta
