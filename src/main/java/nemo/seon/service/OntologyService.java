@@ -72,6 +72,10 @@ public class OntologyService {
         return ontologyNames.get(name.toLowerCase().trim());
     }
 
+    public java.util.Collection<Ontology> getAllOntologies() {
+        return ontologyNames.values();
+    }
+
     /** Reloads ontologies from the Astah file when the .asta file has been updated. */
     public void reloadOntologies() {
         logger.info("Reloading ontologies from Astah file...");
