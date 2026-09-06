@@ -17,6 +17,7 @@ public class SpaController {
             "/",
             "/publications",
             "/ontologies",
+            "/suggestions",
             "/upload",
             "/login",
             "/ontology/{name}"

@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage'
 import UploadPage from './pages/UploadPage'
 import OntologiesPage from './pages/OntologiesPage'
 import OntologyPage from './pages/OntologyPage'
+import SuggestionsPage from './pages/SuggestionsPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
         <Route index element={<HomePage />} />
         <Route path="publications" element={<PublicationsPage />} />
         <Route path="ontologies" element={<OntologiesPage />} />
+        <Route path="suggestions" element={<SuggestionsPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="upload" element={<UploadPage />} />
         <Route path="ontology/:name" element={<OntologyPage />} />

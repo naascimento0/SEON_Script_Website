@@ -21,6 +21,9 @@ export default function Layout() {
           <Link asChild>
             <RouterLink to="/publications">Publications</RouterLink>
           </Link>
+          <Link asChild>
+            <RouterLink to="/suggestions">Suggestions</RouterLink>
+          </Link>
           <Spacer />
           {user ? (
             <HStack gap={3}>
