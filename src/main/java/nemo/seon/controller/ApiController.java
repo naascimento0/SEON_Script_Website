@@ -47,6 +47,7 @@ public class ApiController {
         List<OntologyListItem> items = new ArrayList<>();
         for (Ontology o : ontologyService.getAllOntologies()) {
             items.add(new OntologyListItem(
+                    o.getName(),
                     o.getShortName(),
                     o.getFullName(),
                     o.getLevel() != null ? o.getLevel().name() : null,

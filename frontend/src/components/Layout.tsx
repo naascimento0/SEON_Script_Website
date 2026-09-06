@@ -16,6 +16,9 @@ export default function Layout() {
             </Link>
           </Heading>
           <Link asChild>
+            <RouterLink to="/ontologies">Ontologies</RouterLink>
+          </Link>
+          <Link asChild>
             <RouterLink to="/publications">Publications</RouterLink>
           </Link>
           <Spacer />

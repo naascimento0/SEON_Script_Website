@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage'
 import PublicationsPage from './pages/PublicationsPage'
 import LoginPage from './pages/LoginPage'
 import UploadPage from './pages/UploadPage'
+import OntologiesPage from './pages/OntologiesPage'
 import OntologyPage from './pages/OntologyPage'
 import NotFoundPage from './pages/NotFoundPage'
 
@@ -13,6 +14,7 @@ export default function App() {
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="publications" element={<PublicationsPage />} />
+        <Route path="ontologies" element={<OntologiesPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="upload" element={<UploadPage />} />
         <Route path="ontology/:name" element={<OntologyPage />} />

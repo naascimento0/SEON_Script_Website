@@ -73,6 +73,7 @@ export interface OntologyPageResponse {
 }
 
 export interface OntologyListItem {
+  name: string
   shortName: string
   fullName: string
   level: string | null

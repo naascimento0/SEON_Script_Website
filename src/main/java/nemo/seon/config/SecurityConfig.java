@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/upload-asta").hasRole("ADMIN")
                         .requestMatchers(
-                                "/", "/publications", "/upload", "/login", "/ontology/**",
+                                "/", "/publications", "/ontologies", "/upload", "/login", "/ontology/**",
                                 "/index.html",
                                 "/api/ontologies", "/api/ontologies/**", "/api/meta", "/api/auth/**",
                                 "/seon.owl",

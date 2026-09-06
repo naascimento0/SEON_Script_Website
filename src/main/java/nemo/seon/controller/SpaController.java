@@ -16,6 +16,7 @@ public class SpaController {
     @GetMapping({
             "/",
             "/publications",
+            "/ontologies",
             "/upload",
             "/login",
             "/ontology/{name}"
