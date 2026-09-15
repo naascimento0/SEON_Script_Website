@@ -1,0 +1,13 @@
+{
+  "name": "ontouml-validation",
+  "private": true,
+  "type": "module",
+  "description": "Validates generated OntoUML JSON against what the Visual Paradigm OntoUML plugin (ontouml-vp-plugin 0.5.x) accepts on import; --schema also runs the bundled w3id OntoUML Schema v1.0.2.",
+  "scripts": {
+    "validate": "node validate-ontouml.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  }
+}
