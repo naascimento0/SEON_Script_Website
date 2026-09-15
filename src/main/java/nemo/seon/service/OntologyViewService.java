@@ -194,7 +194,9 @@ public class OntologyViewService {
                 case OTHER -> {
                     introText = name;
                     labelText = name;
-                    imageSrc = "/images/" + name + ".png";
+                    // Astah exports these into the package folder like every other diagram,
+                    // so the URL needs the same hierarchy — a flat "/images/<name>.png" 404s.
+                    imageSrc = "/images/" + buildImagePath(diag.getPack(), name) + ".png";
                     simpleImage = true;
                 }
                 default -> {
