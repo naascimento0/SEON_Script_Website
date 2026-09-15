@@ -84,3 +84,23 @@ export interface AuthUser {
   username: string
   roles: string[]
 }
+
+export type PublicationCategory = 'SEON_ONTOLOGY' | 'GENERAL'
+
+export interface Publication {
+  id: string
+  category: PublicationCategory
+  year: number
+  ontology: string | null
+  reference: string
+  link: string | null
+}
+
+/** Payload for POST /api/publications (admin only). */
+export interface NewPublication {
+  category: PublicationCategory
+  year: number
+  ontology?: string
+  reference: string
+  link?: string
+}

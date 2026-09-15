@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,10 +48,13 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/upload-asta").hasRole("ADMIN")
+                        // Anyone may read the publication list; only an admin may change it.
+                        .requestMatchers(HttpMethod.GET, "/api/publications").permitAll()
+                        .requestMatchers("/api/publications", "/api/publications/**").hasRole("ADMIN")
                         .requestMatchers(
                                 "/", "/publications", "/ontologies", "/suggestions", "/upload", "/login", "/ontology/**",
                                 "/index.html",
-                                "/api/ontologies", "/api/ontologies/**", "/api/meta", "/api/auth/**",
+                                "/api/ontologies", "/api/ontologies/**", "/api/ontouml/**", "/api/meta", "/api/auth/**",
                                 "/seon.owl",
                                 "/images/**", "/assets/**",
                                 "/favicon.ico", "/favicon.svg", "/icons.svg", "/error"

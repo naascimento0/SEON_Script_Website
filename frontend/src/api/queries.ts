@@ -2,8 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from './client'
 import type {
   AuthUser,
+  NewPublication,
   OntologyListItem,
   OntologyPageResponse,
+  Publication,
 } from '../types/api'
 
 export function useOntologyList() {
@@ -25,6 +27,60 @@ export function useOntology(name: string | undefined) {
         `/api/ontologies/${name}`,
       )
       return data
+    },
+  })
+}
+
+export function usePublications() {
+  return useQuery({
+    queryKey: ['publications'],
+    queryFn: async () => {
+      const { data } = await api.get<Publication[]>('/api/publications')
+      return data
+    },
+  })
+}
+
+export function useAddPublication() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (publication: NewPublication) => {
+      const { data } = await api.post<Publication>(
+        '/api/publications',
+        publication,
+      )
+      return data
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['publications'] })
+    },
+  })
+}
+
+export function useUpdatePublication() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (vars: { id: string; publication: NewPublication }) => {
+      const { data } = await api.put<Publication>(
+        `/api/publications/${vars.id}`,
+        vars.publication,
+      )
+      return data
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['publications'] })
+    },
+  })
+}
+
+export function useDeletePublication() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/api/publications/${id}`)
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['publications'] })
     },
   })
 }
