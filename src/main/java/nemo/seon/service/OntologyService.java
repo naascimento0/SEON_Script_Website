@@ -26,16 +26,20 @@ public class OntologyService {
 
     @PostConstruct
     public void initialize() {
-        loadOntologies();
+        loadOntologies(getActiveAstahFilePath());
         buildCache(seonNetwork);
         printOntologyNames();
     }
 
-    private void loadOntologies() {
+    /** Absolute path of the {@code .asta} file the site currently serves. */
+    public String getActiveAstahFilePath() {
+        return Paths.get(System.getProperty("user.dir")).resolve(astahFileName).toString();
+    }
+
+    private void loadOntologies(String astahFilePath) {
         try {
             registry.clear();
             ModelReader modelReader = new ModelReader(registry);
-            String astahFilePath = Paths.get(System.getProperty("user.dir")).resolve(astahFileName).toString();
             this.seonNetwork = modelReader.parseAstah2Seon(astahFilePath);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load SEON ontologies from Astah file", e);
@@ -76,13 +80,37 @@ public class OntologyService {
         return ontologyNames.values();
     }
 
-    /** Reloads ontologies from the Astah file when the .asta file has been updated. */
-    public void reloadOntologies() {
-        logger.info("Reloading ontologies from Astah file...");
+    /** Reloads ontologies from the active Astah file when the .asta file has been updated. */
+    public synchronized void reloadOntologies() {
+        reloadFrom(getActiveAstahFilePath());
+    }
+
+    /**
+     * Reloads ontologies from an arbitrary {@code .asta} file — used to parse a candidate upload
+     * before it is promoted to the active file.
+     *
+     * <p>The Astah API keeps a single open project per JVM, so a successful call leaves the given
+     * file as the live model and a failed one leaves no usable model at all: the caller must then
+     * put the previous file back and call {@link #reloadOntologies()} to recover.
+     *
+     * @throws RuntimeException if the file cannot be parsed
+     */
+    public synchronized void reloadFrom(String astahFilePath) {
+        logger.info("Reloading ontologies from Astah file: {}", astahFilePath);
         ontologyNames.clear();
-        loadOntologies();
+        loadOntologies(astahFilePath);
         buildCache(seonNetwork);
         logger.info("Ontologies reloaded successfully.");
         printOntologyNames();
+    }
+
+    /** Number of ontologies in the model currently loaded. */
+    public int getOntologyCount() {
+        return ontologyNames.size();
+    }
+
+    /** Number of concepts in the model currently loaded. */
+    public int getConceptCount() {
+        return registry.getAllConcepts().size();
     }
 }

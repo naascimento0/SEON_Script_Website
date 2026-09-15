@@ -104,3 +104,19 @@ export interface NewPublication {
   reference: string
   link?: string
 }
+
+/** One archived `.asta` upload, from the admin-only version history. */
+export interface AstaVersion {
+  id: string
+  originalFilename: string | null
+  /** ISO-8601 instant, UTC. */
+  uploadedAt: string
+  uploadedBy: string
+  sizeBytes: number
+  sha256: string
+  note: string | null
+  ontologyCount: number
+  conceptCount: number
+  /** True for the version the site is currently serving. */
+  active: boolean
+}

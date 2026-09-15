@@ -48,6 +48,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/upload-asta").hasRole("ADMIN")
+                        // The .asta version history is admin-only end to end: nothing here is public.
+                        .requestMatchers("/api/asta/**").hasRole("ADMIN")
                         // Anyone may read the publication list; only an admin may change it.
                         .requestMatchers(HttpMethod.GET, "/api/publications").permitAll()
                         .requestMatchers("/api/publications", "/api/publications/**").hasRole("ADMIN")

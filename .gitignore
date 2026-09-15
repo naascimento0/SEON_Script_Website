@@ -41,6 +41,9 @@ frontend/dist/
 # Runtime publication list (seeded from classpath:/publications.json on first start)
 /publications.json
 
+# Archived .asta uploads + their versions.json index (admin-only history, per-server state)
+/asta-versions/
+
 # Generated OntoUML exports (regenerate with GET /api/ontouml/{name})
 /data/ontouml-exports/
 
