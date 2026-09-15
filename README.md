@@ -2,7 +2,7 @@
 
 SEON is a network of software engineering ontologies designed to support the creation, integration, and evolution of ontologies in the Software Engineering domain. Rather than treating ontologies as isolated artifacts, SEON organizes them into a structured network where ontologies can share concepts and relations — covering areas such as Software Measurement, Software Process, Requirements, Configuration Management, Project Management, and Software Testing.
 
-This repository contains the **SEON web application**: a Spring Boot app that parses Astah `.asta` model files, exports UML diagrams as PNGs, and serves interactive HTML pages for browsing the ontology network.
+This repository contains the **SEON web application**: a Spring Boot REST API that parses Astah `.asta` model files, exports UML diagrams as PNGs, and serves an interactive React + Chakra UI single-page application for browsing the ontology network.
 
 ---
 
@@ -10,16 +10,16 @@ This repository contains the **SEON web application**: a Spring Boot app that pa
 
 - Browse all SEON ontologies with full descriptions, UML diagrams, and concept definitions
 - Clickable image maps linking diagram elements to their concept detail pages
-- PDF export of any ontology page (browser print dialog)
 - Academic publications organized by ontology and topic
 - Admin upload of new `.asta` files to refresh content at runtime
-- Responsive layout with sidebar navigation
+- Single-page React frontend with client-side routing
 
 ---
 
 ## Requirements
 
 - Java 21
+- Node 20+ (for the frontend build)
 - Gradle (included via wrapper — no installation needed)
 - An Astah `.asta` model file placed at the project root
 
@@ -52,13 +52,23 @@ cp .env.example .env
 Put the SEON `.asta` file at the path defined by `SEON_ASTAH_FILEPATH` (default: `astah_seon.asta` at the project root).
 
 **4. Run the application**
+
+Single-process mode (Gradle builds the React bundle and Spring Boot serves everything):
 ```bash
 ./gradlew bootRun
 ```
+Open [http://localhost:8080](http://localhost:8080).
 
-**5. Open in browser**
+Dev mode (hot reload for the frontend):
+```bash
+# Terminal 1
+./gradlew bootRun
 
-[http://localhost:8080](http://localhost:8080)
+# Terminal 2
+cd frontend
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) — Vite proxies API calls to `:8080`.
 
 > On startup, the application automatically parses the `.asta` file via the Astah API and exports all UML diagrams as PNG images to the configured output directory.
 
@@ -67,10 +77,13 @@ Put the SEON `.asta` file at the path defined by `SEON_ASTAH_FILEPATH` (default:
 ## Common Commands
 
 ```bash
-./gradlew bootRun   # Start the application (Tomcat on port 8080)
-./gradlew build     # Compile and package
-./gradlew test      # Run tests
-./gradlew clean     # Clean build artifacts
+./gradlew bootRun         # Start the application (Tomcat on port 8080)
+./gradlew build           # Compile, build the React bundle, package as JAR
+./gradlew test            # Run tests
+./gradlew clean           # Clean build artifacts
+./gradlew frontendBuild   # Build only the React app
+cd frontend && npm run dev    # Vite dev server with HMR
+cd frontend && npm run build  # Production bundle into frontend/dist
 ```
 
 ---
@@ -81,31 +94,30 @@ Put the SEON `.asta` file at the path defined by `SEON_ASTAH_FILEPATH` (default:
 SEON_Script_Website/
 ├── src/main/
 │   ├── java/nemo/seon/
-│   │   ├── config/          # Security, startup diagram generation
-│   │   ├── controller/      # Spring MVC controllers (pages + .asta upload)
-│   │   ├── model/           # Domain entities: Ontology, Concept, Relation, Diagram…
-│   │   │   └── dto/         # View records: SectionView, ConceptRow, DiagramView…
-│   │   ├── parser/          # ModelReader — reads .asta via Astah API
-│   │   └── service/         # Business logic
-│   │       ├── OntologyService       # Loads and caches ontologies from SeonRegistry
-│   │       ├── OntologyViewService   # Builds DTOs for Thymeleaf rendering
-│   │       └── DiagramsService       # Runs astah-command.sh to export PNGs
+│   │   ├── config/                # SecurityConfig, StartupDiagramGenerator
+│   │   ├── controller/            # ApiController, AstaController, OwlController, SpaController
+│   │   ├── model/                 # Domain entities + DTOs (Ontology, Concept, Relation, …)
+│   │   │   └── dto/               # JSON records: OntologyPageResponse, ConceptRow, DiagramView, …
+│   │   ├── parser/                # ModelReader — reads .asta via Astah API
+│   │   └── service/               # OntologyService, OntologyViewService, DiagramsService, OwlService
 │   └── resources/
-│       ├── templates/
-│       │   ├── fragments/            # Reusable fragments (navbar, footer, ontology)
-│       │   ├── TemplateHomePage.html
-│       │   ├── TemplateOntologyPage.html
-│       │   ├── TemplatePublications.html
-│       │   ├── UploadPage.html
-│       │   ├── LoginPage.html
-│       │   └── ErrorPage.html
+│       ├── application.properties
 │       └── static/
-│           ├── css/seon-theme.css    # Custom theme (includes print/PDF styles)
-│           ├── css/bootstrap*.css    # Bootstrap 5.3.3 (local)
-│           └── images/               # Exported diagrams (gitignored)
-├── jars/                    # Vendored Astah API JARs
-├── build.gradle
-├── .env.example             # Environment variable template
+│           └── images/            # Exported diagrams (gitignored except a few fixed assets)
+├── frontend/                      # React + Vite + TypeScript SPA
+│   ├── src/
+│   │   ├── api/                   # axios client + React Query hooks
+│   │   ├── components/            # Layout, Section, DiagramWithMap, HtmlContent
+│   │   ├── pages/                 # Home, Publications, Login, Upload, Ontology, NotFound
+│   │   ├── data/                  # Static datasets (publications list)
+│   │   ├── types/                 # TypeScript mirrors of the Java DTOs
+│   │   ├── App.tsx                # React Router routes
+│   │   └── main.tsx               # Entry: ChakraProvider + QueryClient + BrowserRouter
+│   ├── vite.config.ts             # Dev proxy to :8080
+│   └── package.json
+├── jars/                          # Vendored Astah API JARs
+├── build.gradle                   # Includes npmInstall + frontendBuild tasks
+├── .env.example
 └── README.md
 ```
 
@@ -115,24 +127,43 @@ SEON_Script_Website/
 
 **No database.** All data is in-memory: ontologies are loaded from the `.asta` file at startup and cached in `SeonRegistry`. Credentials are managed via Spring Security's `InMemoryUserDetailsManager`.
 
+The backend is a pure REST API; the React SPA renders the UI. In production the SPA is bundled into the JAR's `static/` and served by Spring Boot. `SpaController` forwards known SPA paths (`/`, `/publications`, `/login`, `/upload`, `/ontology/{name}`) to `/index.html` so React Router can take over.
+
 ### Request flow
 
 ```
-GET /ontology/{name}
-  → PageController
-  → OntologyService.findByName()     (in-memory cache)
-  → OntologyViewService              (entity → DTO)
-  → Thymeleaf template               (renders HTML with image maps)
+GET /ontology/{name}                  ← React Router (client-side)
+  → useOntology()                     ← React Query
+    → GET /api/ontologies/{name}      ← ApiController
+      → OntologyService.findByName()  ← in-memory cache
+      → OntologyViewService           ← entity → DTOs
+      → JSON                          ← Jackson
+    → OntologyPage.tsx                ← Chakra UI components
 ```
 
 ### Upload flow
 
 ```
-POST /upload-asta  (ROLE_ADMIN only)
+POST /upload-asta  (ROLE_ADMIN only, X-XSRF-TOKEN required)
   → AstaController
   → saves .asta file
-  → DiagramsService (re-exports PNGs via astah-command.sh)
-  → OntologyService.reload()         (re-parses .asta, rebuilds cache)
+  → DiagramsService                   (re-exports PNGs via astah-command.sh)
+  → OntologyService.reload()          (re-parses .asta, rebuilds cache)
+```
+
+### Auth flow
+
+```
+POST /login   (form-urlencoded username/password, CSRF header)
+  → 200 + { username, roles }, sets JSESSIONID
+  → 401 + { error: "bad_credentials" } on failure
+
+GET /api/auth/me
+  → 200 + { username, roles } if authenticated
+  → 401 + { error: "unauthorized" } otherwise
+
+POST /logout  (CSRF header)
+  → 200 + { status: "ok" }
 ```
 
 ### Startup flow
@@ -140,44 +171,54 @@ POST /upload-asta  (ROLE_ADMIN only)
 ```
 Application start
   → StartupDiagramGenerator
-  → DiagramsService (exports all diagrams as PNGs)
-  → ModelReader (parses .asta, populates SeonRegistry)
+  → DiagramsService                   (exports all diagrams as PNGs)
+  → ModelReader                       (parses .asta, populates SeonRegistry)
 ```
 
 ---
 
-## Templates
+## API
 
-| Template | Description |
-|---|---|
-| `TemplateHomePage.html` | Landing page with SEON definition, architecture, and network overview |
-| `TemplateOntologyPage.html` | Reusable page for any individual ontology (description, diagrams, concepts, PDF export) |
-| `TemplatePublications.html` | Academic publications organized by site ontologies, other ontologies, and general SEON papers |
-| `UploadPage.html` | Upload form for `.asta` files (requires ADMIN role) |
-| `LoginPage.html` | Login screen |
-| `ErrorPage.html` | Generic error page |
+| Method | Path | Description | Access |
+|---|---|---|---|
+| `GET` | `/api/meta` | Misc metadata (current year, …) | Public |
+| `GET` | `/api/ontologies` | List of ontologies | Public |
+| `GET` | `/api/ontologies/{name}` | Full ontology page payload | Public |
+| `GET` | `/api/auth/me` | Current user | Public (401 if anon) |
+| `POST` | `/login` | Form-urlencoded login | Public |
+| `POST` | `/logout` | Logout | Public |
+| `POST` | `/upload-asta` | Upload a new `.asta` file | ADMIN |
+| `GET` | `/seon.owl` | Download generated OWL file | Public |
 
-**Fragments** (`fragments/`):
-- `layout.html` — Navbar and footer, shared across all pages
-- `ontology.html` — Recursive fragments for rendering sections, diagrams, and concept tables
+CSRF is enabled via cookie `XSRF-TOKEN` / header `X-XSRF-TOKEN`.
 
 ---
 
 ## Technology Stack
 
+### Backend
 | Layer | Technology | Version |
 |---|---|---|
 | Framework | Spring Boot | 3.2.5 |
-| Templates | Thymeleaf | (managed by Spring) |
 | Security | Spring Security + BCrypt | (managed by Spring) |
 | Environment | spring-dotenv | 4.0.0 |
-| Frontend | Bootstrap (CDN + local) | 5.3.3 |
-| Icons | Bootstrap Icons | 1.11.3 |
 | Logging | SLF4J + Logback | 2.0.13 / 1.5.6 |
 | File upload | Commons FileUpload | 1.5 |
 | Diagrams | Astah API (vendored JARs) | — |
+| OWL export | OWL API | 5.5.0 |
 | Build | Gradle (wrapper) | 8.10 |
 | Language | Java | 21 |
+
+### Frontend
+| Layer | Technology | Version |
+|---|---|---|
+| Framework | React | 19 |
+| Language | TypeScript | 6 |
+| Bundler | Vite | 8 |
+| UI library | Chakra UI | 3 |
+| Routing | React Router | 7 |
+| Data fetching | TanStack Query | 5 |
+| HTTP | axios | 1 |
 
 ---
 
@@ -185,8 +226,9 @@ Application start
 
 | Route | Access |
 |---|---|
-| `/`, `/ontology/**`, `/publications` | Public |
-| `/login` | Public |
+| `/`, `/publications`, `/upload`, `/login`, `/ontology/**` | Public (SPA fallback) |
+| `/api/ontologies/**`, `/api/meta`, `/api/auth/**` | Public |
+| `/seon.owl`, `/images/**`, `/assets/**` | Public |
 | `/upload-asta` | ADMIN only |
 
 Credentials are loaded from the `.env` file via spring-dotenv. Never commit the `.env` file — use `.env.example` as a template.

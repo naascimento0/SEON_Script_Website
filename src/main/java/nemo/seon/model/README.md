@@ -4,20 +4,23 @@
 
 ```
 model/
-├── Package.java       # Pacote Astah (classe base)
-├── Ontology.java      # Ontologia (extends Package)
-├── Concept.java       # Conceito dentro de uma ontologia
-├── Relation.java      # Relação entre dois conceitos
-├── Dependency.java    # Dependência entre dois pacotes
-├── Diagram.java       # Diagrama no arquivo Astah
-├── SeonRegistry.java  # Registro central de Concepts e Packages
-└── dto/               # Records usados para renderização Thymeleaf
+├── Package.java               # Pacote Astah (classe base)
+├── Ontology.java              # Ontologia (extends Package)
+├── Concept.java               # Conceito dentro de uma ontologia
+├── Relation.java              # Relação entre dois conceitos
+├── Dependency.java            # Dependência entre dois pacotes
+├── Diagram.java               # Diagrama no arquivo Astah
+├── SeonRegistry.java          # Registro central de Concepts e Packages
+└── dto/                       # Records serializados como JSON pela API
+    ├── OntologyPageResponse.java  # Payload completo de GET /api/ontologies/{name}
+    ├── OntologyListItem.java      # Item de GET /api/ontologies
     ├── ConceptDetail.java
     ├── ConceptRow.java
     ├── DependencyView.java
     ├── DiagramView.java
     ├── MapArea.java
-    └── SectionView.java
+    ├── SectionView.java
+    └── UploadResponse.java
 ```
 
 ---
@@ -116,15 +119,20 @@ Operações principais:
 - `registerPackage()` / `getPackageByIPackage()` / `getPackageByFullName()`
 - `clear()`: limpa todos os dados registrados (chamado antes de recarregar um novo arquivo `.asta`)
 
-## dto/ — Records para Thymeleaf
-O subpacote `dto/` contém Java records usados para passar dados estruturados do `OntologyViewService` para os templates Thymeleaf, eliminando a construção de HTML em Java:
+## dto/ — Records serializados como JSON
+O subpacote `dto/` contém Java records construídos pelo `OntologyViewService` e devolvidos como JSON pela `ApiController` para o frontend React consumir:
 
+- `OntologyPageResponse`: payload agregado da página de uma ontologia (`GET /api/ontologies/{name}`);
+- `OntologyListItem`: item da lista de ontologias (`GET /api/ontologies`);
 - `DependencyView`: linha da tabela de dependências;
 - `DiagramView`: diagrama com imagem, image map e descrição;
 - `MapArea`: área clicável dentro de um image map;
 - `SectionView`: seção recursiva (subpackages com diagramas aninhados);
 - `ConceptRow`: linha da tabela de conceitos;
-- `ConceptDetail`: card detalhado de um conceito com generalizações e relações.
+- `ConceptDetail`: card detalhado de um conceito com generalizações e relações;
+- `UploadResponse`: resposta de `POST /upload-asta`.
+
+Os DTOs têm contrapartes em TypeScript no frontend (`frontend/src/types/api.ts`) para manter os contratos sincronizados.
 
 ---
 
