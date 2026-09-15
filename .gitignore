@@ -37,3 +37,15 @@ astah_seon.asta
 # Frontend (React + Vite)
 frontend/node_modules/
 frontend/dist/
+
+# Runtime publication list (seeded from classpath:/publications.json on first start)
+/publications.json
+
+# Generated OntoUML exports (regenerate with GET /api/ontouml/{name})
+/data/ontouml-exports/
+
+# Ferramentas auxiliares de validação (scripts/validate-ontouml.mjs)
+scripts/node_modules/
+
+# Arquivos locais de trabalho (rascunhos, credenciais, PDFs pessoais)
+Utils/
