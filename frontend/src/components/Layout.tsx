@@ -32,27 +32,36 @@ export default function Layout() {
         bg={HEADER_BG}
         borderBottomWidth="1px"
         borderBottomColor="black"
-        px={6}
+        px={{ base: 4, md: 6 }}
         py={3}
       >
-        <HStack gap={6}>
-          <Heading size="md">
+        {/* Column on phones, single row from md up — the nav itself wraps if it has to. */}
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          align="center"
+          gap={{ base: 2, md: 6 }}
+        >
+          <HStack gap={{ base: 4, md: 6 }} wrap="wrap" justify="center">
+            <Heading size="md">
+              <Link asChild>
+                <RouterLink to="/">SEON</RouterLink>
+              </Link>
+            </Heading>
             <Link asChild>
-              <RouterLink to="/">SEON</RouterLink>
+              <RouterLink to="/ontologies">Ontologies</RouterLink>
             </Link>
-          </Heading>
-          <Link asChild>
-            <RouterLink to="/ontologies">Ontologies</RouterLink>
-          </Link>
-          <Link asChild>
-            <RouterLink to="/publications">Publications</RouterLink>
-          </Link>
-          <Link asChild>
-            <RouterLink to="/suggestions">Suggestions</RouterLink>
-          </Link>
-          <Spacer />
+            <Link asChild>
+              <RouterLink to="/publications">Publications</RouterLink>
+            </Link>
+            <Link asChild>
+              <RouterLink to="/suggestions">Suggestions</RouterLink>
+            </Link>
+          </HStack>
+
+          <Spacer display={{ base: 'none', md: 'block' }} />
+
           {user ? (
-            <HStack gap={3}>
+            <HStack gap={3} wrap="wrap" justify="center">
               <Link asChild>
                 <RouterLink to="/upload">Upload</RouterLink>
               </Link>
@@ -70,7 +79,7 @@ export default function Layout() {
               <RouterLink to="/login">Login</RouterLink>
             </Link>
           )}
-        </HStack>
+        </Flex>
       </Box>
 
       <Container as="main" maxW="6xl" py={6} flex="1">
