@@ -10,8 +10,10 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link as RouterLink, useLocation, useParams } from 'react-router-dom'
 import { useOntology } from '../api/queries'
+import { isAppRoute } from '../lib/routes'
 import DiagramWithMap from '../components/DiagramWithMap'
 import HtmlContent from '../components/HtmlContent'
 import Section from '../components/Section'
@@ -24,7 +26,16 @@ import type {
 
 export default function OntologyPage() {
   const { name } = useParams<{ name: string }>()
+  const { hash } = useLocation()
   const { data, isLoading, isError } = useOntology(name)
+
+  // A hotspot links straight to a concept on another ontology's page. The browser cannot honour
+  // that fragment on its own: the anchor only exists once this query has resolved and rendered.
+  useEffect(() => {
+    if (!data || !hash) return
+    const target = document.getElementById(decodeURIComponent(hash.slice(1)))
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [data, hash])
 
   if (isLoading) return <Text>Loading…</Text>
   if (isError || !data) {
@@ -119,9 +130,17 @@ function DependencyRow({ dep }: { dep: DependencyView }) {
   return (
     <Table.Row>
       <Table.Cell>
-        <Link href={dep.url} target={dep.openInNewTab ? '_blank' : undefined}>
-          {dep.shortName} — {dep.fullName}
-        </Link>
+        {isAppRoute(dep.url) ? (
+          <Link asChild>
+            <RouterLink to={dep.url}>
+              {dep.shortName} — {dep.fullName}
+            </RouterLink>
+          </Link>
+        ) : (
+          <Link href={dep.url} target={dep.openInNewTab ? '_blank' : undefined}>
+            {dep.shortName} — {dep.fullName}
+          </Link>
+        )}
       </Table.Cell>
       <Table.Cell>
         {dep.description ? <HtmlContent html={dep.description} /> : 'No description'}

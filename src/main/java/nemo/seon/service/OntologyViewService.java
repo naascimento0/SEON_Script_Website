@@ -3,6 +3,8 @@ package nemo.seon.service;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -45,25 +47,7 @@ public class OntologyViewService {
 
     private static final Logger logger = LoggerFactory.getLogger(OntologyViewService.class);
 
-    private static final Map<String, String> ONTO_URLS = Map.ofEntries(
-            Map.entry("UFO", "UFO.html"),
-            Map.entry("SEON", "https://dev.nemo.inf.ufes.br/seon/"),
-            Map.entry("COM", "COM.html"),
-            Map.entry("EO", "EO.html"),
-            Map.entry("SysSwO", "SysSwO.html"),
-            Map.entry("RSRO", "RSRO.html"),
-            Map.entry("RRO", "RRO.html"),
-            Map.entry("GORO", "GORO.html"),
-            Map.entry("RDPO", "RDPO.html"),
-            Map.entry("DPO", "DPO.html"),
-            Map.entry("CPO", "CPO.html"),
-            Map.entry("ROoST", "ROoST.html"),
-            Map.entry("QAPO", "QAPO.html"),
-            Map.entry("SPMO", "SPMO.html"),
-            Map.entry("CMPO", "CMPO.html"),
-            Map.entry("RSMO", "RSMO.html"),
-            Map.entry("SDRO", "SDRO.html")
-    );
+    private static final String SEON_NETWORK = "SEON";
 
     private final OntologyService ontologyService;
 
@@ -130,7 +114,6 @@ public class OntologyViewService {
             if (dep == null || dep.getTarget() == null) continue;
             Ontology supplier = (Ontology) dep.getTarget();
             String url = networkedOntoURL(supplier.getShortName());
-            boolean isSeon = "SEON".equals(supplier.getNetwork());
             String desc = formatDescription(dep.getDescription());
             String level = dep.getLevel() != null ? dep.getLevel() : "N/A";
 
@@ -138,7 +121,7 @@ public class OntologyViewService {
                     supplier.getShortName(),
                     supplier.getFullName(),
                     url,
-                    isSeon,
+                    isExternal(url),
                     desc,
                     level
             ));
@@ -234,15 +217,12 @@ public class OntologyViewService {
                     if (concept == null || concept.getOntology() == null) continue;
 
                     String coords = getMapCoords(node, aDiagram.getBoundRect());
-                    String reference = concept.getReference();
-                    String target = "";
-                    Ontology whatOnto = concept.getOntology();
-                    if ("SEON".equals(whatOnto.getNetwork())) {
-                        String onURL = networkedOntoURL(whatOnto.getMainOntology().getShortName());
-                        reference = onURL + "#" + whatOnto.getMainOntology().getShortName() + "_"
-                                + concept.getName().replace(' ', '+');
-                        target = "_blank";
-                    }
+                    Ontology mainOnto = concept.getOntology().getMainOntology();
+                    String reference = mainOnto != null
+                            ? anchorLink(mainOnto.getShortName(),
+                                    mainOnto.getShortName() + "_" + concept.getName().replace(' ', '+'))
+                            : "#";
+                    String target = isExternal(reference) ? "_blank" : "";
 
                     areas.add(new MapArea(coords, reference, target,
                             concept.getDefinition() != null ? concept.getDefinition() : ""));
@@ -280,19 +260,28 @@ public class OntologyViewService {
                 if (pack == null) continue;
 
                 String coords = getMapCoords(node, aDiagram.getBoundRect());
-                String reference = pack.getReference() + "_section";
-                String target = "";
+                // Fallback for a package with no owning ontology — the network box itself, say.
+                // Its own page when the name resolves to one, otherwise a same-page anchor:
+                // never a dead "<Ontology>.html#..." from the pre-SPA days.
+                String byName = networkedOntoURL(pack.getName());
+                String reference = "#".equals(byName) ? "#" + pack.getLabel() + "_section" : byName;
+                String target = isExternal(reference) ? "_blank" : "";
                 String network = pack.getNetwork();
                 if (pack.getName().contains("Layer") || pack.getPackageType() == Package.PackType.NETWORK) {
                     reference = networkedOntoURL(network);
-                    target = "SEON".equals(network) ? "_blank" : "";
+                    target = isExternal(reference) ? "_blank" : "";
                 } else {
                     Ontology mainOnto = pack.getMainOntology();
-                    if (mainOnto != null && "SEON".equals(mainOnto.getNetwork())) {
+                    if (mainOnto != null) {
                         String mainOntoName = mainOnto.getShortName();
-                        reference = networkedOntoURL(mainOntoName) + "#" + mainOntoName + "_"
-                                + pack.getName().replace(' ', '+') + "_section";
-                        target = "_blank";
+                        // A box standing for a whole ontology goes to the top of its page: the
+                        // page only renders sections for subpackages, so "#X_X_section" is an
+                        // anchor that never exists.
+                        reference = pack.getPackageType() == Package.PackType.ONTOLOGY
+                                ? networkedOntoURL(mainOntoName)
+                                : anchorLink(mainOntoName,
+                                        mainOntoName + "_" + pack.getName().replace(' ', '+') + "_section");
+                        target = isExternal(reference) ? "_blank" : "";
                     }
                 }
 
@@ -462,8 +451,31 @@ public class OntologyViewService {
         return String.format("%d,%d,%d,%d", x, y, x + w, y + h);
     }
 
-    private static String networkedOntoURL(String network) {
-        if (network == null || network.trim().isEmpty()) return "#";
-        return ONTO_URLS.getOrDefault(network, "#");
+    /**
+     * App-relative SPA route for an ontology (or for the network itself). The frontend prefixes
+     * these with its base URL, so they keep working under a context path such as {@code /seon2}.
+     * Resolving the name against the live registry — instead of a hardcoded table — means an
+     * ontology added by an {@code .asta} upload is linkable immediately.
+     */
+    private String networkedOntoURL(String shortName) {
+        if (shortName == null || shortName.trim().isEmpty()) return "#";
+        String name = shortName.trim();
+        if (SEON_NETWORK.equals(name)) return "/ontologies";
+        if (ontologyService.findByName(name) == null) return "#";
+        return "/ontology/" + URLEncoder.encode(name, StandardCharsets.UTF_8).replace("+", "%20");
+    }
+
+    /**
+     * Link to an anchor on the page of the ontology that owns it. An ontology missing from the
+     * registry yields a plain same-page anchor rather than the "##anchor" the old table produced.
+     */
+    private String anchorLink(String ontologyShortName, String anchor) {
+        String url = networkedOntoURL(ontologyShortName);
+        return "#".equals(url) ? "#" + anchor : url + "#" + anchor;
+    }
+
+    /** Only off-site links open in a new tab; SPA routes stay in the current one. */
+    private static boolean isExternal(String url) {
+        return url != null && (url.startsWith("http://") || url.startsWith("https://"));
     }
 }

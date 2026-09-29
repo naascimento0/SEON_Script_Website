@@ -56,16 +56,6 @@ public class Concept implements Comparable<Concept> {
     public void setExample(String example) { this.example = example; }
     public void setSourceDefinition(String sourceDefinition) { this.sourceDefinition = sourceDefinition; }
 
-    /** Returns an HTML anchor reference: "ShortName.html#ShortName_Concept+Name" */
-    public String getReference() {
-        if (ontology == null || name == null || name.trim().isEmpty()) return "#";
-        Ontology mainOntology = ontology.getMainOntology();
-        String shortName = mainOntology != null && mainOntology.getShortName() != null ?
-                mainOntology.getShortName() : "Unknown";
-        String formattedName = name.trim().replaceAll("\\s+", "+");
-        return String.format("%s.html#%s_%s", shortName, shortName, formattedName);
-    }
-
     /** Returns an HTML id: "ShortName_Concept+Name" */
     public String getLabel() {
         return ontology.getMainOntology().getShortName() + "_" + name.replace(' ', '+');

@@ -94,21 +94,6 @@ public class Package implements Comparable<Package> {
     }
 
     /**
-     * Returns an HTML anchor reference for this package.
-     * Format: "ShortName.html#ShortName_Package+Name"
-     */
-    public String getReference() {
-        if (name == null || name.trim().isEmpty()) return "#";
-        Ontology mainOntology = getMainOntology();
-        String shortName = mainOntology != null && mainOntology.getShortName() != null ?
-                mainOntology.getShortName() : "Unknown";
-        String formattedName = name.trim().replaceAll("\\s+", "+");
-        return mainOntology != null ?
-                String.format("%s.html#%s_%s", shortName, shortName, formattedName) :
-                formattedName;
-    }
-
-    /**
      * Returns an HTML id string for this package.
      * Format: "ShortName_Package+Name"
      */
