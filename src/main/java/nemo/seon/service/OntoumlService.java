@@ -198,13 +198,12 @@ public class OntoumlService {
         String canonical = OntoumlStereotypeMapper.normalizeRelationStereotype(r.getStereotype());
         String name = r.getName() == null || r.getName().isBlank() ? null : r.getName();
 
-        // properties[0] is the source end, properties[1] the target end.
-        // A composition is marked on the whole end, which is the source end here.
+        // properties[0] is the source end, properties[1] the target end. The diamond
+        // (SHARED = hollow, COMPOSITE = filled) stays on the end typed by the whole, as in Astah.
         Map<String, Object> sourceEnd = propertyElement(
-                relId + "-e0", sourceId, r.getSourceMultiplicity(),
-                r.isComposition() ? "COMPOSITE" : "NONE");
+                relId + "-e0", sourceId, r.getSourceMultiplicity(), r.getSourceAggregation().name());
         Map<String, Object> targetEnd = propertyElement(
-                relId + "-e1", targetId, r.getTargetMultiplicity(), "NONE");
+                relId + "-e1", targetId, r.getTargetMultiplicity(), r.getTargetAggregation().name());
 
         Map<String, Object> rel = base("Relation", relId, name, r.getDefinition());
         rel.put("stereotype", canonical);

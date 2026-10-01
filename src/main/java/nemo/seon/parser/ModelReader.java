@@ -8,6 +8,7 @@ import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.model.*;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import nemo.seon.model.*;
+import nemo.seon.model.AggregationKind;
 import nemo.seon.model.Package;
 import nemo.seon.model.Package.PackType;
 
@@ -171,7 +172,8 @@ public class ModelReader {
 
                     if (firstEnd.getType().equals(source.getAstahConceptObject())) {
                         String stereotype = association.getStereotypes().length > 0 ? association.getStereotypes()[0] : null;
-                        boolean composition = firstEnd.isComposite() || secondEnd.isAggregate();
+                        AggregationKind sourceAggregation = aggregationOf(firstEnd);
+                        AggregationKind targetAggregation = aggregationOf(secondEnd);
                         String sourceMultiplicity = firstEnd.getMultiplicity().length > 0 ?
                                 multiplicityToString(firstEnd.getMultiplicity()[0]) : "";
                         String targetMultiplicity = secondEnd.getMultiplicity().length > 0 ?
@@ -182,7 +184,7 @@ public class ModelReader {
 
                         if (target != null) { // Só cria relação se o alvo for válido
                             Relation relation = new Relation(association.getName(), association.getDefinition(),
-                                    stereotype, composition, pack, source, target,
+                                    stereotype, sourceAggregation, targetAggregation, pack, source, target,
                                     sourceMultiplicity, targetMultiplicity);
                             source.addRelation(relation);
                             target.addRelation(relation); // Adiciona ao alvo também, se desejado
@@ -193,6 +195,18 @@ public class ModelReader {
                 }
             }
         }
+    }
+
+    /**
+     * Returns the diamond on an association end. Astah flags the end typed by the whole
+     * ({@code isAggregate} for the hollow diamond, {@code isComposite} for the filled one).
+     * @param end the association end
+     * @return the aggregation kind of that end
+     */
+    private AggregationKind aggregationOf(IAttribute end) {
+        if (end.isComposite()) return AggregationKind.COMPOSITE;
+        if (end.isAggregate()) return AggregationKind.SHARED;
+        return AggregationKind.NONE;
     }
 
     /**
@@ -207,6 +221,7 @@ public class ModelReader {
         if (lower == IMultiplicityRange.UNLIMITED) return "*";
         if (upper == IMultiplicityRange.UNDEFINED) return lower + "";
         if (upper == IMultiplicityRange.UNLIMITED) return lower + "..*";
+        if (lower == upper) return lower + ""; // "1", not "1..1", as Astah shows it
         return lower + ".." + upper;
     }
 

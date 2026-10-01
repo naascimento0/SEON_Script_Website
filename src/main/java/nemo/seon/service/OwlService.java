@@ -147,7 +147,7 @@ public class OwlService {
                 if (!isIncluded(src) || !isIncluded(dst)) continue;
 
                 String name = relation.getName() == null ? "" : relation.getName();
-                if (name.isEmpty() && relation.isComposition()) {
+                if (name.isEmpty() && relation.isWholePart()) {
                     name = "composed of";
                 }
                 String localName = name + "." + src.getName() + "+" + dst.getName();
