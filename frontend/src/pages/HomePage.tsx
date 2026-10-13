@@ -8,6 +8,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { withBase } from '../lib/routes'
 
 export default function HomePage() {
   return (
@@ -38,7 +39,7 @@ export default function HomePage() {
         </Text>
         <Box textAlign="center" my={6}>
           <Image
-            src="/images/astah_seon/SEON%20Architecture.png"
+            src={withBase('/images/astah_seon/SEON%20Architecture.png')}
             alt="SEON Network view"
             maxW="100%"
             mx="auto"
@@ -54,7 +55,7 @@ export default function HomePage() {
         </Text>
         <Box textAlign="center" my={6}>
           <Image
-            src="/images/SEON_Architecture.png"
+            src={withBase('/images/SEON_Architecture.png')}
             alt="SEON Architecture"
             maxW="100%"
             mx="auto"
@@ -124,7 +125,7 @@ export default function HomePage() {
           opened in tools like Protégé.
         </Text>
         <Button asChild colorPalette="gray">
-          <a href="/seon.owl" download>Download SEON.owl</a>
+          <a href={withBase('/seon.owl')} download>Download SEON.owl</a>
         </Button>
       </Box>
     </VStack>

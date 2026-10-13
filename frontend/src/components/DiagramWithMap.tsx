@@ -72,7 +72,7 @@ export default function DiagramWithMap({ diagram }: Props) {
       <Box textAlign="center">
         {diagram.simpleImage ? (
           <Image
-            src={diagram.imageSrc}
+            src={withBase(diagram.imageSrc)}
             alt={diagram.labelText}
             maxW="100%"
             mx="auto"
@@ -81,7 +81,7 @@ export default function DiagramWithMap({ diagram }: Props) {
           <>
             <Image
               ref={imgRef}
-              src={diagram.imageSrc}
+              src={withBase(diagram.imageSrc)}
               alt={`Diagram of ${diagram.mapName}`}
               width={diagram.imageWidth ? `${diagram.imageWidth}px` : undefined}
               maxW="100%"
