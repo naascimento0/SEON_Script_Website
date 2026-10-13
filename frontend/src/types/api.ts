@@ -72,6 +72,16 @@ export interface OntologyPageResponse {
   conceptDetails: ConceptDetail[]
 }
 
+/** GET /api/ontouml/{name}/coverage (admin only): how many classes carry an OntoUML stereotype. */
+export interface OntoumlCoverage {
+  ontology: string
+  totalClasses: number
+  mappedToOntoUml: number
+  missingStereotype: string[]
+  unknownStereotype: string[]
+  rawStereotypeCounts: Record<string, number>
+}
+
 export interface OntologyListItem {
   name: string
   shortName: string

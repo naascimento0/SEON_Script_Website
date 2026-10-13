@@ -6,6 +6,7 @@ import type {
   NewPublication,
   OntologyListItem,
   OntologyPageResponse,
+  OntoumlCoverage,
   Publication,
 } from '../types/api'
 
@@ -26,6 +27,21 @@ export function useOntology(name: string | undefined) {
     queryFn: async () => {
       const { data } = await api.get<OntologyPageResponse>(
         `/api/ontologies/${name}`,
+      )
+      return data
+    },
+  })
+}
+
+/** Admin-only stereotype coverage of one ontology's OntoUML export. */
+export function useOntoumlCoverage(name: string | undefined, enabled: boolean) {
+  return useQuery({
+    // Under 'ontology' so a version rollback (which invalidates ['ontology']) refreshes it too.
+    queryKey: ['ontology', name, 'ontouml-coverage'],
+    enabled: enabled && !!name,
+    queryFn: async () => {
+      const { data } = await api.get<OntoumlCoverage>(
+        `/api/ontouml/${encodeURIComponent(name!)}/coverage`,
       )
       return data
     },

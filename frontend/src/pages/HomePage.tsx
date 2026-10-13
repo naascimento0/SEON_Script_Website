@@ -8,6 +8,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { Link as RouterLink } from 'react-router-dom'
 import { withBase } from '../lib/routes'
 
 export default function HomePage() {
@@ -127,6 +128,18 @@ export default function HomePage() {
         <Button asChild colorPalette="gray">
           <a href={withBase('/seon.owl')} download>Download SEON.owl</a>
         </Button>
+        <Text fontSize="lg" mt={6}>
+          Each networked ontology can also be downloaded as an OntoUML JSON file from its own
+          page (see{' '}
+          <Link asChild>
+            <RouterLink to="/ontologies">Ontologies</RouterLink>
+          </Link>
+          ), ready to be imported into Visual Paradigm with the{' '}
+          <Link href="https://github.com/OntoUML/ontouml-vp-plugin" target="_blank" rel="noreferrer">
+            OntoUML plugin
+          </Link>
+          .
+        </Text>
       </Box>
     </VStack>
   )

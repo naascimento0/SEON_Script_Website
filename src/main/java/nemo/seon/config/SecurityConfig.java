@@ -50,6 +50,9 @@ public class SecurityConfig {
                         .requestMatchers("/upload-asta").hasRole("ADMIN")
                         // The .asta version history is admin-only end to end: nothing here is public.
                         .requestMatchers("/api/asta/**").hasRole("ADMIN")
+                        // The stereotype coverage report is a modelling aid for the admin; the
+                        // OntoUML download itself stays public (matched by /api/ontouml/** below).
+                        .requestMatchers("/api/ontouml/*/coverage").hasRole("ADMIN")
                         // Anyone may read the publication list; only an admin may change it.
                         .requestMatchers(HttpMethod.GET, "/api/publications").permitAll()
                         .requestMatchers("/api/publications", "/api/publications/**").hasRole("ADMIN")

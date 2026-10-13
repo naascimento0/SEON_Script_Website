@@ -1,5 +1,7 @@
 import {
+  Badge,
   Box,
+  Button,
   Code,
   Em,
   Flex,
@@ -12,8 +14,8 @@ import {
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { Link as RouterLink, useLocation, useParams } from 'react-router-dom'
-import { useOntology } from '../api/queries'
-import { isAppRoute } from '../lib/routes'
+import { useCurrentUser, useOntology, useOntoumlCoverage } from '../api/queries'
+import { isAppRoute, withBase } from '../lib/routes'
 import DiagramWithMap from '../components/DiagramWithMap'
 import HtmlContent from '../components/HtmlContent'
 import Section from '../components/Section'
@@ -22,12 +24,15 @@ import type {
   ConceptRow,
   DependencyView,
   OntologyPageResponse,
+  OntoumlCoverage,
 } from '../types/api'
 
 export default function OntologyPage() {
   const { name } = useParams<{ name: string }>()
   const { hash } = useLocation()
   const { data, isLoading, isError } = useOntology(name)
+  const { data: user } = useCurrentUser()
+  const isAdmin = user?.roles.includes('ROLE_ADMIN') ?? false
 
   // A hotspot links straight to a concept on another ontology's page. The browser cannot honour
   // that fragment on its own: the anchor only exists once this query has resolved and rendered.
@@ -50,6 +55,7 @@ export default function OntologyPage() {
   return (
     <VStack align="stretch" gap={10}>
       <PageHeader data={data} />
+      {isAdmin && <OntoumlCoverageSection name={data.shortName} />}
       <DescriptionSection data={data} />
       <RelatedOntologiesSection data={data} />
       <OntologyModelsSection data={data} />
@@ -68,6 +74,94 @@ function PageHeader({ data }: { data: OntologyPageResponse }) {
           {data.ontoLevelText}
         </Text>
       )}
+      <Flex mt={6} gap={4} align="center" wrap="wrap">
+        <Button asChild colorPalette="gray" size="sm">
+          <a
+            href={withBase(`/api/ontouml/${encodeURIComponent(data.shortName)}`)}
+            download
+          >
+            Download OntoUML (JSON)
+          </a>
+        </Button>
+        <Text fontSize="sm" color="fg.muted" flex="1" minW="240px">
+          Importable into Visual Paradigm with the OntoUML plugin. The file carries the model
+          only (no diagrams), and relations to other ontologies are left out.
+        </Text>
+      </Flex>
+    </Box>
+  )
+}
+
+/** Admin-only: which classes would reach Visual Paradigm without an OntoUML stereotype. */
+function OntoumlCoverageSection({ name }: { name: string }) {
+  const { data, isLoading, isError } = useOntoumlCoverage(name, true)
+
+  if (isLoading) return <Text color="fg.muted">Loading OntoUML coverage…</Text>
+  if (isError || !data) {
+    return <Text color="red.500">Could not load the OntoUML stereotype coverage.</Text>
+  }
+  return <CoverageReport report={data} />
+}
+
+function CoverageReport({ report }: { report: OntoumlCoverage }) {
+  const { totalClasses, mappedToOntoUml, missingStereotype, unknownStereotype } = report
+  const percent = totalClasses === 0 ? 100 : Math.round((mappedToOntoUml / totalClasses) * 100)
+  const complete = missingStereotype.length === 0 && unknownStereotype.length === 0
+  const rawCounts = Object.entries(report.rawStereotypeCounts).sort((a, b) => b[1] - a[1])
+
+  return (
+    <Box borderWidth="1px" borderColor="border.emphasized" borderRadius="md" p={5}>
+      <Flex gap={3} align="center" wrap="wrap" mb={2}>
+        <Heading size="md">OntoUML stereotype coverage</Heading>
+        <Badge colorPalette="purple">admin</Badge>
+        <Badge colorPalette={complete ? 'green' : 'orange'}>
+          {mappedToOntoUml}/{totalClasses} classes ({percent}%)
+        </Badge>
+      </Flex>
+      <Text fontSize="sm" color="fg.muted" mb={complete ? 0 : 3}>
+        Classes without a recognised stereotype are imported into Visual Paradigm as plain UML
+        classes. Fix them in the Astah model and upload it again.
+      </Text>
+
+      {!complete && (
+        <details>
+          <summary style={{ cursor: 'pointer' }}>Show the classes to fix</summary>
+          <VStack align="stretch" gap={4} mt={3}>
+            <ClassList
+              title="Without stereotype"
+              items={missingStereotype}
+            />
+            <ClassList
+              title="Stereotype not recognised as OntoUML"
+              items={unknownStereotype}
+            />
+            {rawCounts.length > 0 && (
+              <Box>
+                <Text fontWeight="bold" mb={1}>Stereotypes found in the model</Text>
+                <Flex gap={2} wrap="wrap">
+                  {rawCounts.map(([stereotype, count]) => (
+                    <Badge key={stereotype} variant="outline">
+                      «{stereotype}» {count}
+                    </Badge>
+                  ))}
+                </Flex>
+              </Box>
+            )}
+          </VStack>
+        </details>
+      )}
+    </Box>
+  )
+}
+
+function ClassList({ title, items }: { title: string; items: string[] }) {
+  if (items.length === 0) return null
+  return (
+    <Box>
+      <Text fontWeight="bold" mb={1}>
+        {title} ({items.length})
+      </Text>
+      <Text fontSize="sm">{[...items].sort((a, b) => a.localeCompare(b)).join(', ')}</Text>
     </Box>
   )
 }
